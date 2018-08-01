@@ -1,0 +1,27 @@
+{
+  "name": "bar",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "fakerest": "^2.1.0",
+    "jsrsasign": "^8.0.12",
+    "ra-data-json-server": "^2.1.1",
+    "ra-data-simple-rest": "^2.1.1",
+    "ra-language-chinese": "^2.0.1",
+    "ra-language-english": "^2.0.2",
+    "react": "^16.4.1",
+    "react-admin": "^2.1.1",
+    "react-dom": "^16.4.1",
+    "react-scripts": "1.1.4",
+    "uuid": "^3.3.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "react-test-renderer": "^16.4.1"
+  }
+}

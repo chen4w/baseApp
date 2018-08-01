@@ -1,36 +1,31 @@
-# bar
+本项目的建立采用 [Create React App](https://marmelab.com/react-admin/Tutorial.html).
 
-#### Description
-base app of RepChain
+##项目介绍
+本项目为[RepChain](https://gitee.com/BTAJL/repchain)
+的应用提供可复用的UI支持，包括：
+- 概览：简要信息展示
+- 密钥对管理: 数据保存在indexedDB，支持导入导出（所有用户）
+- 证书管理：在区块链完成注册的用户数据，通过数据同步提供数据检索和查看（所有用户）
+- 账户：在区块链完成注册的用户数据，通过数据同步提供数据检索和查看 （节点管理员可以注册新账号，普通用户只能查看）
+- 组网管理：即参与p2p组网形成一个链实例，包括创世块建立、信任证书列表维护（平台管理员可以建立组网）
+- 节点管理：节点证书管理、节点的入网管理、节点服务启停 （节点管理员可以维护节点）
+- 区块管理：从区块链同步数据之后，提供区块检索、查看、验证 （只读检索和查看）
+- 交易管理：从区块链同步数据之后，提供交易检索、查看、验证 （只读检索和查看，构造和新建签名交易）
 
-#### Software Architecture
-Software architecture description
+##如何运行
+git clone到本地之后，
+- `yarn install` 安装依赖
+- `yarn start` 启动服务
 
-#### Installation
+##关于自动化测试选型
+- Jest：nodejs单元测试
+- Jest+ Puppeteer：浏览器端无头测试，集成测试，e2e测试
+- Cypress：e2e测试
+- jest+enzyme：React组件测试
+- 能够进行多浏览真实测试的是：jasmine+karma
 
-1. xxxx
-2. xxxx
-3. xxxx
+以上测试不适用于indexedDB测试，只能进行fake 或 mock，
+- 本项目拟采用Jest作为nodejs单元测试，
+- 采用Jest+ Puppeteer作为集成测试
+- 针对密钥对管理的indexedDB，采用独立的DataProvider以及独立的测试手段
 
-#### Instructions
-
-1. xxxx
-2. xxxx
-3. xxxx
-
-#### Contribution
-
-1. Fork the project
-2. Create Feat_xxx branch
-3. Commit your code
-4. Create Pull Request
-
-
-#### Gitee Feature
-
-1. You can use Readme\_XXX.md to support different languages, such as Readme\_en.md, Readme\_zh.md
-2. Gitee blog [blog.gitee.com](https://blog.gitee.com)
-3. Explore open source project [https://gitee.com/explore](https://gitee.com/explore)
-4. The most valuable open source project [GVP](https://gitee.com/gvp)
-5. The manual of Gitee [http://git.mydoc.io/](http://git.mydoc.io/)
-6. The most popular members  [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
