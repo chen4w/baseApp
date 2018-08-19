@@ -12,10 +12,19 @@
 - 区块管理：从区块链同步数据之后，提供区块检索、查看、验证 （只读检索和查看）
 - 交易管理：从区块链同步数据之后，提供交易检索、查看、验证 （只读检索和查看，构造和新建签名交易）
 
-##如何运行
+##如何运行bar
 git clone到本地之后，
 - `yarn install` 安装依赖
 - `yarn start` 启动服务
+
+##如何运行graphql服务[gdb](https://github.com/prisma/prisma/blob/master/docs/1.9/03-Tutorials2/08-Bootstrapping-Boilerplates/02-Node.md)
+- `cd gdb `
+- `yarn install` 安装依赖
+- 安装docker
+- `docker-compose up -d` 启动prisma 和mysql5.7的docker实例
+- datamodel.graphql  按需要修改数据schema,然后`prisma deploy` 部署schema
+- `yarn start` 启动app服务
+- `yarn dev` 启动app服务（数据操作子集）和db服务（数据操作全集）
 
 ##关于自动化测试选型
 - Jest：nodejs单元测试
