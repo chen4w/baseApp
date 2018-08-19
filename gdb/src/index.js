@@ -63,14 +63,16 @@ function startEvents() {
     Message = root.lookupType("rep.protos.Event");
     Block = root.lookupType("rep.protos.Block");
     var et = new EventTube('ws://localhost:8081/event',function(evt){
-      //console.log(m);
       var ed = new Uint8Array(evt.data);
       var msg = Message.decode(ed);
       console.log(msg)
+      //TODO 调用pdb to mutation createBlock
     })            
   });
 }  
 startEvents();      
 
-
+//TODO 通过rclink restAPI主动请求高度，请求本地缺失block,调用pdb to mutation createBlock
+//TODO 前端react admin 通过graphql检索、分页、排序数据
+//TODO 前端react admin 订阅graphql,主动刷新
 server.start(() => console.log('Server is running on http://localhost:4000'))
