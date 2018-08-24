@@ -67,7 +67,6 @@ function startEvents() {
       var msg = Message.decode(ed);
       //出块通知
       if (msg.action == 2 && msg.from != 'Block') {
-        console.log(msg.blk)
         var blk =  msg.blk;
         var blk_data = {
           hash: Buffer.from(blk.stateHash).toString('base64'),
