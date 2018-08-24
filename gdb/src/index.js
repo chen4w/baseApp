@@ -65,7 +65,23 @@ function startEvents() {
     var et = new EventTube('ws://localhost:8081/event',function(evt){
       var ed = new Uint8Array(evt.data);
       var msg = Message.decode(ed);
-      console.log(msg)
+      //出块通知
+      if (msg.action == 2 && msg.from != 'Block') {
+        console.log(msg.blk)
+        var blk =  msg.blk;
+        var blk_data = {
+          hash: Buffer.from(blk.stateHash).toString('base64'),
+          transCount: blk.transactions.length
+        };
+        if(blk.previousBlockHash)
+          blk_data.preHash = Buffer.from(blk.previousBlockHash).toString('base64');
+        console.log(blk_data)
+        pdb.mutation.createBlock(
+          {
+            data: blk_data,
+          }
+        )
+      }
       //TODO 调用pdb to mutation createBlock
     })            
   });

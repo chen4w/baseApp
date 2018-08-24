@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sun Aug 19 2018 22:33:03 GMT+0800 (中国标准时间)
+# timestamp: Fri Aug 24 2018 20:36:02 GMT+0800 (中国标准时间)
 
 type AggregateBlock {
   count: Int!
@@ -16,6 +16,7 @@ type BatchPayload {
 
 type Block implements Node {
   id: ID!
+  hash: String
   preHash: String
   pid: Int
   height: Int
@@ -33,6 +34,7 @@ type BlockConnection {
 }
 
 input BlockCreateInput {
+  hash: String
   preHash: String
   pid: Int
   height: Int
@@ -51,6 +53,8 @@ type BlockEdge {
 enum BlockOrderByInput {
   id_ASC
   id_DESC
+  hash_ASC
+  hash_DESC
   preHash_ASC
   preHash_DESC
   pid_ASC
@@ -67,6 +71,7 @@ enum BlockOrderByInput {
 
 type BlockPreviousValues {
   id: ID!
+  hash: String
   preHash: String
   pid: Int
   height: Int
@@ -113,6 +118,7 @@ input BlockSubscriptionWhereInput {
 }
 
 input BlockUpdateInput {
+  hash: String
   preHash: String
   pid: Int
   height: Int
@@ -168,6 +174,46 @@ input BlockWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  hash: String
+
+  """All values that are not equal to given value."""
+  hash_not: String
+
+  """All values that are contained in given list."""
+  hash_in: [String!]
+
+  """All values that are not contained in given list."""
+  hash_not_in: [String!]
+
+  """All values less than the given value."""
+  hash_lt: String
+
+  """All values less than or equal the given value."""
+  hash_lte: String
+
+  """All values greater than the given value."""
+  hash_gt: String
+
+  """All values greater than or equal the given value."""
+  hash_gte: String
+
+  """All values containing the given string."""
+  hash_contains: String
+
+  """All values not containing the given string."""
+  hash_not_contains: String
+
+  """All values starting with the given string."""
+  hash_starts_with: String
+
+  """All values not starting with the given string."""
+  hash_not_starts_with: String
+
+  """All values ending with the given string."""
+  hash_ends_with: String
+
+  """All values not ending with the given string."""
+  hash_not_ends_with: String
   preHash: String
 
   """All values that are not equal to given value."""

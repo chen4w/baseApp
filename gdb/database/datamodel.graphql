@@ -6,6 +6,7 @@ type Post {
 }
 type Block {
   id: ID! @unique
+  hash: String
   preHash: String
   pid: Int
   height: Int
