@@ -24,8 +24,8 @@ import englishMessages from './i18n/cn';
 import chineseMessages from './i18n/cn';
 
 //import  dataProvider from './dataprovider/data-provider'
-//import buildGraphQLProvider from 'ra-data-graphql';
-import buildGraphQLProvider from 'ra-data-graphql-simple';
+import buildGraphQLProvider from './ra-data-graphql-prisma';
+//import buildGraphQLProvider from 'ra-data-graphql-simple';
 import ApolloClient from 'apollo-boost';
 
 
