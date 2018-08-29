@@ -32,7 +32,7 @@ export default {
         },
     },
     resources: {
-        blocks: {
+        Block: {
             name: '区块',
             tabs: {
                 tab1: '基本项',

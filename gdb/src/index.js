@@ -14,6 +14,9 @@ const resolvers = {
     post(parent, { id }, ctx, info) {
       return ctx.db.query.post({ where: { id } }, info)
     },
+    Block(parent, { id }, ctx, info) {
+      return ctx.db.query.block({ where: { id } }, info)
+    },
   },
   Mutation: {
     createDraft(parent, { title, text }, ctx, info) {
@@ -65,7 +68,7 @@ function startEvents() {
     var et = new EventTube('ws://localhost:8081/event',function(evt){
       var ed = new Uint8Array(evt.data);
       var msg = Message.decode(ed);
-      //出块通知
+      //出块通知 TODO 确保块内全部交易写入
       if (msg.action == 2 && msg.from != 'Block') {
         var blk =  msg.blk;
         var blk_data = {
@@ -85,7 +88,7 @@ function startEvents() {
     })            
   });
 }  
-startEvents();      
+//startEvents();      
 
 //TODO 通过rclink restAPI主动请求高度，请求本地缺失block,调用pdb to mutation createBlock
 //TODO 前端react admin 通过graphql检索、分页、排序数据

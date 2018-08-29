@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Admin, Resource } from 'react-admin/lib';
 
 import { CertList, CertShow } from './cert';
@@ -20,30 +20,62 @@ import BlockIcon from '@material-ui/icons/ViewColumn';
 import Dashboard from './dashboard/Dashboard';
 
 import authProvider from './authProvider';
-import englishMessages from 'ra-language-english';
+import englishMessages from './i18n/cn';
 import chineseMessages from './i18n/cn';
 
-import  dataProvider2 from './fake/fdp'
+//import  dataProvider from './dataprovider/data-provider'
+//import buildGraphQLProvider from 'ra-data-graphql';
+import buildGraphQLProvider from 'ra-data-graphql-simple';
+import ApolloClient from 'apollo-boost';
+
+
 const messages = {
     cn: chineseMessages,
     en: englishMessages,
 }
 const i18nProvider = locale => messages[locale];
 
-
-//const dataProvider = jsonServerProvider('http://jsonplaceholder.typicode.com');
-
-
-const App = () => (
+/*const App = () => (
     <Admin title="RepChain基础服务" locale="cn" i18nProvider={i18nProvider} dashboard={Dashboard} 
-    dataProvider={dataProvider2} authProvider={authProvider}>
+    dataProvider={dataProvider} authProvider={authProvider}>
         <Resource name="certs" list={CertList}  show={CertShow} icon={CertIcon}/>
         <Resource name="keypairs" list={KeypairList}  edit={KeypairEdit} create={KeypairCreate} icon={KeypairIcon}/>
         <Resource name="accounts" list={AccountList}  edit={AccountEdit} create={AccountCreate} icon={AccountIcon}/>
         <Resource name="networks" list={NetworkList}  show={NetworkShow} create={NetworkCreate} icon={NetworkIcon}/>
         <Resource name="nodes" list={NodeList}  show={NodeShow} create={NodeCreate} icon={NodeIcon}/>
-        <Resource name="blocks" list={BlockList}  show={BlockShow}  icon={BlockIcon}/>
+        <Resource name="Block" list={BlockList}  show={BlockShow}  icon={BlockIcon}/>
         <Resource name="transactions" list={TransList}  show={TransShow} create={TransCreate} icon={TransIcon}/>
     </Admin>
-);
+);*/
+
+
+const myClient = new ApolloClient({
+    uri: 'http://localhost:4466/'
+  });
+
+class App extends Component {
+    constructor() {
+        super();
+        this.state = { dataProvider: null };
+    }
+    componentDidMount() {
+        buildGraphQLProvider({ client: myClient })
+            .then(dataProvider => this.setState({ dataProvider }));
+    }
+
+    render() {
+        const { dataProvider } = this.state;
+
+        if (!dataProvider) {
+            return <div>Loading</div>;
+        }
+
+        return (
+            <Admin dataProvider={dataProvider} title="RepChain基础服务" authProvider={authProvider}
+            locale="cn" i18nProvider={i18nProvider} dashboard={Dashboard} >
+                 <Resource name="Block" list={BlockList}  show={BlockShow}  icon={BlockIcon}/>
+            </Admin>
+        );
+    }
+}
 export default App;
