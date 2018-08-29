@@ -25,8 +25,6 @@ import chineseMessages from './i18n/cn';
 
 //import  dataProvider from './dataprovider/data-provider'
 import buildGraphQLProvider from './adaptator';
-//import buildGraphQLProvider from 'ra-data-graphql-simple';
-import ApolloClient from 'apollo-boost';
 
 
 const messages = {
@@ -49,9 +47,6 @@ const i18nProvider = locale => messages[locale];
 );*/
 
 
-const myClient = new ApolloClient({
-    uri: 'http://localhost:4466/'
-  });
 
 class App extends Component {
     constructor() {
@@ -59,8 +54,9 @@ class App extends Component {
         this.state = { dataProvider: null };
     }
     componentDidMount() {
-        buildGraphQLProvider({ client: myClient })
-            .then(dataProvider => 
+        buildGraphQLProvider({
+            clientOptions: { uri: 'http://localhost:4466/' }
+          }).then(dataProvider => 
                 this.setState({ dataProvider })
             );
     }
