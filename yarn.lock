@@ -240,13 +240,19 @@ apollo-cache-inmemory@^1.1.7, apollo-cache-inmemory@^1.2.8:
     apollo-utilities "^1.0.19"
     graphql-anywhere "^4.1.17"
 
+apollo-cache@1.1.16:
+  version "1.1.16"
+  resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-1.1.16.tgz#0c7460ee8eff1898462979143b4e922aaba73cf8"
+  dependencies:
+    apollo-utilities "^1.0.20"
+
 apollo-cache@^1.1.15:
   version "1.1.15"
   resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-1.1.15.tgz#48d3a366047fc4b876c2036a79b0e070dee74cc1"
   dependencies:
     apollo-utilities "^1.0.19"
 
-apollo-client-preset@^1.0.6:
+apollo-client-preset@^1.0.6, apollo-client-preset@^1.0.8:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/apollo-client-preset/-/apollo-client-preset-1.0.8.tgz#23bd7176849d0d815f12c648774d009b258a449e"
   dependencies:
@@ -265,6 +271,20 @@ apollo-client@^2.2.2, apollo-client@^2.2.8, apollo-client@^2.4.0:
     apollo-link "^1.0.0"
     apollo-link-dedup "^1.0.0"
     apollo-utilities "^1.0.19"
+    symbol-observable "^1.0.2"
+    zen-observable "^0.8.0"
+  optionalDependencies:
+    "@types/async" "2.0.49"
+
+apollo-client@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.4.1.tgz#d2ebaac1831fa170f7d0070bb9d581cccb5f64e3"
+  dependencies:
+    "@types/zen-observable" "^0.8.0"
+    apollo-cache "1.1.16"
+    apollo-link "^1.0.0"
+    apollo-link-dedup "^1.0.0"
+    apollo-utilities "1.0.20"
     symbol-observable "^1.0.2"
     zen-observable "^0.8.0"
   optionalDependencies:
@@ -309,6 +329,12 @@ apollo-link@^1.0.0, apollo-link@^1.0.6, apollo-link@^1.2.2:
     "@types/graphql" "0.12.6"
     apollo-utilities "^1.0.0"
     zen-observable-ts "^0.8.9"
+
+apollo-utilities@1.0.20, apollo-utilities@^1.0.20:
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.0.20.tgz#b14318686cb67838279fb5f009cca0ec97a4d140"
+  dependencies:
+    fast-json-stable-stringify "^2.0.0"
 
 apollo-utilities@^1.0.0, apollo-utilities@^1.0.19, apollo-utilities@^1.0.8:
   version "1.0.19"

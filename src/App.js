@@ -24,7 +24,7 @@ import englishMessages from './i18n/cn';
 import chineseMessages from './i18n/cn';
 
 //import  dataProvider from './dataprovider/data-provider'
-import buildGraphQLProvider from './ra-data-graphql-prisma';
+import buildGraphQLProvider from './adaptator';
 //import buildGraphQLProvider from 'ra-data-graphql-simple';
 import ApolloClient from 'apollo-boost';
 
@@ -60,7 +60,9 @@ class App extends Component {
     }
     componentDidMount() {
         buildGraphQLProvider({ client: myClient })
-            .then(dataProvider => this.setState({ dataProvider }));
+            .then(dataProvider => 
+                this.setState({ dataProvider })
+            );
     }
 
     render() {
