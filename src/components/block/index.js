@@ -25,8 +25,7 @@ const PostActions = ({ resource, filters, displayedFilters, filterValues, basePa
 
 const BlockFilter = props => (
     <Filter {...props}>
-        <TextInput label="pos.search" source="q" alwaysOn />
-        <DateInput source="created" />
+        <TextInput label="hash" source="hash" alwaysOn />
     </Filter>
 );
 
@@ -40,20 +39,13 @@ export const BlockList = (props) => (
             small={
                 <SimpleList
                     primaryText={record => record.id}
-                    secondaryText={record => record.sid}
-                    tertiaryText={record => new Date(record.created).toLocaleDateString()}
+                    secondaryText={record => record.hash}
                 />
             }
             medium={
                 <Datagrid>
                     <TextField source="id" />
-                    <TextField source="height" />
-                    <TextField source="preHash" />
-                    <ReferenceField label="组网" source="pid" reference="networks" linkType="show">
-                        <TextField source="netId" />
-                    </ReferenceField>
-
-                    <DateField source="created" showTime />
+                    <TextField source="hash" />
                     <ShowButton />
                 </Datagrid>
             }
@@ -72,21 +64,7 @@ export const BlockShow = (props) => (
                 <TextField source="id" />
                 <TextField source="height" />
                 <TextField source="preHash" />
-                <TextField source="transCount" />
-                <DateField source="created" />
-            </Tab>
-            <Tab label="resources.blocks.tabs.tab2">
-                <ReferenceManyField
-                    reference="transactions"
-                    target="bid"
-                    addLabel={false}
-                >
-                    <Datagrid>
-                        <TextField source="txId" />
-                        <DateField source="created" />
-                        <ShowButton />
-                    </Datagrid>
-                </ReferenceManyField>
+                <TextField source="hash" />
             </Tab>
         </TabbedShowLayout>
     </Show>

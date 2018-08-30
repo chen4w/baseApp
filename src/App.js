@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Admin, Resource } from 'react-admin/lib';
 
-import { CertList, CertShow } from './cert';
-import { KeypairList, KeypairEdit, KeypairCreate } from './keypair';
-import { AccountList, AccountEdit, AccountCreate } from './account';
-import { TransList, TransShow, TransCreate } from './transaction';
-import { NetworkList, NetworkShow, NetworkCreate } from './network';
-import { NodeList, NodeShow, NodeCreate } from './node';
-import { BlockList, BlockShow } from './block';
+import { CertList, CertShow } from './components/cert';
+import { KeypairList, KeypairEdit, KeypairCreate } from './components/keypair';
+import { AccountList, AccountEdit, AccountCreate } from './components/account';
+import { TransList, TransShow, TransCreate } from './components/transaction';
+import { NetworkList, NetworkShow, NetworkCreate } from './components/network';
+import { NodeList, NodeShow, NodeCreate } from './components/node';
+import { BlockList, BlockShow } from './components/block';
 
 import CertIcon from '@material-ui/icons/Description';
 import KeypairIcon from '@material-ui/icons/VpnKey';
@@ -17,7 +17,7 @@ import NetworkIcon from '@material-ui/icons/GroupWork';
 import NodeIcon from '@material-ui/icons/Computer';
 import BlockIcon from '@material-ui/icons/ViewColumn';
 
-import Dashboard from './dashboard/Dashboard';
+import Dashboard from './components/dashboard/Dashboard';
 
 import authProvider from './authProvider';
 import englishMessages from './i18n/cn';
