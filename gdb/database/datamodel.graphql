@@ -12,3 +12,11 @@ type Block {
   height: Int
   transCount: Int
 }
+type Transaction {
+  id: ID! @unique
+  txId: String
+  cname: String
+  action: String
+  ipt: String
+  blockId: String
+}

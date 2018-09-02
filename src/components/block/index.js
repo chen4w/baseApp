@@ -60,7 +60,7 @@ const BlockTitle = ({ record }) => {
 export const BlockShow = (props) => (
     <Show title={<BlockTitle />} {...props}>
         <TabbedShowLayout>
-            <Tab label="resources.blocks.tabs.tab1">
+            <Tab label="resources.Block.tabs.tab1">
                 <TextField source="id" />
                 <TextField source="height" />
                 <TextField source="preHash" />

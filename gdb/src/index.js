@@ -83,6 +83,14 @@ function startEvents() {
             data: blk_data,
           }
         )
+        var txs = blk.transactions;
+        for(var i=0; i<txs.length; i++){
+          var tx = txs[i];
+          var tx_data ={
+            txId: tx.txId,
+            blockId: blk_data.hash
+          }
+        }
       }
       //TODO 调用pdb to mutation createBlock
     })            

@@ -1,11 +1,15 @@
 # source: http://localhost:4466
-# timestamp: Fri Aug 24 2018 20:36:02 GMT+0800 (中国标准时间)
+# timestamp: Sat Sep 01 2018 21:56:58 GMT+0800 (中国标准时间)
 
 type AggregateBlock {
   count: Int!
 }
 
 type AggregatePost {
+  count: Int!
+}
+
+type AggregateTransaction {
   count: Int!
 }
 
@@ -335,16 +339,22 @@ scalar Long
 type Mutation {
   createPost(data: PostCreateInput!): Post!
   createBlock(data: BlockCreateInput!): Block!
+  createTransaction(data: TransactionCreateInput!): Transaction!
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateBlock(data: BlockUpdateInput!, where: BlockWhereUniqueInput!): Block
+  updateTransaction(data: TransactionUpdateInput!, where: TransactionWhereUniqueInput!): Transaction
   deletePost(where: PostWhereUniqueInput!): Post
   deleteBlock(where: BlockWhereUniqueInput!): Block
+  deleteTransaction(where: TransactionWhereUniqueInput!): Transaction
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   upsertBlock(where: BlockWhereUniqueInput!, create: BlockCreateInput!, update: BlockUpdateInput!): Block!
+  upsertTransaction(where: TransactionWhereUniqueInput!, create: TransactionCreateInput!, update: TransactionUpdateInput!): Transaction!
   updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
   updateManyBlocks(data: BlockUpdateInput!, where: BlockWhereInput): BatchPayload!
+  updateManyTransactions(data: TransactionUpdateInput!, where: TransactionWhereInput): BatchPayload!
   deleteManyPosts(where: PostWhereInput): BatchPayload!
   deleteManyBlocks(where: BlockWhereInput): BatchPayload!
+  deleteManyTransactions(where: TransactionWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -615,10 +625,13 @@ input PostWhereUniqueInput {
 type Query {
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   blocks(where: BlockWhereInput, orderBy: BlockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Block]!
+  transactions(where: TransactionWhereInput, orderBy: TransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Transaction]!
   post(where: PostWhereUniqueInput!): Post
   block(where: BlockWhereUniqueInput!): Block
+  transaction(where: TransactionWhereUniqueInput!): Transaction
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
   blocksConnection(where: BlockWhereInput, orderBy: BlockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BlockConnection!
+  transactionsConnection(where: TransactionWhereInput, orderBy: TransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TransactionConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -630,4 +643,371 @@ type Query {
 type Subscription {
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   block(where: BlockSubscriptionWhereInput): BlockSubscriptionPayload
+  transaction(where: TransactionSubscriptionWhereInput): TransactionSubscriptionPayload
+}
+
+type Transaction implements Node {
+  id: ID!
+  txId: String
+  cname: String
+  action: String
+  ipt: String
+  blockId: String
+}
+
+"""A connection to a list of items."""
+type TransactionConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [TransactionEdge]!
+  aggregate: AggregateTransaction!
+}
+
+input TransactionCreateInput {
+  txId: String
+  cname: String
+  action: String
+  ipt: String
+  blockId: String
+}
+
+"""An edge in a connection."""
+type TransactionEdge {
+  """The item at the end of the edge."""
+  node: Transaction!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum TransactionOrderByInput {
+  id_ASC
+  id_DESC
+  txId_ASC
+  txId_DESC
+  cname_ASC
+  cname_DESC
+  action_ASC
+  action_DESC
+  ipt_ASC
+  ipt_DESC
+  blockId_ASC
+  blockId_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type TransactionPreviousValues {
+  id: ID!
+  txId: String
+  cname: String
+  action: String
+  ipt: String
+  blockId: String
+}
+
+type TransactionSubscriptionPayload {
+  mutation: MutationType!
+  node: Transaction
+  updatedFields: [String!]
+  previousValues: TransactionPreviousValues
+}
+
+input TransactionSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TransactionSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TransactionSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TransactionSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: TransactionWhereInput
+}
+
+input TransactionUpdateInput {
+  txId: String
+  cname: String
+  action: String
+  ipt: String
+  blockId: String
+}
+
+input TransactionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TransactionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TransactionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TransactionWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  txId: String
+
+  """All values that are not equal to given value."""
+  txId_not: String
+
+  """All values that are contained in given list."""
+  txId_in: [String!]
+
+  """All values that are not contained in given list."""
+  txId_not_in: [String!]
+
+  """All values less than the given value."""
+  txId_lt: String
+
+  """All values less than or equal the given value."""
+  txId_lte: String
+
+  """All values greater than the given value."""
+  txId_gt: String
+
+  """All values greater than or equal the given value."""
+  txId_gte: String
+
+  """All values containing the given string."""
+  txId_contains: String
+
+  """All values not containing the given string."""
+  txId_not_contains: String
+
+  """All values starting with the given string."""
+  txId_starts_with: String
+
+  """All values not starting with the given string."""
+  txId_not_starts_with: String
+
+  """All values ending with the given string."""
+  txId_ends_with: String
+
+  """All values not ending with the given string."""
+  txId_not_ends_with: String
+  cname: String
+
+  """All values that are not equal to given value."""
+  cname_not: String
+
+  """All values that are contained in given list."""
+  cname_in: [String!]
+
+  """All values that are not contained in given list."""
+  cname_not_in: [String!]
+
+  """All values less than the given value."""
+  cname_lt: String
+
+  """All values less than or equal the given value."""
+  cname_lte: String
+
+  """All values greater than the given value."""
+  cname_gt: String
+
+  """All values greater than or equal the given value."""
+  cname_gte: String
+
+  """All values containing the given string."""
+  cname_contains: String
+
+  """All values not containing the given string."""
+  cname_not_contains: String
+
+  """All values starting with the given string."""
+  cname_starts_with: String
+
+  """All values not starting with the given string."""
+  cname_not_starts_with: String
+
+  """All values ending with the given string."""
+  cname_ends_with: String
+
+  """All values not ending with the given string."""
+  cname_not_ends_with: String
+  action: String
+
+  """All values that are not equal to given value."""
+  action_not: String
+
+  """All values that are contained in given list."""
+  action_in: [String!]
+
+  """All values that are not contained in given list."""
+  action_not_in: [String!]
+
+  """All values less than the given value."""
+  action_lt: String
+
+  """All values less than or equal the given value."""
+  action_lte: String
+
+  """All values greater than the given value."""
+  action_gt: String
+
+  """All values greater than or equal the given value."""
+  action_gte: String
+
+  """All values containing the given string."""
+  action_contains: String
+
+  """All values not containing the given string."""
+  action_not_contains: String
+
+  """All values starting with the given string."""
+  action_starts_with: String
+
+  """All values not starting with the given string."""
+  action_not_starts_with: String
+
+  """All values ending with the given string."""
+  action_ends_with: String
+
+  """All values not ending with the given string."""
+  action_not_ends_with: String
+  ipt: String
+
+  """All values that are not equal to given value."""
+  ipt_not: String
+
+  """All values that are contained in given list."""
+  ipt_in: [String!]
+
+  """All values that are not contained in given list."""
+  ipt_not_in: [String!]
+
+  """All values less than the given value."""
+  ipt_lt: String
+
+  """All values less than or equal the given value."""
+  ipt_lte: String
+
+  """All values greater than the given value."""
+  ipt_gt: String
+
+  """All values greater than or equal the given value."""
+  ipt_gte: String
+
+  """All values containing the given string."""
+  ipt_contains: String
+
+  """All values not containing the given string."""
+  ipt_not_contains: String
+
+  """All values starting with the given string."""
+  ipt_starts_with: String
+
+  """All values not starting with the given string."""
+  ipt_not_starts_with: String
+
+  """All values ending with the given string."""
+  ipt_ends_with: String
+
+  """All values not ending with the given string."""
+  ipt_not_ends_with: String
+  blockId: String
+
+  """All values that are not equal to given value."""
+  blockId_not: String
+
+  """All values that are contained in given list."""
+  blockId_in: [String!]
+
+  """All values that are not contained in given list."""
+  blockId_not_in: [String!]
+
+  """All values less than the given value."""
+  blockId_lt: String
+
+  """All values less than or equal the given value."""
+  blockId_lte: String
+
+  """All values greater than the given value."""
+  blockId_gt: String
+
+  """All values greater than or equal the given value."""
+  blockId_gte: String
+
+  """All values containing the given string."""
+  blockId_contains: String
+
+  """All values not containing the given string."""
+  blockId_not_contains: String
+
+  """All values starting with the given string."""
+  blockId_starts_with: String
+
+  """All values not starting with the given string."""
+  blockId_not_starts_with: String
+
+  """All values ending with the given string."""
+  blockId_ends_with: String
+
+  """All values not ending with the given string."""
+  blockId_not_ends_with: String
+}
+
+input TransactionWhereUniqueInput {
+  id: ID
 }
