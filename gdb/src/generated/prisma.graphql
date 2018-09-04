@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sat Sep 01 2018 21:56:58 GMT+0800 (中国标准时间)
+# timestamp: Tue Sep 04 2018 14:00:47 GMT+0800 (中国标准时间)
 
 type AggregateBlock {
   count: Int!
@@ -25,6 +25,7 @@ type Block implements Node {
   pid: Int
   height: Int
   transCount: Int
+  transactions(where: TransactionWhereInput, orderBy: TransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Transaction!]
 }
 
 """A connection to a list of items."""
@@ -38,6 +39,20 @@ type BlockConnection {
 }
 
 input BlockCreateInput {
+  hash: String
+  preHash: String
+  pid: Int
+  height: Int
+  transCount: Int
+  transactions: TransactionCreateManyWithoutBlockerInput
+}
+
+input BlockCreateOneWithoutTransactionsInput {
+  create: BlockCreateWithoutTransactionsInput
+  connect: BlockWhereUniqueInput
+}
+
+input BlockCreateWithoutTransactionsInput {
   hash: String
   preHash: String
   pid: Int
@@ -127,6 +142,28 @@ input BlockUpdateInput {
   pid: Int
   height: Int
   transCount: Int
+  transactions: TransactionUpdateManyWithoutBlockerInput
+}
+
+input BlockUpdateOneWithoutTransactionsInput {
+  create: BlockCreateWithoutTransactionsInput
+  connect: BlockWhereUniqueInput
+  delete: Boolean
+  update: BlockUpdateWithoutTransactionsDataInput
+  upsert: BlockUpsertWithoutTransactionsInput
+}
+
+input BlockUpdateWithoutTransactionsDataInput {
+  hash: String
+  preHash: String
+  pid: Int
+  height: Int
+  transCount: Int
+}
+
+input BlockUpsertWithoutTransactionsInput {
+  update: BlockUpdateWithoutTransactionsDataInput!
+  create: BlockCreateWithoutTransactionsInput!
 }
 
 input BlockWhereInput {
@@ -324,6 +361,9 @@ input BlockWhereInput {
 
   """All values greater than or equal the given value."""
   transCount_gte: Int
+  transactions_every: TransactionWhereInput
+  transactions_some: TransactionWhereInput
+  transactions_none: TransactionWhereInput
 }
 
 input BlockWhereUniqueInput {
@@ -648,11 +688,13 @@ type Subscription {
 
 type Transaction implements Node {
   id: ID!
+  type: Int
   txId: String
   cname: String
   action: String
   ipt: String
   blockId: String
+  blocker(where: BlockWhereInput): Block!
 }
 
 """A connection to a list of items."""
@@ -666,6 +708,22 @@ type TransactionConnection {
 }
 
 input TransactionCreateInput {
+  type: Int
+  txId: String
+  cname: String
+  action: String
+  ipt: String
+  blockId: String
+  blocker: BlockCreateOneWithoutTransactionsInput!
+}
+
+input TransactionCreateManyWithoutBlockerInput {
+  create: [TransactionCreateWithoutBlockerInput!]
+  connect: [TransactionWhereUniqueInput!]
+}
+
+input TransactionCreateWithoutBlockerInput {
+  type: Int
   txId: String
   cname: String
   action: String
@@ -685,6 +743,8 @@ type TransactionEdge {
 enum TransactionOrderByInput {
   id_ASC
   id_DESC
+  type_ASC
+  type_DESC
   txId_ASC
   txId_DESC
   cname_ASC
@@ -703,6 +763,7 @@ enum TransactionOrderByInput {
 
 type TransactionPreviousValues {
   id: ID!
+  type: Int
   txId: String
   cname: String
   action: String
@@ -750,11 +811,42 @@ input TransactionSubscriptionWhereInput {
 }
 
 input TransactionUpdateInput {
+  type: Int
   txId: String
   cname: String
   action: String
   ipt: String
   blockId: String
+  blocker: BlockUpdateOneWithoutTransactionsInput
+}
+
+input TransactionUpdateManyWithoutBlockerInput {
+  create: [TransactionCreateWithoutBlockerInput!]
+  connect: [TransactionWhereUniqueInput!]
+  disconnect: [TransactionWhereUniqueInput!]
+  delete: [TransactionWhereUniqueInput!]
+  update: [TransactionUpdateWithWhereUniqueWithoutBlockerInput!]
+  upsert: [TransactionUpsertWithWhereUniqueWithoutBlockerInput!]
+}
+
+input TransactionUpdateWithoutBlockerDataInput {
+  type: Int
+  txId: String
+  cname: String
+  action: String
+  ipt: String
+  blockId: String
+}
+
+input TransactionUpdateWithWhereUniqueWithoutBlockerInput {
+  where: TransactionWhereUniqueInput!
+  data: TransactionUpdateWithoutBlockerDataInput!
+}
+
+input TransactionUpsertWithWhereUniqueWithoutBlockerInput {
+  where: TransactionWhereUniqueInput!
+  update: TransactionUpdateWithoutBlockerDataInput!
+  create: TransactionCreateWithoutBlockerInput!
 }
 
 input TransactionWhereInput {
@@ -806,6 +898,28 @@ input TransactionWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  type: Int
+
+  """All values that are not equal to given value."""
+  type_not: Int
+
+  """All values that are contained in given list."""
+  type_in: [Int!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [Int!]
+
+  """All values less than the given value."""
+  type_lt: Int
+
+  """All values less than or equal the given value."""
+  type_lte: Int
+
+  """All values greater than the given value."""
+  type_gt: Int
+
+  """All values greater than or equal the given value."""
+  type_gte: Int
   txId: String
 
   """All values that are not equal to given value."""
@@ -1006,6 +1120,7 @@ input TransactionWhereInput {
 
   """All values not ending with the given string."""
   blockId_not_ends_with: String
+  blocker: BlockWhereInput
 }
 
 input TransactionWhereUniqueInput {

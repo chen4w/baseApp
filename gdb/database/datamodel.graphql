@@ -10,13 +10,16 @@ type Block {
   preHash: String
   pid: Int
   height: Int
-  transCount: Int
+  transCount: Int,
+  transactions:[Transaction!]!
 }
 type Transaction {
   id: ID! @unique
+  type: Int
   txId: String
   cname: String
   action: String
   ipt: String
   blockId: String
+  blocker: Block! 
 }
