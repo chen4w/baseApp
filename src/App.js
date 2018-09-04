@@ -72,6 +72,7 @@ class App extends Component {
             <Admin dataProvider={dataProvider} title="RepChain基础服务" authProvider={authProvider}
             locale="cn" i18nProvider={i18nProvider} dashboard={Dashboard} >
                  <Resource name="Block" list={BlockList}  show={BlockShow}  icon={BlockIcon}/>
+                 <Resource name="Transaction" list={TransList}  show={TransShow} create={TransCreate} icon={TransIcon}/>
             </Admin>
         );
     }

@@ -68,7 +68,7 @@ async function saveBlock(blk) {
   if(blk.previousBlockHash)
     blk_data.preHash = Buffer.from(blk.previousBlockHash).toString('base64');
 
-  //写入区块
+  //写入区块,
   var obj_blk =await pdb.mutation.createBlock(
     {
       data: blk_data,

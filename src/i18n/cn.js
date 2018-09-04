@@ -88,7 +88,7 @@ export default {
                 created: '生成时间'
             }
         },
-        transactions: {
+        Transaction: {
             name: '交易',
             tabs: {
                 tab1: '基本项',

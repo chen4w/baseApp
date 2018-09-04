@@ -9,8 +9,7 @@ import {
 
 const TransFilter = props => (
     <Filter {...props}>
-        <TextInput label="pos.search" source="q" alwaysOn />
-        <DateInput source="created" />
+        <TextInput label="txId" source="txId" alwaysOn />
     </Filter>
 );
 
@@ -29,14 +28,9 @@ export const TransList = (props) => (
             medium={
                 <Datagrid>
                     <TextField source="id" />
-                    <ReferenceField label="姓名" source="aid" reference="accounts">
-                        <TextField source="name" />
-                    </ReferenceField>
-                    <ReferenceField label="区块" source="bid" reference="blocks"  linkType="show">
-                        <TextField source="height" />
-                    </ReferenceField>
                     <TextField source="txId" />
-                    <DateField source="created" showTime />
+                    <TextField source="cname" />
+                    
                     <ShowButton />
                 </Datagrid>
             }
@@ -51,13 +45,13 @@ const TransTitle = ({ record }) => {
 export const TransShow = (props) => (
     <Show title={<TransTitle />} {...props}>
         <TabbedShowLayout>
-            <Tab label="resources.transactions.tabs.tab1">
+            <Tab label="resources.Transaction.tabs.tab1">
                 <TextField source="id" />
                 <TextField source="txId" />
                 <TextField source="blockId" />
                 <DateField source="created" />
             </Tab>
-            <Tab label="resources.transactions.tabs.tab2">
+            <Tab label="resources.Transaction.tabs.tab2">
                 <TextField source="cid" />
                 <TextField source="cname" />
                 <TextField source="action" />
@@ -70,7 +64,7 @@ export const TransShow = (props) => (
 export const TransCreate = (props) => (
     <Create {...props}>
         <TabbedForm>
-            <FormTab label="resources.transactions.tabs.tab2">
+            <FormTab label="resources.Transaction.tabs.tab2">
                 <TextInput source="cid" />
                 <TextInput source="action" />
                 <LongTextInput source="ipt" />

@@ -66,6 +66,20 @@ export const BlockShow = (props) => (
                 <TextField source="preHash" />
                 <TextField source="hash" />
             </Tab>
+            <Tab label="resources.Block.tabs.tab2">
+                <ReferenceManyField
+                    reference="Transaction"                    
+                    target="blocker"
+                    addLabel={false}
+                >
+                    <Datagrid>
+                        <TextField source="txId" />
+                        <TextField source="blockId" />
+                        <ShowButton />
+                    </Datagrid>
+                </ReferenceManyField>
+            </Tab>
+
         </TabbedShowLayout>
     </Show>
 );
