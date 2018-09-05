@@ -1,7 +1,11 @@
 # source: http://localhost:4466
-# timestamp: Tue Sep 04 2018 14:00:47 GMT+0800 (中国标准时间)
+# timestamp: Wed Sep 05 2018 17:04:51 GMT+0800 (中国标准时间)
 
 type AggregateBlock {
+  count: Int!
+}
+
+type AggregateNetwork {
   count: Int!
 }
 
@@ -380,27 +384,519 @@ type Mutation {
   createPost(data: PostCreateInput!): Post!
   createBlock(data: BlockCreateInput!): Block!
   createTransaction(data: TransactionCreateInput!): Transaction!
+  createNetwork(data: NetworkCreateInput!): Network!
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateBlock(data: BlockUpdateInput!, where: BlockWhereUniqueInput!): Block
   updateTransaction(data: TransactionUpdateInput!, where: TransactionWhereUniqueInput!): Transaction
+  updateNetwork(data: NetworkUpdateInput!, where: NetworkWhereUniqueInput!): Network
   deletePost(where: PostWhereUniqueInput!): Post
   deleteBlock(where: BlockWhereUniqueInput!): Block
   deleteTransaction(where: TransactionWhereUniqueInput!): Transaction
+  deleteNetwork(where: NetworkWhereUniqueInput!): Network
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   upsertBlock(where: BlockWhereUniqueInput!, create: BlockCreateInput!, update: BlockUpdateInput!): Block!
   upsertTransaction(where: TransactionWhereUniqueInput!, create: TransactionCreateInput!, update: TransactionUpdateInput!): Transaction!
+  upsertNetwork(where: NetworkWhereUniqueInput!, create: NetworkCreateInput!, update: NetworkUpdateInput!): Network!
   updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
   updateManyBlocks(data: BlockUpdateInput!, where: BlockWhereInput): BatchPayload!
   updateManyTransactions(data: TransactionUpdateInput!, where: TransactionWhereInput): BatchPayload!
+  updateManyNetworks(data: NetworkUpdateInput!, where: NetworkWhereInput): BatchPayload!
   deleteManyPosts(where: PostWhereInput): BatchPayload!
   deleteManyBlocks(where: BlockWhereInput): BatchPayload!
   deleteManyTransactions(where: TransactionWhereInput): BatchPayload!
+  deleteManyNetworks(where: NetworkWhereInput): BatchPayload!
 }
 
 enum MutationType {
   CREATED
   UPDATED
   DELETED
+}
+
+type Network implements Node {
+  id: ID!
+  name: String
+  seed: String
+  genesisBlock: String
+  config: String
+  certList: String
+  rtGraph: String
+  taskId: String
+  status: Int
+}
+
+"""A connection to a list of items."""
+type NetworkConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [NetworkEdge]!
+  aggregate: AggregateNetwork!
+}
+
+input NetworkCreateInput {
+  name: String
+  seed: String
+  genesisBlock: String
+  config: String
+  certList: String
+  rtGraph: String
+  taskId: String
+  status: Int
+}
+
+"""An edge in a connection."""
+type NetworkEdge {
+  """The item at the end of the edge."""
+  node: Network!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum NetworkOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  seed_ASC
+  seed_DESC
+  genesisBlock_ASC
+  genesisBlock_DESC
+  config_ASC
+  config_DESC
+  certList_ASC
+  certList_DESC
+  rtGraph_ASC
+  rtGraph_DESC
+  taskId_ASC
+  taskId_DESC
+  status_ASC
+  status_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type NetworkPreviousValues {
+  id: ID!
+  name: String
+  seed: String
+  genesisBlock: String
+  config: String
+  certList: String
+  rtGraph: String
+  taskId: String
+  status: Int
+}
+
+type NetworkSubscriptionPayload {
+  mutation: MutationType!
+  node: Network
+  updatedFields: [String!]
+  previousValues: NetworkPreviousValues
+}
+
+input NetworkSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [NetworkSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [NetworkSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [NetworkSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: NetworkWhereInput
+}
+
+input NetworkUpdateInput {
+  name: String
+  seed: String
+  genesisBlock: String
+  config: String
+  certList: String
+  rtGraph: String
+  taskId: String
+  status: Int
+}
+
+input NetworkWhereInput {
+  """Logical AND on all given filters."""
+  AND: [NetworkWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [NetworkWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [NetworkWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  seed: String
+
+  """All values that are not equal to given value."""
+  seed_not: String
+
+  """All values that are contained in given list."""
+  seed_in: [String!]
+
+  """All values that are not contained in given list."""
+  seed_not_in: [String!]
+
+  """All values less than the given value."""
+  seed_lt: String
+
+  """All values less than or equal the given value."""
+  seed_lte: String
+
+  """All values greater than the given value."""
+  seed_gt: String
+
+  """All values greater than or equal the given value."""
+  seed_gte: String
+
+  """All values containing the given string."""
+  seed_contains: String
+
+  """All values not containing the given string."""
+  seed_not_contains: String
+
+  """All values starting with the given string."""
+  seed_starts_with: String
+
+  """All values not starting with the given string."""
+  seed_not_starts_with: String
+
+  """All values ending with the given string."""
+  seed_ends_with: String
+
+  """All values not ending with the given string."""
+  seed_not_ends_with: String
+  genesisBlock: String
+
+  """All values that are not equal to given value."""
+  genesisBlock_not: String
+
+  """All values that are contained in given list."""
+  genesisBlock_in: [String!]
+
+  """All values that are not contained in given list."""
+  genesisBlock_not_in: [String!]
+
+  """All values less than the given value."""
+  genesisBlock_lt: String
+
+  """All values less than or equal the given value."""
+  genesisBlock_lte: String
+
+  """All values greater than the given value."""
+  genesisBlock_gt: String
+
+  """All values greater than or equal the given value."""
+  genesisBlock_gte: String
+
+  """All values containing the given string."""
+  genesisBlock_contains: String
+
+  """All values not containing the given string."""
+  genesisBlock_not_contains: String
+
+  """All values starting with the given string."""
+  genesisBlock_starts_with: String
+
+  """All values not starting with the given string."""
+  genesisBlock_not_starts_with: String
+
+  """All values ending with the given string."""
+  genesisBlock_ends_with: String
+
+  """All values not ending with the given string."""
+  genesisBlock_not_ends_with: String
+  config: String
+
+  """All values that are not equal to given value."""
+  config_not: String
+
+  """All values that are contained in given list."""
+  config_in: [String!]
+
+  """All values that are not contained in given list."""
+  config_not_in: [String!]
+
+  """All values less than the given value."""
+  config_lt: String
+
+  """All values less than or equal the given value."""
+  config_lte: String
+
+  """All values greater than the given value."""
+  config_gt: String
+
+  """All values greater than or equal the given value."""
+  config_gte: String
+
+  """All values containing the given string."""
+  config_contains: String
+
+  """All values not containing the given string."""
+  config_not_contains: String
+
+  """All values starting with the given string."""
+  config_starts_with: String
+
+  """All values not starting with the given string."""
+  config_not_starts_with: String
+
+  """All values ending with the given string."""
+  config_ends_with: String
+
+  """All values not ending with the given string."""
+  config_not_ends_with: String
+  certList: String
+
+  """All values that are not equal to given value."""
+  certList_not: String
+
+  """All values that are contained in given list."""
+  certList_in: [String!]
+
+  """All values that are not contained in given list."""
+  certList_not_in: [String!]
+
+  """All values less than the given value."""
+  certList_lt: String
+
+  """All values less than or equal the given value."""
+  certList_lte: String
+
+  """All values greater than the given value."""
+  certList_gt: String
+
+  """All values greater than or equal the given value."""
+  certList_gte: String
+
+  """All values containing the given string."""
+  certList_contains: String
+
+  """All values not containing the given string."""
+  certList_not_contains: String
+
+  """All values starting with the given string."""
+  certList_starts_with: String
+
+  """All values not starting with the given string."""
+  certList_not_starts_with: String
+
+  """All values ending with the given string."""
+  certList_ends_with: String
+
+  """All values not ending with the given string."""
+  certList_not_ends_with: String
+  rtGraph: String
+
+  """All values that are not equal to given value."""
+  rtGraph_not: String
+
+  """All values that are contained in given list."""
+  rtGraph_in: [String!]
+
+  """All values that are not contained in given list."""
+  rtGraph_not_in: [String!]
+
+  """All values less than the given value."""
+  rtGraph_lt: String
+
+  """All values less than or equal the given value."""
+  rtGraph_lte: String
+
+  """All values greater than the given value."""
+  rtGraph_gt: String
+
+  """All values greater than or equal the given value."""
+  rtGraph_gte: String
+
+  """All values containing the given string."""
+  rtGraph_contains: String
+
+  """All values not containing the given string."""
+  rtGraph_not_contains: String
+
+  """All values starting with the given string."""
+  rtGraph_starts_with: String
+
+  """All values not starting with the given string."""
+  rtGraph_not_starts_with: String
+
+  """All values ending with the given string."""
+  rtGraph_ends_with: String
+
+  """All values not ending with the given string."""
+  rtGraph_not_ends_with: String
+  taskId: String
+
+  """All values that are not equal to given value."""
+  taskId_not: String
+
+  """All values that are contained in given list."""
+  taskId_in: [String!]
+
+  """All values that are not contained in given list."""
+  taskId_not_in: [String!]
+
+  """All values less than the given value."""
+  taskId_lt: String
+
+  """All values less than or equal the given value."""
+  taskId_lte: String
+
+  """All values greater than the given value."""
+  taskId_gt: String
+
+  """All values greater than or equal the given value."""
+  taskId_gte: String
+
+  """All values containing the given string."""
+  taskId_contains: String
+
+  """All values not containing the given string."""
+  taskId_not_contains: String
+
+  """All values starting with the given string."""
+  taskId_starts_with: String
+
+  """All values not starting with the given string."""
+  taskId_not_starts_with: String
+
+  """All values ending with the given string."""
+  taskId_ends_with: String
+
+  """All values not ending with the given string."""
+  taskId_not_ends_with: String
+  status: Int
+
+  """All values that are not equal to given value."""
+  status_not: Int
+
+  """All values that are contained in given list."""
+  status_in: [Int!]
+
+  """All values that are not contained in given list."""
+  status_not_in: [Int!]
+
+  """All values less than the given value."""
+  status_lt: Int
+
+  """All values less than or equal the given value."""
+  status_lte: Int
+
+  """All values greater than the given value."""
+  status_gt: Int
+
+  """All values greater than or equal the given value."""
+  status_gte: Int
+}
+
+input NetworkWhereUniqueInput {
+  id: ID
 }
 
 """An object with an ID"""
@@ -666,12 +1162,15 @@ type Query {
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   blocks(where: BlockWhereInput, orderBy: BlockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Block]!
   transactions(where: TransactionWhereInput, orderBy: TransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Transaction]!
+  networks(where: NetworkWhereInput, orderBy: NetworkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Network]!
   post(where: PostWhereUniqueInput!): Post
   block(where: BlockWhereUniqueInput!): Block
   transaction(where: TransactionWhereUniqueInput!): Transaction
+  network(where: NetworkWhereUniqueInput!): Network
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
   blocksConnection(where: BlockWhereInput, orderBy: BlockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BlockConnection!
   transactionsConnection(where: TransactionWhereInput, orderBy: TransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TransactionConnection!
+  networksConnection(where: NetworkWhereInput, orderBy: NetworkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NetworkConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -684,6 +1183,7 @@ type Subscription {
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   block(where: BlockSubscriptionWhereInput): BlockSubscriptionPayload
   transaction(where: TransactionSubscriptionWhereInput): TransactionSubscriptionPayload
+  network(where: NetworkSubscriptionWhereInput): NetworkSubscriptionPayload
 }
 
 type Transaction implements Node {

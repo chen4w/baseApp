@@ -6,7 +6,7 @@ import {
     DateField, Responsive, SimpleList, List, Create, Datagrid, TextField,
     ShowButton, LongTextInput, TextInput
 } from 'react-admin/lib';
-
+import ApproveButton from '../node/ApproveButton';
 
 export const NetworkList = (props) => (
     <List {...props}
@@ -15,16 +15,15 @@ export const NetworkList = (props) => (
             small={
                 <SimpleList
                     primaryText={record => record.id}
-                    secondaryText={record => record.netId}
-                    tertiaryText={record => new Date(record.created).toLocaleDateString()}
+                    secondaryText={record => record.name}
                 />
             }
             medium={
                 <Datagrid>
                     <TextField source="id" />
-                    <TextField source="netId" />
+                    <TextField source="name" />
                     <UrlField source="seed" />
-                    <DateField source="created" showTime />
+                    <ApproveButton />
                     <ShowButton />
                 </Datagrid>
             }
@@ -33,49 +32,26 @@ export const NetworkList = (props) => (
 );
 
 const NetworkTitle = ({ record }) => {
-    return <span> {record ? `"${record.netId}"` : ''}</span>;
+    return <span> {record ? `"${record.name}"` : ''}</span>;
 };
 
 export const NetworkShow = (props) => (
     <Show title={<NetworkTitle />} {...props}>
         <TabbedShowLayout>
-            <Tab label="resources.networks.tabs.tab1">
+            <Tab label="resources.Network.tabs.tab1">
                 <TextField source="id" />
-                <TextField source="netId" />
+                <TextField source="name" />
                 <TextField source="seed" />
-                <DateField source="created" />
+                <TextField source="rtGraph" />
             </Tab>
-            <Tab label="resources.networks.tabs.tab2">
+            <Tab label="resources.Network.tabs.tab2">
                 <RichTextField source="genesisBlock" />
             </Tab>
-            <Tab label="resources.networks.tabs.tab3">
+            <Tab label="resources.Network.tabs.tab3">
                 <RichTextField source="config" stripTags />
             </Tab>
-            <Tab label="resources.networks.tabs.tab4">
-                <ReferenceManyField
-                    reference="certs"
-                    target="aid"
-                    addLabel={false}
-                >
-                    <Datagrid>
-                        <TextField source="sn" />
-                        <DateField source="created" />
-
-                    </Datagrid>
-                </ReferenceManyField>
-            </Tab>
-            <Tab label="resources.networks.tabs.tab5">
-                <ReferenceManyField
-                    reference="blocks"
-                    target="pid"
-                    addLabel={false}
-                >
-                    <Datagrid>
-                        <TextField source="preHash" />
-                        <DateField source="created" />
-                        <ShowButton />
-                    </Datagrid>
-                </ReferenceManyField>
+            <Tab label="resources.Network.tabs.tab4">
+                <RichTextField source="certList" stripTags />
             </Tab>
 
         </TabbedShowLayout>
@@ -85,27 +61,19 @@ export const NetworkShow = (props) => (
 export const NetworkCreate = (props) => (
     <Create {...props}>
         <TabbedForm>
-            <FormTab label="resources.networks.tabs.tab1">
+            <FormTab label="resources.Network.tabs.tab1">
+                <TextInput source="name" />
                 <TextInput source="seed" />
+                <TextInput source="rtGraph" />
             </FormTab>
-            <FormTab label="resources.networks.tabs.tab2">
+            <FormTab label="resources.Network.tabs.tab2">
                 <LongTextInput source="genesisBlock" />
             </FormTab>
-            <FormTab label="resources.networks.tabs.tab3">
+            <FormTab label="resources.Network.tabs.tab3">
                 <LongTextInput source="config" />
             </FormTab>
-            <FormTab label="resources.networks.tabs.tab4">
-                <ReferenceManyField
-                    reference="certs"
-                    target="aid"
-                    addLabel={false}
-                >
-                    <Datagrid>
-                        <TextField source="sn" />
-                        <DateField source="created" />
-
-                    </Datagrid>
-                </ReferenceManyField>
+            <FormTab label="resources.Network.tabs.tab4">
+                <LongTextInput source="certList" />
             </FormTab>
         </TabbedForm>
     </Create>

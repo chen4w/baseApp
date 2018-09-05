@@ -23,3 +23,15 @@ type Transaction {
   blockId: String
   blocker: Block! 
 }
+
+type Network {
+  id: ID! @unique
+  name: String
+  seed: String
+  genesisBlock: String
+  config: String
+  certList: String
+  rtGraph: String
+  taskId: String
+  status: Int
+}

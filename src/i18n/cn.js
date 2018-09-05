@@ -70,7 +70,7 @@ export default {
                 created: '生成时间'
             }
         },
-        networks: {
+        Network: {
             name: '组网',
             tabs: {
                 tab1: '基本项',
@@ -85,6 +85,7 @@ export default {
                 config:'配置',
                 genesisBlock: '创世区块',
                 seed:'种子节点',
+                rtGraph:'实时图URL',
                 created: '生成时间'
             }
         },
