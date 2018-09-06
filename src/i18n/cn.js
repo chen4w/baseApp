@@ -86,6 +86,7 @@ export default {
                 genesisBlock: '创世区块',
                 seed:'种子节点',
                 rtGraph:'实时图URL',
+                name: '名称',
                 created: '生成时间'
             }
         },

@@ -21,6 +21,7 @@ git clone到本地之后，
 - `cd gdb `
 - `yarn install` 安装依赖
 - 安装docker
+- `cd database`切换到gdb/database目录
 - `docker-compose up -d` 启动prisma 和mysql5.7的docker实例
 - datamodel.graphql  按需要修改数据schema,然后`prisma deploy` 部署schema
 - `yarn start` 启动app服务
