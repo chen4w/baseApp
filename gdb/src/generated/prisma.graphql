@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Wed Sep 05 2018 17:04:51 GMT+0800 (中国标准时间)
+# timestamp: Thu Sep 06 2018 15:55:34 GMT+0800 (中国标准时间)
 
 type AggregateBlock {
   count: Int!
@@ -373,6 +373,8 @@ input BlockWhereInput {
 input BlockWhereUniqueInput {
   id: ID
 }
+
+scalar DateTime
 
 """
 The `Long` scalar type represents non-fractional signed whole numeric values.
@@ -1193,7 +1195,9 @@ type Transaction implements Node {
   cname: String
   action: String
   ipt: String
+  signature: String
   blockId: String
+  timeStamp: DateTime
   blocker(where: BlockWhereInput): Block!
 }
 
@@ -1213,7 +1217,9 @@ input TransactionCreateInput {
   cname: String
   action: String
   ipt: String
+  signature: String
   blockId: String
+  timeStamp: DateTime
   blocker: BlockCreateOneWithoutTransactionsInput!
 }
 
@@ -1228,7 +1234,9 @@ input TransactionCreateWithoutBlockerInput {
   cname: String
   action: String
   ipt: String
+  signature: String
   blockId: String
+  timeStamp: DateTime
 }
 
 """An edge in a connection."""
@@ -1253,8 +1261,12 @@ enum TransactionOrderByInput {
   action_DESC
   ipt_ASC
   ipt_DESC
+  signature_ASC
+  signature_DESC
   blockId_ASC
   blockId_DESC
+  timeStamp_ASC
+  timeStamp_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -1268,7 +1280,9 @@ type TransactionPreviousValues {
   cname: String
   action: String
   ipt: String
+  signature: String
   blockId: String
+  timeStamp: DateTime
 }
 
 type TransactionSubscriptionPayload {
@@ -1316,7 +1330,9 @@ input TransactionUpdateInput {
   cname: String
   action: String
   ipt: String
+  signature: String
   blockId: String
+  timeStamp: DateTime
   blocker: BlockUpdateOneWithoutTransactionsInput
 }
 
@@ -1335,7 +1351,9 @@ input TransactionUpdateWithoutBlockerDataInput {
   cname: String
   action: String
   ipt: String
+  signature: String
   blockId: String
+  timeStamp: DateTime
 }
 
 input TransactionUpdateWithWhereUniqueWithoutBlockerInput {
@@ -1580,6 +1598,46 @@ input TransactionWhereInput {
 
   """All values not ending with the given string."""
   ipt_not_ends_with: String
+  signature: String
+
+  """All values that are not equal to given value."""
+  signature_not: String
+
+  """All values that are contained in given list."""
+  signature_in: [String!]
+
+  """All values that are not contained in given list."""
+  signature_not_in: [String!]
+
+  """All values less than the given value."""
+  signature_lt: String
+
+  """All values less than or equal the given value."""
+  signature_lte: String
+
+  """All values greater than the given value."""
+  signature_gt: String
+
+  """All values greater than or equal the given value."""
+  signature_gte: String
+
+  """All values containing the given string."""
+  signature_contains: String
+
+  """All values not containing the given string."""
+  signature_not_contains: String
+
+  """All values starting with the given string."""
+  signature_starts_with: String
+
+  """All values not starting with the given string."""
+  signature_not_starts_with: String
+
+  """All values ending with the given string."""
+  signature_ends_with: String
+
+  """All values not ending with the given string."""
+  signature_not_ends_with: String
   blockId: String
 
   """All values that are not equal to given value."""
@@ -1620,6 +1678,28 @@ input TransactionWhereInput {
 
   """All values not ending with the given string."""
   blockId_not_ends_with: String
+  timeStamp: DateTime
+
+  """All values that are not equal to given value."""
+  timeStamp_not: DateTime
+
+  """All values that are contained in given list."""
+  timeStamp_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  timeStamp_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  timeStamp_lt: DateTime
+
+  """All values less than or equal the given value."""
+  timeStamp_lte: DateTime
+
+  """All values greater than the given value."""
+  timeStamp_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  timeStamp_gte: DateTime
   blocker: BlockWhereInput
 }
 

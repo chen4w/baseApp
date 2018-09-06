@@ -20,7 +20,9 @@ type Transaction {
   cname: String
   action: String
   ipt: String
+  signature: String
   blockId: String
+  timeStamp: DateTime
   blocker: Block! 
 }
 

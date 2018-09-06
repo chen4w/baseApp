@@ -62,11 +62,11 @@ const server = new GraphQLServer({
 
 async function saveBlock(blk) {
   var blk_data = {
-    hash: Buffer.from(blk.stateHash).toString('base64'),
+    hash: Buffer.from(blk.stateHash).toString('hex'),
     transCount: blk.transactions.length
   };
   if(blk.previousBlockHash)
-    blk_data.preHash = Buffer.from(blk.previousBlockHash).toString('base64');
+    blk_data.preHash = Buffer.from(blk.previousBlockHash).toString('hex');
 
   //写入区块,
   var obj_blk =await pdb.mutation.createBlock(
@@ -85,6 +85,9 @@ async function saveBlock(blk) {
       cname: tx.payload.chaincodeID.name,
       action: tx.payload.ctorMsg.function,
       ipt:tx.payload.ctorMsg.args.toString(),
+      signature: Buffer.from(tx.signature).toString('hex'),
+      //nodejs只支持到毫秒
+      timeStamp: new Date(tx.timestamp.seconds * 1000 + Math.floor(tx.timestamp.nanos / 1000)),
       blocker :{connect:{id:obj_blk.id}}
     }
     pdb.mutation.createTransaction(

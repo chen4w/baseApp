@@ -30,7 +30,7 @@ export const TransList = (props) => (
                     <TextField source="id" />
                     <TextField source="txId" />
                     <TextField source="cname" />
-                    
+                    <DateField source="timeStamp" showTime/>                    
                     <ShowButton />
                 </Datagrid>
             }
