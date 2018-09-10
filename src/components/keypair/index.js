@@ -29,10 +29,7 @@ export const KeypairList = (props) => (
                     <TextField source="id" />
                     <UrlField source="sn" title="下载密钥对" />
                     <UrlField source="sn_cert" title="下载证书" />
-                    <ReferenceField label="姓名" source="aid" reference="accounts">
-                        <TextField source="name" />
-                    </ReferenceField>
-                    <BooleanField source="status" />
+                   <BooleanField source="status" />
                     <DateField source="created" showTime />
                     <EditButton />
                 </Datagrid>

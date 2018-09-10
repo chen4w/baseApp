@@ -25,6 +25,7 @@ import chineseMessages from './i18n/cn';
 
 //import  dataProvider from './dataprovider/data-provider'
 import buildGraphQLProvider from './adaptator';
+import  fakeDataProvider from './dataprovider/fdp'
 
 
 const messages = {
@@ -56,9 +57,19 @@ class App extends Component {
     componentDidMount() {
         buildGraphQLProvider({
             clientOptions: { uri: 'http://localhost:4466/' }
-          }).then(dataProvider => 
-                this.setState({ dataProvider })
-            );
+          }).then(dataProvider => {
+               this.setState({
+                    dataProvider: (type, resource, params) => {
+                        console.log('resource name:'+resource)
+                        if(resource=='keypairs')
+                            return fakeDataProvider(type, resource, params);
+                        else
+                            return dataProvider(type, resource, params);
+                    }   
+                }                
+               )
+            }
+        );
     }
 
     render() {
@@ -71,6 +82,7 @@ class App extends Component {
         return (
             <Admin dataProvider={dataProvider} title="RepChain基础服务" authProvider={authProvider}
             locale="cn" i18nProvider={i18nProvider} dashboard={Dashboard} >
+                <Resource name="keypairs" list={KeypairList}  edit={KeypairEdit} create={KeypairCreate} icon={KeypairIcon}/>
                 <Resource name="Network" list={NetworkList}  show={NetworkShow} create={NetworkCreate} icon={NetworkIcon}/>
                  <Resource name="Block" list={BlockList}  show={BlockShow}  icon={BlockIcon}/>
                  <Resource name="Transaction" list={TransList}  show={TransShow} create={TransCreate} icon={TransIcon}/>
