@@ -16,6 +16,7 @@
 git clone到本地之后，
 - `yarn install` 安装依赖
 - `yarn start` 启动服务
+
 ##通过brew安装prisma工具
 - brew tap prisma/prisma
 - brew install prisma
