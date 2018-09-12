@@ -17,8 +17,8 @@ git clone到本地之后，
 - `yarn install` 安装依赖
 - `yarn start` 启动服务
 ##通过brew安装prisma工具
-brew tap prisma/prisma
-brew install prisma
+- brew tap prisma/prisma
+- brew install prisma
 ##如何运行graphql服务[gdb](https://github.com/prisma/prisma/blob/master/docs/1.9/03-Tutorials2/08-Bootstrapping-Boilerplates/02-Node.md)
 - `cd gdb `
 - `yarn install` 安装依赖
