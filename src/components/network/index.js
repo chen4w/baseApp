@@ -1,9 +1,9 @@
 import React from 'react';
 import {
     Show, TabbedShowLayout, Tab,
-    FormTab, TabbedForm, ReferenceManyField,
-    Filter, UrlField, RichTextField,
-    DateField, Responsive, SimpleList, List, Create, Datagrid, TextField,
+    FormTab, TabbedForm, FileInput,
+    Filter, UrlField, RichTextField, ImageInput,FileField,
+    ImageField, Responsive, SimpleList, List, Create, Datagrid, TextField,
     ShowButton, LongTextInput, TextInput
 } from 'react-admin/lib';
 import ApproveButton from '../node/ApproveButton';
@@ -73,7 +73,10 @@ export const NetworkCreate = (props) => (
                 <LongTextInput source="config" />
             </FormTab>
             <FormTab label="resources.Network.tabs.tab4">
-                <LongTextInput source="certList" />
+           
+                <ImageInput source="certList" label="Related pictures" accept="image/*" placeholder={<p>Drop your file here</p>}>
+                    <ImageField source="src" title="title" />
+                </ImageInput>
             </FormTab>
         </TabbedForm>
     </Create>

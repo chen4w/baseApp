@@ -47,7 +47,7 @@ export default {
                 created: '生成时间'
             }
         },
-        nodes: {
+        NetPeer: {
             notification: {
                 approved_success: '服务已启动',
                 approved_error: '错误: 服务启动失败',

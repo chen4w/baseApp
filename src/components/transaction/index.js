@@ -49,6 +49,7 @@ export const TransShow = (props) => (
                 <TextField source="id" />
                 <TextField source="txId" />
                 <TextField source="blockId" />
+                <TextField source="signature" />
                 <DateField source="created" />
             </Tab>
             <Tab label="resources.Transaction.tabs.tab2">

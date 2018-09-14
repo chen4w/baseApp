@@ -68,8 +68,7 @@ function startEvents() {
     Message = root.lookupType("rep.protos.Event");
     Block = root.lookupType("rep.protos.Block");
     var et = new EventTube('ws://localhost:8081/event',function(evt){
-      var ed = new Uint8Array(evt.data);
-      var msg = Message.decode(ed);
+      var msg = Message.decode(evt.data);
       //出块通知 TODO 确保块内全部交易写入
       if (msg.action == 2 && msg.from != 'Block') {
         var blk =  msg.blk;

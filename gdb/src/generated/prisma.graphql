@@ -1,7 +1,15 @@
 # source: http://localhost:4466
-# timestamp: Thu Sep 06 2018 15:55:34 GMT+0800 (中国标准时间)
+# timestamp: Fri Sep 14 2018 22:47:13 GMT+0800 (中国标准时间)
 
 type AggregateBlock {
+  count: Int!
+}
+
+type AggregateFile {
+  count: Int!
+}
+
+type AggregateNetPeer {
   count: Int!
 }
 
@@ -376,6 +384,572 @@ input BlockWhereUniqueInput {
 
 scalar DateTime
 
+type File implements Node {
+  id: ID!
+  pname: String
+  pid: ID
+  purpose: String
+  name: String!
+  size: Int!
+  secret: String!
+  contentType: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  url: String!
+}
+
+"""A connection to a list of items."""
+type FileConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [FileEdge]!
+  aggregate: AggregateFile!
+}
+
+input FileCreateInput {
+  pname: String
+  pid: ID
+  purpose: String
+  name: String!
+  size: Int!
+  secret: String!
+  contentType: String!
+  url: String!
+}
+
+input FileCreateOneInput {
+  create: FileCreateInput
+  connect: FileWhereUniqueInput
+}
+
+"""An edge in a connection."""
+type FileEdge {
+  """The item at the end of the edge."""
+  node: File!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum FileOrderByInput {
+  id_ASC
+  id_DESC
+  pname_ASC
+  pname_DESC
+  pid_ASC
+  pid_DESC
+  purpose_ASC
+  purpose_DESC
+  name_ASC
+  name_DESC
+  size_ASC
+  size_DESC
+  secret_ASC
+  secret_DESC
+  contentType_ASC
+  contentType_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  url_ASC
+  url_DESC
+}
+
+type FilePreviousValues {
+  id: ID!
+  pname: String
+  pid: ID
+  purpose: String
+  name: String!
+  size: Int!
+  secret: String!
+  contentType: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  url: String!
+}
+
+type FileSubscriptionPayload {
+  mutation: MutationType!
+  node: File
+  updatedFields: [String!]
+  previousValues: FilePreviousValues
+}
+
+input FileSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [FileSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [FileSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [FileSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: FileWhereInput
+}
+
+input FileUpdateDataInput {
+  pname: String
+  pid: ID
+  purpose: String
+  name: String
+  size: Int
+  secret: String
+  contentType: String
+  url: String
+}
+
+input FileUpdateInput {
+  pname: String
+  pid: ID
+  purpose: String
+  name: String
+  size: Int
+  secret: String
+  contentType: String
+  url: String
+}
+
+input FileUpdateOneInput {
+  create: FileCreateInput
+  connect: FileWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: FileUpdateDataInput
+  upsert: FileUpsertNestedInput
+}
+
+input FileUpsertNestedInput {
+  update: FileUpdateDataInput!
+  create: FileCreateInput!
+}
+
+input FileWhereInput {
+  """Logical AND on all given filters."""
+  AND: [FileWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [FileWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [FileWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  pname: String
+
+  """All values that are not equal to given value."""
+  pname_not: String
+
+  """All values that are contained in given list."""
+  pname_in: [String!]
+
+  """All values that are not contained in given list."""
+  pname_not_in: [String!]
+
+  """All values less than the given value."""
+  pname_lt: String
+
+  """All values less than or equal the given value."""
+  pname_lte: String
+
+  """All values greater than the given value."""
+  pname_gt: String
+
+  """All values greater than or equal the given value."""
+  pname_gte: String
+
+  """All values containing the given string."""
+  pname_contains: String
+
+  """All values not containing the given string."""
+  pname_not_contains: String
+
+  """All values starting with the given string."""
+  pname_starts_with: String
+
+  """All values not starting with the given string."""
+  pname_not_starts_with: String
+
+  """All values ending with the given string."""
+  pname_ends_with: String
+
+  """All values not ending with the given string."""
+  pname_not_ends_with: String
+  pid: ID
+
+  """All values that are not equal to given value."""
+  pid_not: ID
+
+  """All values that are contained in given list."""
+  pid_in: [ID!]
+
+  """All values that are not contained in given list."""
+  pid_not_in: [ID!]
+
+  """All values less than the given value."""
+  pid_lt: ID
+
+  """All values less than or equal the given value."""
+  pid_lte: ID
+
+  """All values greater than the given value."""
+  pid_gt: ID
+
+  """All values greater than or equal the given value."""
+  pid_gte: ID
+
+  """All values containing the given string."""
+  pid_contains: ID
+
+  """All values not containing the given string."""
+  pid_not_contains: ID
+
+  """All values starting with the given string."""
+  pid_starts_with: ID
+
+  """All values not starting with the given string."""
+  pid_not_starts_with: ID
+
+  """All values ending with the given string."""
+  pid_ends_with: ID
+
+  """All values not ending with the given string."""
+  pid_not_ends_with: ID
+  purpose: String
+
+  """All values that are not equal to given value."""
+  purpose_not: String
+
+  """All values that are contained in given list."""
+  purpose_in: [String!]
+
+  """All values that are not contained in given list."""
+  purpose_not_in: [String!]
+
+  """All values less than the given value."""
+  purpose_lt: String
+
+  """All values less than or equal the given value."""
+  purpose_lte: String
+
+  """All values greater than the given value."""
+  purpose_gt: String
+
+  """All values greater than or equal the given value."""
+  purpose_gte: String
+
+  """All values containing the given string."""
+  purpose_contains: String
+
+  """All values not containing the given string."""
+  purpose_not_contains: String
+
+  """All values starting with the given string."""
+  purpose_starts_with: String
+
+  """All values not starting with the given string."""
+  purpose_not_starts_with: String
+
+  """All values ending with the given string."""
+  purpose_ends_with: String
+
+  """All values not ending with the given string."""
+  purpose_not_ends_with: String
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  size: Int
+
+  """All values that are not equal to given value."""
+  size_not: Int
+
+  """All values that are contained in given list."""
+  size_in: [Int!]
+
+  """All values that are not contained in given list."""
+  size_not_in: [Int!]
+
+  """All values less than the given value."""
+  size_lt: Int
+
+  """All values less than or equal the given value."""
+  size_lte: Int
+
+  """All values greater than the given value."""
+  size_gt: Int
+
+  """All values greater than or equal the given value."""
+  size_gte: Int
+  secret: String
+
+  """All values that are not equal to given value."""
+  secret_not: String
+
+  """All values that are contained in given list."""
+  secret_in: [String!]
+
+  """All values that are not contained in given list."""
+  secret_not_in: [String!]
+
+  """All values less than the given value."""
+  secret_lt: String
+
+  """All values less than or equal the given value."""
+  secret_lte: String
+
+  """All values greater than the given value."""
+  secret_gt: String
+
+  """All values greater than or equal the given value."""
+  secret_gte: String
+
+  """All values containing the given string."""
+  secret_contains: String
+
+  """All values not containing the given string."""
+  secret_not_contains: String
+
+  """All values starting with the given string."""
+  secret_starts_with: String
+
+  """All values not starting with the given string."""
+  secret_not_starts_with: String
+
+  """All values ending with the given string."""
+  secret_ends_with: String
+
+  """All values not ending with the given string."""
+  secret_not_ends_with: String
+  contentType: String
+
+  """All values that are not equal to given value."""
+  contentType_not: String
+
+  """All values that are contained in given list."""
+  contentType_in: [String!]
+
+  """All values that are not contained in given list."""
+  contentType_not_in: [String!]
+
+  """All values less than the given value."""
+  contentType_lt: String
+
+  """All values less than or equal the given value."""
+  contentType_lte: String
+
+  """All values greater than the given value."""
+  contentType_gt: String
+
+  """All values greater than or equal the given value."""
+  contentType_gte: String
+
+  """All values containing the given string."""
+  contentType_contains: String
+
+  """All values not containing the given string."""
+  contentType_not_contains: String
+
+  """All values starting with the given string."""
+  contentType_starts_with: String
+
+  """All values not starting with the given string."""
+  contentType_not_starts_with: String
+
+  """All values ending with the given string."""
+  contentType_ends_with: String
+
+  """All values not ending with the given string."""
+  contentType_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  url: String
+
+  """All values that are not equal to given value."""
+  url_not: String
+
+  """All values that are contained in given list."""
+  url_in: [String!]
+
+  """All values that are not contained in given list."""
+  url_not_in: [String!]
+
+  """All values less than the given value."""
+  url_lt: String
+
+  """All values less than or equal the given value."""
+  url_lte: String
+
+  """All values greater than the given value."""
+  url_gt: String
+
+  """All values greater than or equal the given value."""
+  url_gte: String
+
+  """All values containing the given string."""
+  url_contains: String
+
+  """All values not containing the given string."""
+  url_not_contains: String
+
+  """All values starting with the given string."""
+  url_starts_with: String
+
+  """All values not starting with the given string."""
+  url_not_starts_with: String
+
+  """All values ending with the given string."""
+  url_ends_with: String
+
+  """All values not ending with the given string."""
+  url_not_ends_with: String
+}
+
+input FileWhereUniqueInput {
+  id: ID
+  secret: String
+  url: String
+}
+
 """
 The `Long` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
@@ -387,26 +961,38 @@ type Mutation {
   createBlock(data: BlockCreateInput!): Block!
   createTransaction(data: TransactionCreateInput!): Transaction!
   createNetwork(data: NetworkCreateInput!): Network!
+  createNetPeer(data: NetPeerCreateInput!): NetPeer!
+  createFile(data: FileCreateInput!): File!
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateBlock(data: BlockUpdateInput!, where: BlockWhereUniqueInput!): Block
   updateTransaction(data: TransactionUpdateInput!, where: TransactionWhereUniqueInput!): Transaction
   updateNetwork(data: NetworkUpdateInput!, where: NetworkWhereUniqueInput!): Network
+  updateNetPeer(data: NetPeerUpdateInput!, where: NetPeerWhereUniqueInput!): NetPeer
+  updateFile(data: FileUpdateInput!, where: FileWhereUniqueInput!): File
   deletePost(where: PostWhereUniqueInput!): Post
   deleteBlock(where: BlockWhereUniqueInput!): Block
   deleteTransaction(where: TransactionWhereUniqueInput!): Transaction
   deleteNetwork(where: NetworkWhereUniqueInput!): Network
+  deleteNetPeer(where: NetPeerWhereUniqueInput!): NetPeer
+  deleteFile(where: FileWhereUniqueInput!): File
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   upsertBlock(where: BlockWhereUniqueInput!, create: BlockCreateInput!, update: BlockUpdateInput!): Block!
   upsertTransaction(where: TransactionWhereUniqueInput!, create: TransactionCreateInput!, update: TransactionUpdateInput!): Transaction!
   upsertNetwork(where: NetworkWhereUniqueInput!, create: NetworkCreateInput!, update: NetworkUpdateInput!): Network!
+  upsertNetPeer(where: NetPeerWhereUniqueInput!, create: NetPeerCreateInput!, update: NetPeerUpdateInput!): NetPeer!
+  upsertFile(where: FileWhereUniqueInput!, create: FileCreateInput!, update: FileUpdateInput!): File!
   updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
   updateManyBlocks(data: BlockUpdateInput!, where: BlockWhereInput): BatchPayload!
   updateManyTransactions(data: TransactionUpdateInput!, where: TransactionWhereInput): BatchPayload!
   updateManyNetworks(data: NetworkUpdateInput!, where: NetworkWhereInput): BatchPayload!
+  updateManyNetPeers(data: NetPeerUpdateInput!, where: NetPeerWhereInput): BatchPayload!
+  updateManyFiles(data: FileUpdateInput!, where: FileWhereInput): BatchPayload!
   deleteManyPosts(where: PostWhereInput): BatchPayload!
   deleteManyBlocks(where: BlockWhereInput): BatchPayload!
   deleteManyTransactions(where: TransactionWhereInput): BatchPayload!
   deleteManyNetworks(where: NetworkWhereInput): BatchPayload!
+  deleteManyNetPeers(where: NetPeerWhereInput): BatchPayload!
+  deleteManyFiles(where: FileWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -415,16 +1001,321 @@ enum MutationType {
   DELETED
 }
 
+type NetPeer implements Node {
+  id: ID!
+  net(where: NetworkWhereInput): Network
+  keypair(where: FileWhereInput): File
+  rtGraph: String
+  taskId: String
+  status: Int
+}
+
+"""A connection to a list of items."""
+type NetPeerConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [NetPeerEdge]!
+  aggregate: AggregateNetPeer!
+}
+
+input NetPeerCreateInput {
+  rtGraph: String
+  taskId: String
+  status: Int
+  net: NetworkCreateOneWithoutPeersInput
+  keypair: FileCreateOneInput
+}
+
+input NetPeerCreateManyWithoutNetInput {
+  create: [NetPeerCreateWithoutNetInput!]
+  connect: [NetPeerWhereUniqueInput!]
+}
+
+input NetPeerCreateWithoutNetInput {
+  rtGraph: String
+  taskId: String
+  status: Int
+  keypair: FileCreateOneInput
+}
+
+"""An edge in a connection."""
+type NetPeerEdge {
+  """The item at the end of the edge."""
+  node: NetPeer!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum NetPeerOrderByInput {
+  id_ASC
+  id_DESC
+  rtGraph_ASC
+  rtGraph_DESC
+  taskId_ASC
+  taskId_DESC
+  status_ASC
+  status_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type NetPeerPreviousValues {
+  id: ID!
+  rtGraph: String
+  taskId: String
+  status: Int
+}
+
+type NetPeerSubscriptionPayload {
+  mutation: MutationType!
+  node: NetPeer
+  updatedFields: [String!]
+  previousValues: NetPeerPreviousValues
+}
+
+input NetPeerSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [NetPeerSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [NetPeerSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [NetPeerSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: NetPeerWhereInput
+}
+
+input NetPeerUpdateInput {
+  rtGraph: String
+  taskId: String
+  status: Int
+  net: NetworkUpdateOneWithoutPeersInput
+  keypair: FileUpdateOneInput
+}
+
+input NetPeerUpdateManyWithoutNetInput {
+  create: [NetPeerCreateWithoutNetInput!]
+  connect: [NetPeerWhereUniqueInput!]
+  disconnect: [NetPeerWhereUniqueInput!]
+  delete: [NetPeerWhereUniqueInput!]
+  update: [NetPeerUpdateWithWhereUniqueWithoutNetInput!]
+  upsert: [NetPeerUpsertWithWhereUniqueWithoutNetInput!]
+}
+
+input NetPeerUpdateWithoutNetDataInput {
+  rtGraph: String
+  taskId: String
+  status: Int
+  keypair: FileUpdateOneInput
+}
+
+input NetPeerUpdateWithWhereUniqueWithoutNetInput {
+  where: NetPeerWhereUniqueInput!
+  data: NetPeerUpdateWithoutNetDataInput!
+}
+
+input NetPeerUpsertWithWhereUniqueWithoutNetInput {
+  where: NetPeerWhereUniqueInput!
+  update: NetPeerUpdateWithoutNetDataInput!
+  create: NetPeerCreateWithoutNetInput!
+}
+
+input NetPeerWhereInput {
+  """Logical AND on all given filters."""
+  AND: [NetPeerWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [NetPeerWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [NetPeerWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  rtGraph: String
+
+  """All values that are not equal to given value."""
+  rtGraph_not: String
+
+  """All values that are contained in given list."""
+  rtGraph_in: [String!]
+
+  """All values that are not contained in given list."""
+  rtGraph_not_in: [String!]
+
+  """All values less than the given value."""
+  rtGraph_lt: String
+
+  """All values less than or equal the given value."""
+  rtGraph_lte: String
+
+  """All values greater than the given value."""
+  rtGraph_gt: String
+
+  """All values greater than or equal the given value."""
+  rtGraph_gte: String
+
+  """All values containing the given string."""
+  rtGraph_contains: String
+
+  """All values not containing the given string."""
+  rtGraph_not_contains: String
+
+  """All values starting with the given string."""
+  rtGraph_starts_with: String
+
+  """All values not starting with the given string."""
+  rtGraph_not_starts_with: String
+
+  """All values ending with the given string."""
+  rtGraph_ends_with: String
+
+  """All values not ending with the given string."""
+  rtGraph_not_ends_with: String
+  taskId: String
+
+  """All values that are not equal to given value."""
+  taskId_not: String
+
+  """All values that are contained in given list."""
+  taskId_in: [String!]
+
+  """All values that are not contained in given list."""
+  taskId_not_in: [String!]
+
+  """All values less than the given value."""
+  taskId_lt: String
+
+  """All values less than or equal the given value."""
+  taskId_lte: String
+
+  """All values greater than the given value."""
+  taskId_gt: String
+
+  """All values greater than or equal the given value."""
+  taskId_gte: String
+
+  """All values containing the given string."""
+  taskId_contains: String
+
+  """All values not containing the given string."""
+  taskId_not_contains: String
+
+  """All values starting with the given string."""
+  taskId_starts_with: String
+
+  """All values not starting with the given string."""
+  taskId_not_starts_with: String
+
+  """All values ending with the given string."""
+  taskId_ends_with: String
+
+  """All values not ending with the given string."""
+  taskId_not_ends_with: String
+  status: Int
+
+  """All values that are not equal to given value."""
+  status_not: Int
+
+  """All values that are contained in given list."""
+  status_in: [Int!]
+
+  """All values that are not contained in given list."""
+  status_not_in: [Int!]
+
+  """All values less than the given value."""
+  status_lt: Int
+
+  """All values less than or equal the given value."""
+  status_lte: Int
+
+  """All values greater than the given value."""
+  status_gt: Int
+
+  """All values greater than or equal the given value."""
+  status_gte: Int
+  net: NetworkWhereInput
+  keypair: FileWhereInput
+}
+
+input NetPeerWhereUniqueInput {
+  id: ID
+}
+
 type Network implements Node {
   id: ID!
   name: String
   seed: String
   genesisBlock: String
   config: String
-  certList: String
+  keypair(where: FileWhereInput): File
+  certList(where: FileWhereInput): File
   rtGraph: String
   taskId: String
   status: Int
+  peers(where: NetPeerWhereInput, orderBy: NetPeerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [NetPeer!]
 }
 
 """A connection to a list of items."""
@@ -442,10 +1333,29 @@ input NetworkCreateInput {
   seed: String
   genesisBlock: String
   config: String
-  certList: String
   rtGraph: String
   taskId: String
   status: Int
+  keypair: FileCreateOneInput
+  certList: FileCreateOneInput
+  peers: NetPeerCreateManyWithoutNetInput
+}
+
+input NetworkCreateOneWithoutPeersInput {
+  create: NetworkCreateWithoutPeersInput
+  connect: NetworkWhereUniqueInput
+}
+
+input NetworkCreateWithoutPeersInput {
+  name: String
+  seed: String
+  genesisBlock: String
+  config: String
+  rtGraph: String
+  taskId: String
+  status: Int
+  keypair: FileCreateOneInput
+  certList: FileCreateOneInput
 }
 
 """An edge in a connection."""
@@ -468,8 +1378,6 @@ enum NetworkOrderByInput {
   genesisBlock_DESC
   config_ASC
   config_DESC
-  certList_ASC
-  certList_DESC
   rtGraph_ASC
   rtGraph_DESC
   taskId_ASC
@@ -488,7 +1396,6 @@ type NetworkPreviousValues {
   seed: String
   genesisBlock: String
   config: String
-  certList: String
   rtGraph: String
   taskId: String
   status: Int
@@ -538,10 +1445,38 @@ input NetworkUpdateInput {
   seed: String
   genesisBlock: String
   config: String
-  certList: String
   rtGraph: String
   taskId: String
   status: Int
+  keypair: FileUpdateOneInput
+  certList: FileUpdateOneInput
+  peers: NetPeerUpdateManyWithoutNetInput
+}
+
+input NetworkUpdateOneWithoutPeersInput {
+  create: NetworkCreateWithoutPeersInput
+  connect: NetworkWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: NetworkUpdateWithoutPeersDataInput
+  upsert: NetworkUpsertWithoutPeersInput
+}
+
+input NetworkUpdateWithoutPeersDataInput {
+  name: String
+  seed: String
+  genesisBlock: String
+  config: String
+  rtGraph: String
+  taskId: String
+  status: Int
+  keypair: FileUpdateOneInput
+  certList: FileUpdateOneInput
+}
+
+input NetworkUpsertWithoutPeersInput {
+  update: NetworkUpdateWithoutPeersDataInput!
+  create: NetworkCreateWithoutPeersInput!
 }
 
 input NetworkWhereInput {
@@ -753,46 +1688,6 @@ input NetworkWhereInput {
 
   """All values not ending with the given string."""
   config_not_ends_with: String
-  certList: String
-
-  """All values that are not equal to given value."""
-  certList_not: String
-
-  """All values that are contained in given list."""
-  certList_in: [String!]
-
-  """All values that are not contained in given list."""
-  certList_not_in: [String!]
-
-  """All values less than the given value."""
-  certList_lt: String
-
-  """All values less than or equal the given value."""
-  certList_lte: String
-
-  """All values greater than the given value."""
-  certList_gt: String
-
-  """All values greater than or equal the given value."""
-  certList_gte: String
-
-  """All values containing the given string."""
-  certList_contains: String
-
-  """All values not containing the given string."""
-  certList_not_contains: String
-
-  """All values starting with the given string."""
-  certList_starts_with: String
-
-  """All values not starting with the given string."""
-  certList_not_starts_with: String
-
-  """All values ending with the given string."""
-  certList_ends_with: String
-
-  """All values not ending with the given string."""
-  certList_not_ends_with: String
   rtGraph: String
 
   """All values that are not equal to given value."""
@@ -895,6 +1790,11 @@ input NetworkWhereInput {
 
   """All values greater than or equal the given value."""
   status_gte: Int
+  keypair: FileWhereInput
+  certList: FileWhereInput
+  peers_every: NetPeerWhereInput
+  peers_some: NetPeerWhereInput
+  peers_none: NetPeerWhereInput
 }
 
 input NetworkWhereUniqueInput {
@@ -1165,14 +2065,20 @@ type Query {
   blocks(where: BlockWhereInput, orderBy: BlockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Block]!
   transactions(where: TransactionWhereInput, orderBy: TransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Transaction]!
   networks(where: NetworkWhereInput, orderBy: NetworkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Network]!
+  netPeers(where: NetPeerWhereInput, orderBy: NetPeerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [NetPeer]!
+  files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File]!
   post(where: PostWhereUniqueInput!): Post
   block(where: BlockWhereUniqueInput!): Block
   transaction(where: TransactionWhereUniqueInput!): Transaction
   network(where: NetworkWhereUniqueInput!): Network
+  netPeer(where: NetPeerWhereUniqueInput!): NetPeer
+  file(where: FileWhereUniqueInput!): File
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
   blocksConnection(where: BlockWhereInput, orderBy: BlockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BlockConnection!
   transactionsConnection(where: TransactionWhereInput, orderBy: TransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TransactionConnection!
   networksConnection(where: NetworkWhereInput, orderBy: NetworkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NetworkConnection!
+  netPeersConnection(where: NetPeerWhereInput, orderBy: NetPeerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NetPeerConnection!
+  filesConnection(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FileConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -1186,6 +2092,8 @@ type Subscription {
   block(where: BlockSubscriptionWhereInput): BlockSubscriptionPayload
   transaction(where: TransactionSubscriptionWhereInput): TransactionSubscriptionPayload
   network(where: NetworkSubscriptionWhereInput): NetworkSubscriptionPayload
+  netPeer(where: NetPeerSubscriptionWhereInput): NetPeerSubscriptionPayload
+  file(where: FileSubscriptionWhereInput): FileSubscriptionPayload
 }
 
 type Transaction implements Node {
