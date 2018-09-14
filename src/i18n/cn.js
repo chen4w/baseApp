@@ -125,6 +125,19 @@ export default {
                 status: '状态'
             }
         },
+        File: {
+            name: '附件',
+            tabs: {
+                tab1: '基本项',
+                tab2: '相关密钥',
+                tab3: '相关交易'
+            },
+             fields: {
+                id: '序号',
+                name: '名称',
+                size: '大小',
+            }
+        },
         certs: {
             tabs: {
                 tab1: '基本项',

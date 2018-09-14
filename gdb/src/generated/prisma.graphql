@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Fri Sep 14 2018 22:47:13 GMT+0800 (中国标准时间)
+# timestamp: Fri Sep 14 2018 23:23:53 GMT+0800 (中国标准时间)
 
 type AggregateBlock {
   count: Int!
@@ -391,11 +391,9 @@ type File implements Node {
   purpose: String
   name: String!
   size: Int!
-  secret: String!
-  contentType: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  url: String!
+  secret: String
+  contentType: String
+  url: String
 }
 
 """A connection to a list of items."""
@@ -414,9 +412,9 @@ input FileCreateInput {
   purpose: String
   name: String!
   size: Int!
-  secret: String!
-  contentType: String!
-  url: String!
+  secret: String
+  contentType: String
+  url: String
 }
 
 input FileCreateOneInput {
@@ -450,12 +448,12 @@ enum FileOrderByInput {
   secret_DESC
   contentType_ASC
   contentType_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
   url_ASC
   url_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
 }
 
 type FilePreviousValues {
@@ -465,11 +463,9 @@ type FilePreviousValues {
   purpose: String
   name: String!
   size: Int!
-  secret: String!
-  contentType: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  url: String!
+  secret: String
+  contentType: String
+  url: String
 }
 
 type FileSubscriptionPayload {
@@ -858,50 +854,6 @@ input FileWhereInput {
 
   """All values not ending with the given string."""
   contentType_not_ends_with: String
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-
-  """All values that are not equal to given value."""
-  updatedAt_not: DateTime
-
-  """All values that are contained in given list."""
-  updatedAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  updatedAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  updatedAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  updatedAt_lte: DateTime
-
-  """All values greater than the given value."""
-  updatedAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  updatedAt_gte: DateTime
   url: String
 
   """All values that are not equal to given value."""
@@ -946,8 +898,6 @@ input FileWhereInput {
 
 input FileWhereUniqueInput {
   id: ID
-  secret: String
-  url: String
 }
 
 """

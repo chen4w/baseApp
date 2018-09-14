@@ -56,9 +56,7 @@ type File {
   purpose: String
   name: String!
   size: Int!
-  secret: String! @unique
-  contentType: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  url: String! @unique
+  secret: String
+  contentType: String
+  url: String
 }

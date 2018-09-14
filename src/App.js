@@ -8,6 +8,7 @@ import { TransList, TransShow, TransCreate } from './components/transaction';
 import { NetworkList, NetworkShow, NetworkCreate } from './components/network';
 import { NodeList, NodeShow, NodeCreate } from './components/node';
 import { BlockList, BlockShow } from './components/block';
+import { FileList, FileCreate } from './components/file';
 
 import CertIcon from '@material-ui/icons/Description';
 import KeypairIcon from '@material-ui/icons/VpnKey';
@@ -16,7 +17,7 @@ import TransIcon from '@material-ui/icons/Cached';
 import NetworkIcon from '@material-ui/icons/GroupWork';
 import NodeIcon from '@material-ui/icons/Computer';
 import BlockIcon from '@material-ui/icons/ViewColumn';
-
+import AttachIcon from '@material-ui/icons/AttachFile';
 import Dashboard from './components/dashboard/Dashboard';
 
 import authProvider from './authProvider';
@@ -89,6 +90,7 @@ class App extends Component {
                 <Resource name="NetPeer" list={NodeList}  show={NodeShow} create={NodeCreate} icon={NodeIcon}/>
                  <Resource name="Block" list={BlockList}  show={BlockShow}  icon={BlockIcon}/>
                  <Resource name="Transaction" list={TransList}  show={TransShow} create={TransCreate} icon={TransIcon}/>
+                 <Resource name="File" list={FileList}   create={FileCreate} icon={AttachIcon}/>
             </Admin>
         );
     }
