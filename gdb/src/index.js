@@ -4,8 +4,48 @@ const protobuf = require("protobufjs")
 const {EventTube} = require('rclink')
 const {saveBlock} = require('./sync')
 
+const fs =require('fs')
+const mkdirp = require('mkdirp');
+const shortid = require('shortid');
+const lowdb = require('lowdb')
+const FileSync = require('lowdb/adapters/FileSync')
+
+const uploadDir = './uploads'
+const db = new lowdb(new FileSync('db.json'))
+
+// Seed an empty DB
+db.defaults({ uploads: [] }).write()
+
+// Ensure upload directory exists
+mkdirp.sync(uploadDir)
+
+const storeUpload = async ({ stream, filename }) => {
+  const id = shortid.generate()
+  const path = `${uploadDir}/${id}-${filename}`
+
+  return new Promise((resolve, reject) =>
+    stream
+      .pipe(fs.createWriteStream(path))
+      .on('finish', () => resolve({ id, path }))
+      .on('error', reject),
+  )
+}
+
+const recordFile = file =>
+  db.get('uploads')
+    .push(file)
+    .last()
+    .write()
+
+const processUpload = async upload => {
+  const { stream, filename, mimetype, encoding } = await upload
+  const { id, path } = await storeUpload({ stream, filename })
+  return recordFile({ id, filename, mimetype, encoding, path })
+}
+
 const resolvers = {
   Query: {
+    uploads: () => db.get('uploads').value(),
     feed(parent, args, ctx, info) {
       return ctx.db.query.posts({ where: { isPublished: true } }, info)
     },
@@ -20,6 +60,9 @@ const resolvers = {
     },
   },
   Mutation: {
+    singleUpload: (obj, { file }) => processUpload(file),
+    multipleUpload: (obj, { files }) => Promise.all(files.map(processUpload)),
+
     createDraft(parent, { title, text }, ctx, info) {
       return ctx.db.mutation.createPost(
         {

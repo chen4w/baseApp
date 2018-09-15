@@ -35,7 +35,7 @@ export const NodeList = (props) => (
 );
 
 const NodeTitle = ({ record }) => {
-    return <span> {record ? `"${record.sid}"` : ''}</span>;
+    return <span> {record ? `"${record.id}"` : ''}</span>;
 };
 
 export const NodeShow = (props) => (

@@ -26,7 +26,9 @@ export const FileList = (props) => (
             medium={
                 <Datagrid>
                     <TextField source="id" />
+                    <TextField source="name" />
                     <TextField source="size" />
+                    <TextField source="url" />
                 </Datagrid>
             }
         />
