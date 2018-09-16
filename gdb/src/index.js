@@ -120,8 +120,9 @@ function startEvents() {
       //TODO 调用pdb to mutation createBlock
     })            
   });
-}  
-startEvents();      
+} 
+ 
+//startEvents();      
 
 //TODO 通过rclink restAPI主动请求高度，请求本地缺失block,调用pdb to mutation createBlock
 //TODO 前端react admin 通过graphql检索、分页、排序数据

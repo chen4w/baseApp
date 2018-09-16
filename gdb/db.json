@@ -1,3 +1,18 @@
 {
-  "uploads": []
+  "uploads": [
+    {
+      "id": "AgSwyWCqN",
+      "filename": "屏幕快照 2018-07-30 上午9.40.44.png",
+      "mimetype": "image/png",
+      "encoding": "7bit",
+      "path": "./uploads/AgSwyWCqN-屏幕快照 2018-07-30 上午9.40.44.png"
+    },
+    {
+      "id": "uSvAlPMGR",
+      "filename": "屏幕快照 2018-07-30 下午2.25.44.png",
+      "mimetype": "image/png",
+      "encoding": "7bit",
+      "path": "./uploads/uSvAlPMGR-屏幕快照 2018-07-30 下午2.25.44.png"
+    }
+  ]
 }
