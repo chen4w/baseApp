@@ -1,7 +1,8 @@
 import React from 'react';
 import {
-    FormTab, TabbedForm,
-    NumberInput,BooleanField,
+    ShowButton, Show,
+    SimpleShowLayout,BooleanField,ImageInput,FileField,
+    ImageField,
     Filter, DateField, DateInput, Responsive, SimpleList, List, Edit, Create, Datagrid, TextField, EditButton, DisabledInput, SimpleForm, TextInput
 } from 'react-admin/lib';
 
@@ -26,9 +27,10 @@ export const FileList = (props) => (
             medium={
                 <Datagrid>
                     <TextField source="id" />
-                    <TextField source="name" />
+                    <TextField source="title" />
                     <TextField source="size" />
                     <TextField source="url" />
+                    <ShowButton />
                 </Datagrid>
             }
         />
@@ -44,9 +46,20 @@ export const FileCreate = (props) => (
     <Create {...props}>
         <SimpleForm>
             <DisabledInput source="id" />
-            <TextInput source="name" />
-            <NumberInput source="size" />
+            <ImageInput multiple source="pictures" accept="image/*">
+                    <ImageField source="src" title="title" />
+                </ImageInput>
+
         </SimpleForm>
     </Create>
 );
 
+export const FileShow = (props) => (
+    <Show title={<FileTitle />} {...props}>
+        <SimpleShowLayout>
+                <TextField source="id" />
+                <TextField source="title" />
+                <ImageField source="src" title="title" />
+            </SimpleShowLayout>
+    </Show>
+);

@@ -34,6 +34,7 @@ type Network {
   config: String
   keypair: File @relation(name: "NWKeypair")
   certList: File @relation(name: "NWCerts")
+  pictures: [File!]! @relation(name: "NWPics")
   rtGraph: String
   taskId: String
   status: Int
@@ -54,9 +55,11 @@ type File {
   pname: String
   pid: ID
   purpose: String
-  name: String!
-  size: Int!
+  name: String
+  title: String
+  size: Int
   secret: String
   contentType: String
+  src: String
   url: String
 }

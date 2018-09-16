@@ -2,9 +2,9 @@ import React from 'react';
 import {
     Show, TabbedShowLayout, Tab,
     FormTab, TabbedForm, FileInput,
-    Filter, UrlField, RichTextField, ImageInput,FileField,
+    Edit, UrlField, RichTextField, ImageInput,FileField,
     ImageField, Responsive, SimpleList, List, Create, Datagrid, TextField,
-    ShowButton, LongTextInput, TextInput
+    EditButton, LongTextInput, TextInput
 } from 'react-admin/lib';
 import ApproveButton from '../node/ApproveButton';
 
@@ -24,7 +24,7 @@ export const NetworkList = (props) => (
                     <TextField source="name" />
                     <UrlField source="seed" />
                     <ApproveButton />
-                    <ShowButton />
+                    <EditButton />
                 </Datagrid>
             }
         />
@@ -74,11 +74,36 @@ export const NetworkCreate = (props) => (
             </FormTab>
             <FormTab label="resources.Network.tabs.tab4">
            
-                <ImageInput source="certList" label="Related pictures" accept="image/*" placeholder={<p>Drop your file here</p>}>
+            <ImageInput multiple source="pictures" accept="image/*">
                     <ImageField source="src" title="title" />
                 </ImageInput>
             </FormTab>
         </TabbedForm>
     </Create>
+);
+
+export const NetworkEdit = (props) => (
+    <Edit {...props}>
+        <TabbedForm>
+            <FormTab label="resources.Network.tabs.tab1">
+                <TextInput source="name" />
+                <TextInput source="seed" />
+                <TextInput source="rtGraph" />
+            </FormTab>
+            <FormTab label="resources.Network.tabs.tab2">
+                <LongTextInput source="genesisBlock" />
+            </FormTab>
+            <FormTab label="resources.Network.tabs.tab3">
+                <LongTextInput source="config" />
+            </FormTab>
+            <FormTab label="resources.Network.tabs.tab4">
+           
+            <ImageInput multiple source="pictures" accept="image/*">
+                    <ImageField source="src" title="title" />
+                </ImageInput>
+
+            </FormTab>
+        </TabbedForm>
+    </Edit>
 );
 

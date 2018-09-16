@@ -5,10 +5,10 @@ import { CertList, CertShow } from './components/cert';
 import { KeypairList, KeypairEdit, KeypairCreate } from './components/keypair';
 import { AccountList, AccountEdit, AccountCreate } from './components/account';
 import { TransList, TransShow, TransCreate } from './components/transaction';
-import { NetworkList, NetworkShow, NetworkCreate } from './components/network';
+import { NetworkList, NetworkShow,  NetworkEdit, NetworkCreate } from './components/network';
 import { NodeList, NodeShow, NodeCreate } from './components/node';
 import { BlockList, BlockShow } from './components/block';
-import { FileList, FileCreate } from './components/file';
+import { FileList, FileCreate ,FileShow} from './components/file';
 
 import CertIcon from '@material-ui/icons/Description';
 import KeypairIcon from '@material-ui/icons/VpnKey';
@@ -27,7 +27,7 @@ import chineseMessages from './i18n/cn';
 //import  dataProvider from './dataprovider/data-provider'
 import buildGraphQLProvider from './adaptator';
 import  fakeDataProvider from './dataprovider/fdp'
-import addUploadCapabilities from './dataprovider/addUploadCapabilities';
+import addUploadCapabilities from './dataprovider/addUploadFeature';
 
 
 const messages = {
@@ -86,11 +86,11 @@ class App extends Component {
             <Admin dataProvider={dataProvider} title="RepChain基础服务" authProvider={authProvider}
             locale="cn" i18nProvider={i18nProvider} dashboard={Dashboard} >
                 <Resource name="keypairs" list={KeypairList}  edit={KeypairEdit} create={KeypairCreate} icon={KeypairIcon}/>
-                <Resource name="Network" list={NetworkList}  show={NetworkShow} create={NetworkCreate} icon={NetworkIcon}/>
+                <Resource name="Network" list={NetworkList}   edit={NetworkEdit} show={NetworkShow}  create={NetworkCreate} icon={NetworkIcon}/>
                 <Resource name="NetPeer" list={NodeList}  show={NodeShow} create={NodeCreate} icon={NodeIcon}/>
                  <Resource name="Block" list={BlockList}  show={BlockShow}  icon={BlockIcon}/>
                  <Resource name="Transaction" list={TransList}  show={TransShow} create={TransCreate} icon={TransIcon}/>
-                 <Resource name="File" list={FileList}   create={FileCreate} icon={AttachIcon}/>
+                 <Resource name="File" list={FileList}   show={FileShow} create={FileCreate} icon={AttachIcon}/>
             </Admin>
         );
     }

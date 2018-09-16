@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Fri Sep 14 2018 23:23:53 GMT+0800 (中国标准时间)
+# timestamp: Sun Sep 16 2018 20:39:58 GMT+0800 (中国标准时间)
 
 type AggregateBlock {
   count: Int!
@@ -389,10 +389,12 @@ type File implements Node {
   pname: String
   pid: ID
   purpose: String
-  name: String!
-  size: Int!
+  name: String
+  title: String
+  size: Int
   secret: String
   contentType: String
+  src: String
   url: String
 }
 
@@ -410,11 +412,18 @@ input FileCreateInput {
   pname: String
   pid: ID
   purpose: String
-  name: String!
-  size: Int!
+  name: String
+  title: String
+  size: Int
   secret: String
   contentType: String
+  src: String
   url: String
+}
+
+input FileCreateManyInput {
+  create: [FileCreateInput!]
+  connect: [FileWhereUniqueInput!]
 }
 
 input FileCreateOneInput {
@@ -442,12 +451,16 @@ enum FileOrderByInput {
   purpose_DESC
   name_ASC
   name_DESC
+  title_ASC
+  title_DESC
   size_ASC
   size_DESC
   secret_ASC
   secret_DESC
   contentType_ASC
   contentType_DESC
+  src_ASC
+  src_DESC
   url_ASC
   url_DESC
   updatedAt_ASC
@@ -461,10 +474,12 @@ type FilePreviousValues {
   pname: String
   pid: ID
   purpose: String
-  name: String!
-  size: Int!
+  name: String
+  title: String
+  size: Int
   secret: String
   contentType: String
+  src: String
   url: String
 }
 
@@ -512,9 +527,11 @@ input FileUpdateDataInput {
   pid: ID
   purpose: String
   name: String
+  title: String
   size: Int
   secret: String
   contentType: String
+  src: String
   url: String
 }
 
@@ -523,10 +540,21 @@ input FileUpdateInput {
   pid: ID
   purpose: String
   name: String
+  title: String
   size: Int
   secret: String
   contentType: String
+  src: String
   url: String
+}
+
+input FileUpdateManyInput {
+  create: [FileCreateInput!]
+  connect: [FileWhereUniqueInput!]
+  disconnect: [FileWhereUniqueInput!]
+  delete: [FileWhereUniqueInput!]
+  update: [FileUpdateWithWhereUniqueNestedInput!]
+  upsert: [FileUpsertWithWhereUniqueNestedInput!]
 }
 
 input FileUpdateOneInput {
@@ -538,7 +566,18 @@ input FileUpdateOneInput {
   upsert: FileUpsertNestedInput
 }
 
+input FileUpdateWithWhereUniqueNestedInput {
+  where: FileWhereUniqueInput!
+  data: FileUpdateDataInput!
+}
+
 input FileUpsertNestedInput {
+  update: FileUpdateDataInput!
+  create: FileCreateInput!
+}
+
+input FileUpsertWithWhereUniqueNestedInput {
+  where: FileWhereUniqueInput!
   update: FileUpdateDataInput!
   create: FileCreateInput!
 }
@@ -752,6 +791,46 @@ input FileWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
   size: Int
 
   """All values that are not equal to given value."""
@@ -854,6 +933,46 @@ input FileWhereInput {
 
   """All values not ending with the given string."""
   contentType_not_ends_with: String
+  src: String
+
+  """All values that are not equal to given value."""
+  src_not: String
+
+  """All values that are contained in given list."""
+  src_in: [String!]
+
+  """All values that are not contained in given list."""
+  src_not_in: [String!]
+
+  """All values less than the given value."""
+  src_lt: String
+
+  """All values less than or equal the given value."""
+  src_lte: String
+
+  """All values greater than the given value."""
+  src_gt: String
+
+  """All values greater than or equal the given value."""
+  src_gte: String
+
+  """All values containing the given string."""
+  src_contains: String
+
+  """All values not containing the given string."""
+  src_not_contains: String
+
+  """All values starting with the given string."""
+  src_starts_with: String
+
+  """All values not starting with the given string."""
+  src_not_starts_with: String
+
+  """All values ending with the given string."""
+  src_ends_with: String
+
+  """All values not ending with the given string."""
+  src_not_ends_with: String
   url: String
 
   """All values that are not equal to given value."""
@@ -1262,6 +1381,7 @@ type Network implements Node {
   config: String
   keypair(where: FileWhereInput): File
   certList(where: FileWhereInput): File
+  pictures(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File!]
   rtGraph: String
   taskId: String
   status: Int
@@ -1288,6 +1408,7 @@ input NetworkCreateInput {
   status: Int
   keypair: FileCreateOneInput
   certList: FileCreateOneInput
+  pictures: FileCreateManyInput
   peers: NetPeerCreateManyWithoutNetInput
 }
 
@@ -1306,6 +1427,7 @@ input NetworkCreateWithoutPeersInput {
   status: Int
   keypair: FileCreateOneInput
   certList: FileCreateOneInput
+  pictures: FileCreateManyInput
 }
 
 """An edge in a connection."""
@@ -1400,6 +1522,7 @@ input NetworkUpdateInput {
   status: Int
   keypair: FileUpdateOneInput
   certList: FileUpdateOneInput
+  pictures: FileUpdateManyInput
   peers: NetPeerUpdateManyWithoutNetInput
 }
 
@@ -1422,6 +1545,7 @@ input NetworkUpdateWithoutPeersDataInput {
   status: Int
   keypair: FileUpdateOneInput
   certList: FileUpdateOneInput
+  pictures: FileUpdateManyInput
 }
 
 input NetworkUpsertWithoutPeersInput {
@@ -1742,6 +1866,9 @@ input NetworkWhereInput {
   status_gte: Int
   keypair: FileWhereInput
   certList: FileWhereInput
+  pictures_every: FileWhereInput
+  pictures_some: FileWhereInput
+  pictures_none: FileWhereInput
   peers_every: NetPeerWhereInput
   peers_some: NetPeerWhereInput
   peers_none: NetPeerWhereInput
