@@ -18,7 +18,6 @@ const port = process.env.PORT || 5000;
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From Express' });
 });
-app.use('/files', express.static('uploads'));
 app.post('/upload', upload.single('file-to-upload'), (req, res) => {
     var file = req.file;
     res.send({ret_code: '0'});
