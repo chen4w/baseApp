@@ -26,7 +26,7 @@ import chineseMessages from './i18n/cn';
 //import  dataProvider from './dataprovider/data-provider'
 import buildGraphQLProvider from './adaptator';
 import  fakeDataProvider from './dataprovider/fdp'
-
+import indexDataProvider from './dataprovider/ra-data-indexdb'
 
 const messages = {
     cn: chineseMessages,
@@ -61,8 +61,11 @@ class App extends Component {
                this.setState({
                     dataProvider: (type, resource, params) => {
                         console.log('resource name:'+resource)
-                        if(resource=='keypairs')
-                            return fakeDataProvider(type, resource, params);
+                        console.log('type :'+type)
+                        console.log('params :'+JSON.stringify(params))
+                        if(resource==='keypairs')
+                            return indexDataProvider(type, resource, params);
+                            //return fakeDataProvider(type, resource, params);
                         else
                             return dataProvider(type, resource, params);
                     }   

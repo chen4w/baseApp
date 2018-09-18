@@ -8,20 +8,22 @@ import {
 const KeypairFilter = props => (
     <Filter {...props}>
         <TextInput label="pos.search" source="q" alwaysOn />
-        <DateInput source="created" />
+        <DateInput source="createdAt" />
     </Filter>
 );
 
 export const KeypairList = (props) => (
     <List {...props}
         filters={<KeypairFilter />}
-        bulkActions={false}>
+        bulkActions={false}
+        sort={{field: 'id', sort: 'ASC'}}
+        >
         <Responsive
             small={
                 <SimpleList
                     primaryText={record => record.sn}
                     secondaryText={record => record.desc}
-                    tertiaryText={record => new Date(record.created).toLocaleDateString()}
+                    tertiaryText={record => new Date(record.createdAt).toLocaleDateString()}
                 />
             }
             medium={
@@ -30,7 +32,7 @@ export const KeypairList = (props) => (
                     <UrlField source="sn" title="下载密钥对" />
                     <UrlField source="sn_cert" title="下载证书" />
                    <BooleanField source="status" />
-                    <DateField source="created" showTime />
+                    <DateField source="createdAt" showTime />
                     <EditButton />
                 </Datagrid>
             }
@@ -48,7 +50,7 @@ export const KeypairEdit = (props) => (
             <FormTab label="resources.keypairs.tabs.tab1">
                 <DisabledInput source="id" />
                 <TextInput source="sn" />
-                <TextInput source="algorithm" />
+                <TextInput source="alg" />
                 <FileInput source="files" label="导入密钥对" accept="application/pdf">
                     <FileField source="fimp" title="title" />
                 </FileInput>
@@ -75,7 +77,7 @@ export const KeypairCreate = (props) => (
             <FormTab label="resources.keypairs.tabs.tab1">
                 <DisabledInput source="id" />
                 <TextInput source="sn" />
-                <TextInput source="algorithm" />
+                <TextInput source="alg" />
                 <FileInput source="files" label="导入密钥对" accept="application/pdf">
                     <FileField source="fimp" title="title" />
                 </FileInput>
@@ -94,4 +96,3 @@ export const KeypairCreate = (props) => (
         </TabbedForm>
     </Create>
 );
-

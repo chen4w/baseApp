@@ -5,6 +5,7 @@
   "dependencies": {
     "apollo-client": "^2.4.1",
     "apollo-client-preset": "^1.0.8",
+    "dexie": "^2.0.4",
     "fakerest": "^2.1.0",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
