@@ -7,8 +7,8 @@ import {
   FileInput,
   FileField,
   Filter,
-  DateField,
-  DateInput,
+  SaveButton,
+  Toolbar,
   Responsive,
   SimpleList,
   List,
@@ -59,9 +59,20 @@ const FileTitle = ({ record }) => {
   return <span> {record ? `"${record.id}"` : ""}</span>;
 };
 
+const PostCreateToolbar = props => (
+  <Toolbar {...props}>
+      <SaveButton
+          label="确定"
+          redirect="list"
+          submitOnEnter={true}
+      />
+  </Toolbar>
+);
+
+
 export const FileCreate = props => (
   <Create {...props}>
-    <SimpleForm>
+    <SimpleForm toolbar={<PostCreateToolbar />}>
       <DisabledInput source="id" />
       <FileInput multiple source="pictures">
         <FileField source="src" title="title" />
