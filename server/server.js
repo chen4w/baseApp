@@ -1,8 +1,10 @@
 const express = require('express');
 const { Prisma } = require('prisma-binding')
+const filedir = '../public'
 const multer = require('multer');
+const {getAttchFileName} = require('../src/server/deployservice/getAttchment.js')
 const upload = multer({
-  dest: '../public/uploads/' // this saves your file into a directory called "uploads"
+  dest: filedir+'/uploads/' // this saves your file into a directory called "uploads"
 }); 
 
 const pdb = new Prisma({
@@ -12,12 +14,14 @@ const pdb = new Prisma({
     // secret: 'mysecret123', // only needed if specified in `database/prisma.yml`
   });
   
+  
 const app = express();
 const port = process.env.PORT || 5000;
 // API calls
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From Express' });
 });
+
 app.post('/upload', upload.single('file-to-upload'), (req, res) => {
     var file = req.file;
     res.send({ret_code: '0'});
@@ -29,4 +33,9 @@ app.post('/upload', upload.single('file-to-upload'), (req, res) => {
       )    
   });
   
+  app.get('/download/:attchmentid', function (req, res) {
+    getAttchFileName(req, res, pdb,filedir);
+  });
+
+
 app.listen(port, () => console.log(`Listening on port ${port}`));
