@@ -19,6 +19,7 @@
     "ra-data-simple-rest": "^2.1.1",
     "ra-language-chinese": "^2.0.1",
     "ra-language-english": "^2.0.2",
+    "rclink": "^1.0.4",
     "react": "^16.4.1",
     "react-admin": "^2.1.1",
     "react-apollo": "^2.1.11",

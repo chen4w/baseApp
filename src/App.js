@@ -60,9 +60,6 @@ class App extends Component {
           }).then(dataProvider => {
                this.setState({
                     dataProvider: (type, resource, params) => {
-                        console.log('resource name:'+resource)
-                        console.log('type :'+type)
-                        console.log('params :'+JSON.stringify(params))
                         if(resource==='keypairs')
                             return indexDataProvider(type, resource, params);
                             //return fakeDataProvider(type, resource, params);

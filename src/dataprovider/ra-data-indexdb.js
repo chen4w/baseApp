@@ -1,3 +1,4 @@
+import {IndexDBRest} from 'rclink'
 import {
     GET_LIST,
     GET_ONE,
@@ -9,59 +10,74 @@ import {
     DELETE,
     DELETE_MANY,
 } from 'react-admin/lib';
-import db from './db'
+
+const log = (type, resource, params) => {
+    console.log(`indexdbRest query:\n type: ${type}\n resource: ${resource}\n params: ${JSON.stringify(params)}`)
+}
+
+const schema = {
+    users: "++id, &userName, &email",
+    keypairs: "++id, &sn, alg, createdAt, status, ownerID",
+    certificates: "++id, &sn, ownerID, &accountAddr, &keypairSN",
+}
+
+// Init For test
+const initData = {
+    keypairs: [
+        {sn: '9316EC91876CDEE5', alg: 'EC-scep256k1', createdAt: new Date(), status: true, ownerID: 1},
+        {sn: '9416EC91876CDEE5', alg: 'EC-scep256k1', createdAt: new Date(), status: true, ownerID: 1},
+        {sn: '9616EC91876CDEE5', alg: 'EC-scep256k1', createdAt: new Date(), status: false, ownerID: 2},
+        {sn: '9716EC91876CDEE5', alg: 'EC-scep256k1', createdAt: new Date(), status: false, ownerID: 2},
+        {sn: '9816EC91876CDEE5', alg: 'EC-scep256k1', createdAt: new Date(), status: false, ownerID: 2},
+        {sn: '9916EC91876CDEE5', alg: 'EC-scep256k1', createdAt: new Date(), status: false, ownerID: 2},
+        {sn: '9626EC91876CDEE5', alg: 'EC-scep256k1', createdAt: new Date(), status: false, ownerID: 2},
+        {sn: '9636EC91876CDEE5', alg: 'EC-scep256k1', createdAt: new Date(), status: false, ownerID: 2},
+        {sn: '9646EC91876CDEE5', alg: 'EC-scep256k1', createdAt: new Date(), status: false, ownerID: 2},
+        {sn: '9656EC91876CDEE5', alg: 'EC-scep256k1', createdAt: new Date(), status: false, ownerID: 2},
+        {sn: '9666EC91876CDEE5', alg: 'EC-scep256k1', createdAt: new Date(), status: false, ownerID: 2},
+        {sn: '9676EC91876CDEE5', alg: 'EC-scep256k1', createdAt: new Date(), status: false, ownerID: 2},
+        {sn: '9686EC91876CDEE5', alg: 'EC-scep256k1', createdAt: new Date(), status: false, ownerID: 2},
+        {sn: '9696EC91876CDEE5', alg: 'EC-scep256k1', createdAt: new Date(), status: false, ownerID: 2},
+        {sn: '9617EC91876CDEE5', alg: 'EC-scep256k1', createdAt: new Date(), status: false, ownerID: 2},
+    ]
+}
 
 export default (type, resource, params) => {
+    const indexdbRest = new IndexDBRest("BAR", 1, schema, initData) 
+    log(type, resource, params)
     switch(type){
         case GET_LIST: 
             const {page, perPage} = params.pagination
-            const filter =  params.filter
-            const {field, order} = params.sort
-            const range = [(page-1)*perPage, page*perPage - 1]
+            const s = [params.sort.field, params.sort.order]
+            const r = [(page-1)*perPage, page*perPage - 1]
+            const query = {
+                filter: params.filter,
+                sort: s,
+                range: r
+            }
 
-            let collection = JSON.stringify(filter) === '{}' ? db.table(resource).toCollection() : db.table(resource).where(filter)
-            if(order === 'DESC')
-                collection = collection.reverse()
-            return collection.sortBy(field).then(rs => (
-                        {
-                            data: rs.slice(range[0], range[1] + 1),
-                            total: rs.length
-                        }
-                    ))
+            return indexdbRest.getCollection(resource, query).then(r => {
+                return {
+                    data: r.result,
+                    total: r.totalCount
+                }
+            })
         case GET_ONE:
             const gID = parseInt(params.id, 10)
-            return db.table(resource).get(gID).then(r => ({data: r}))
+            return indexdbRest.getOne(resource, gID).then(r => ({ data: r.result}))
         case CREATE:
             let d = params.data
             d.status = false
             d.createdAt = new Date()
-
-            return db.table(resource).add(d).then(rID => db.table(resource).get(rID)).then(r => ({data: r}))
+            return indexdbRest.create(resource, d).then(r => ({data: r.result}))
         case UPDATE:
             const uID = parseInt(params.id, 10)
             const uData = params.data
-            return db.table(resource).update(uID, uData).then(r => {
-                if(r)
-                    return db.table(resource).get(uID).then(r => ({data: r}))
-                else
-                    throw new Error(`Update ${resource} id:${uID} failed, the resource doesn't exist or provided data is the same with the orogin one`)
-            })
+            return indexdbRest.update(resource, uID, uData).then(r => ({data: r.result}))
         case DELETE:
             const dID = parseInt(params.id, 10)
             let prevR
-            return db.transaction('rw', db.table(resource), async () => {
-                await db.table(resource).get(dID).then(r => {
-                    if(!r)
-                        throw new Error(`Not found the ${resource} id:${dID}`)
-                    prevR = r
-                })
-                await db.table(resource).delete(dID)
-                return db.table(resource).get(dID).then(r => {
-                    if(r)
-                        throw new Error(`Delete operation failed for the ${resource} id:${dID}`)
-                    return {data: prevR}
-                })
-            })
+            return indexdbRest.delete(resource, dID).then(r => ({data: r.result}))
         default:
             throw new Error(`Unsupported data provider request type ${type}`)
     }
