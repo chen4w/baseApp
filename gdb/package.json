@@ -1,5 +1,6 @@
 {
   "name": "gdb",
+  "license": "(MIT OR Apache-2.0)",
   "scripts": {
     "start": "node src/index.js",
     "dev": "npm-run-all --parallel start playground",
@@ -8,9 +9,13 @@
   },
   "dependencies": {
     "graphql-yoga": "1.16.1",
+    "lowdb": "^1.0.0",
+    "mkdirp": "^0.5.1",
     "prisma-binding": "2.1.4",
     "protobufjs": "^6.8.8",
-    "rclink": "^1.0.1"
+    "rclink": "^1.0.1",
+    "react-apollo": "^2.1.11",
+    "shortid": "^2.2.13"
   },
   "devDependencies": {
     "graphql-cli": "2.16.5",

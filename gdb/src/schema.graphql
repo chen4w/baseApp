@@ -1,14 +1,26 @@
 # import Post from "./generated/prisma.graphql"
+scalar Upload
 
 type Query {
   feed: [Post!]!
   drafts: [Post!]!
   post(id: ID!): Post
   Block(id: ID!): Block
+  uploads: [File]
 }
 
 type Mutation {
   createDraft(title: String!, text: String): Post
   deletePost(id: ID!): Post
   publish(id: ID!): Post
+  singleUpload (file: Upload!): File!
+  multipleUpload (files: [Upload!]!): [File!]!
 }
+
+  type File {
+    id: ID!
+    path: String!
+    filename: String!
+    mimetype: String!
+    encoding: String!
+  }

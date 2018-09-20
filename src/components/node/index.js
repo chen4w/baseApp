@@ -23,13 +23,9 @@ export const NodeList = (props) => (
             medium={
                 <Datagrid>
                     <TextField source="id" />
-                    <TextField source="sid" />
-                    <TextField source="addr" />
-                    <ReferenceField label="组网" source="pid" reference="networks" linkType="show">
-                        <TextField source="netId" />
+                    <ReferenceField label="组网" source="net.id" reference="Network" linkType="show">
+                        <TextField source="name" />
                     </ReferenceField>
-
-                    <DateField source="created" showTime />
                     <ApproveButton />
                     <ShowButton />
                 </Datagrid>
@@ -39,17 +35,15 @@ export const NodeList = (props) => (
 );
 
 const NodeTitle = ({ record }) => {
-    return <span> {record ? `"${record.sid}"` : ''}</span>;
+    return <span> {record ? `"${record.id}"` : ''}</span>;
 };
 
 export const NodeShow = (props) => (
     <Show title={<NodeTitle />} {...props}>
         <TabbedShowLayout>
-            <Tab label="resources.networks.tabs.tab1">
+            <Tab label="resources.Network.tabs.tab1">
                 <TextField source="id" />
-                <TextField source="sid" />
-                <TextField source="addr" />
-                <DateField source="created" />
+                <TextField source="rtGraph" />
             </Tab>
         </TabbedShowLayout>
     </Show>
@@ -58,9 +52,10 @@ export const NodeShow = (props) => (
 export const NodeCreate = (props) => (
     <Create {...props}>
         <TabbedForm>
-            <FormTab label="resources.networks.tabs.tab1">
-                <ReferenceInput label="组网" source="pid" reference="networks">
-                    <SelectInput optionText="netId" />
+            <FormTab label="resources.Network.tabs.tab1">
+                <TextInput source="rtGraph" />
+                <ReferenceInput label="组网" source="net.id" reference="Network">
+                    <SelectInput optionText="name" />
                 </ReferenceInput>
             </FormTab>
         </TabbedForm>

@@ -5,9 +5,10 @@ import { CertList, CertShow } from './components/cert';
 import { KeypairList, KeypairEdit, KeypairCreate } from './components/keypair';
 import { AccountList, AccountEdit, AccountCreate } from './components/account';
 import { TransList, TransShow, TransCreate } from './components/transaction';
-import { NetworkList, NetworkShow, NetworkCreate } from './components/network';
+import { NetworkList, NetworkShow,  NetworkEdit, NetworkCreate } from './components/network';
 import { NodeList, NodeShow, NodeCreate } from './components/node';
 import { BlockList, BlockShow } from './components/block';
+import { FileList, FileCreate ,FileShow} from './components/file';
 
 import CertIcon from '@material-ui/icons/Description';
 import KeypairIcon from '@material-ui/icons/VpnKey';
@@ -16,7 +17,7 @@ import TransIcon from '@material-ui/icons/Cached';
 import NetworkIcon from '@material-ui/icons/GroupWork';
 import NodeIcon from '@material-ui/icons/Computer';
 import BlockIcon from '@material-ui/icons/ViewColumn';
-
+import AttachIcon from '@material-ui/icons/AttachFile';
 import Dashboard from './components/dashboard/Dashboard';
 
 import authProvider from './authProvider';
@@ -27,6 +28,8 @@ import chineseMessages from './i18n/cn';
 import buildGraphQLProvider from './adaptator';
 import  fakeDataProvider from './dataprovider/fdp'
 import indexDataProvider from './dataprovider/ra-data-indexdb'
+import addUploadCapabilities from './dataprovider/addUploadFeature';
+
 
 const messages = {
     cn: chineseMessages,
@@ -58,13 +61,14 @@ class App extends Component {
         buildGraphQLProvider({
             clientOptions: { uri: 'http://localhost:4466/' }
           }).then(dataProvider => {
+              const upDataProvider = addUploadCapabilities(dataProvider)
                this.setState({
                     dataProvider: (type, resource, params) => {
                         if(resource==='keypairs')
                             return indexDataProvider(type, resource, params);
                             //return fakeDataProvider(type, resource, params);
                         else
-                            return dataProvider(type, resource, params);
+                            return upDataProvider(type, resource, params);
                     }   
                 }                
                )
@@ -83,9 +87,11 @@ class App extends Component {
             <Admin dataProvider={dataProvider} title="RepChain基础服务" authProvider={authProvider}
             locale="cn" i18nProvider={i18nProvider} dashboard={Dashboard} >
                 <Resource name="keypairs" list={KeypairList}  edit={KeypairEdit} create={KeypairCreate} icon={KeypairIcon}/>
-                <Resource name="Network" list={NetworkList}  show={NetworkShow} create={NetworkCreate} icon={NetworkIcon}/>
+                <Resource name="Network" list={NetworkList}   edit={NetworkEdit} show={NetworkShow}  create={NetworkCreate} icon={NetworkIcon}/>
+                <Resource name="NetPeer" list={NodeList}  show={NodeShow} create={NodeCreate} icon={NodeIcon}/>
                  <Resource name="Block" list={BlockList}  show={BlockShow}  icon={BlockIcon}/>
                  <Resource name="Transaction" list={TransList}  show={TransShow} create={TransCreate} icon={TransIcon}/>
+                 <Resource name="File" list={FileList}   show={FileShow} create={FileCreate} icon={AttachIcon}/>
             </Admin>
         );
     }

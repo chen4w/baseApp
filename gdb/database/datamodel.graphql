@@ -32,8 +32,34 @@ type Network {
   seed: String
   genesisBlock: String
   config: String
-  certList: String
+  keypair: File @relation(name: "NWKeypair")
+  certList: File @relation(name: "NWCerts")
+  pictures: [File!]! @relation(name: "NWPics")
   rtGraph: String
   taskId: String
   status: Int
+  peers:[NetPeer!]!
+}
+
+type NetPeer {
+  id: ID! @unique
+  net: Network
+  keypair: File 
+  rtGraph: String
+  taskId: String
+  status: Int
+}
+
+type File {
+  id: ID! @unique
+  pname: String
+  pid: ID
+  purpose: String
+  name: String
+  title: String
+  size: Int
+  secret: String
+  contentType: String
+  src: String
+  url: String
 }

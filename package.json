@@ -6,6 +6,7 @@
     "apollo-client": "^2.4.1",
     "apollo-client-preset": "^1.0.8",
     "dexie": "^2.0.4",
+    "concurrently": "^4.0.1",
     "fakerest": "^2.1.0",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
@@ -31,11 +32,14 @@
     "jest": {
       "testEnvironment": "node"
     },
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "concurrently 'yarn react-start' 'cd server && yarn start'",
+    "build": "concurrently 'yarn react-build' 'cd server && yarn build'",
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://localhost:5000",
   "devDependencies": {
     "react-test-renderer": "^16.4.1"
   }

@@ -47,7 +47,7 @@ export default {
                 created: '生成时间'
             }
         },
-        nodes: {
+        NetPeer: {
             notification: {
                 approved_success: '服务已启动',
                 approved_error: '错误: 服务启动失败',
@@ -123,6 +123,19 @@ export default {
                 modified: '修改时间',
                 org:'单位/机构',
                 status: '状态'
+            }
+        },
+        File: {
+            name: '附件',
+            tabs: {
+                tab1: '基本项',
+                tab2: '相关密钥',
+                tab3: '相关交易'
+            },
+             fields: {
+                id: '序号',
+                name: '名称',
+                size: '大小',
             }
         },
         certs: {
