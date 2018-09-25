@@ -11,6 +11,14 @@ const convertFileToBase64 = file =>
         }
         reader.onerror = reject;
     });
+const xhr = new XMLHttpRequest(); 
+const uploadFile = file =>{
+    var formData = new FormData();
+    formData.append('file-to-upload', file.rawFile);
+    xhr.open('POST', '/upload', true);
+    console.log(file.rawFile)
+    xhr.send(formData);
+}
 
 const addUploadCapabilities = requestHandler => (type, resource, params) => {
     if ((type === 'UPDATE'|| type === 'CREATE') && resource === 'File') {
@@ -23,17 +31,8 @@ const addUploadCapabilities = requestHandler => (type, resource, params) => {
                 p => p.rawFile instanceof File
             );
 
-            return Promise.all(newPictures.map(convertFileToBase64))
-                .then(base64Pictures =>
-                    base64Pictures.map(picture64 => {
-                        //picture64
-                        requestHandler(type, resource, {
-                            data: picture64                        
-                        })   
-                        picture64
-                    }
-                    )
-                ).then(transformedNewPictures => requestHandler("GET_LIST", resource, 
+            return Promise.all(newPictures.map(uploadFile))
+                .then(transformedNewPictures => requestHandler("GET_LIST", resource, 
                     {filter:{},pagination:{page:1,perPage:10},sort:{field: "id", order: "DESC"}}))
         }
     }

@@ -44,6 +44,9 @@ export const NodeShow = (props) => (
             <Tab label="resources.Network.tabs.tab1">
                 <TextField source="id" />
                 <TextField source="rtGraph" />
+                <ReferenceField label="组网" source="net.id" reference="Network">
+                    <TextField source="name" />
+                </ReferenceField>
             </Tab>
         </TabbedShowLayout>
     </Show>
