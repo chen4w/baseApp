@@ -27,6 +27,7 @@ import chineseMessages from './i18n/cn';
 //import  dataProvider from './dataprovider/data-provider'
 import buildGraphQLProvider from './adaptator';
 import  fakeDataProvider from './dataprovider/fdp'
+import indexDataProvider from './dataprovider/ra-data-indexdb'
 import addUploadCapabilities from './dataprovider/addUploadFeature';
 
 
@@ -63,9 +64,9 @@ class App extends Component {
               const upDataProvider = addUploadCapabilities(dataProvider)
                this.setState({
                     dataProvider: (type, resource, params) => {
-                        console.log('resource name:'+resource)
-                        if(resource=='keypairs')
-                            return fakeDataProvider(type, resource, params);
+                        if(resource==='keypairs')
+                            return indexDataProvider(type, resource, params);
+                            //return fakeDataProvider(type, resource, params);
                         else
                             return upDataProvider(type, resource, params);
                     }   
