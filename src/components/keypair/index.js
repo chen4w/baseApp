@@ -1,19 +1,20 @@
 import React from 'react';
 import {
-    FormTab, TabbedForm, TabbedShowLayout, Tab, ReferenceField, FormDataConsumer, RadioButtonGroupInput, SelectInput,
+    FormTab, TabbedForm, TabbedShowLayout, Tab, SimpleForm, ReferenceField, FormDataConsumer, RadioButtonGroupInput, SelectInput,
     Filter, DateInput, BooleanField, NumberField, 
     UrlField, DateField, FileInput, FileField, Responsive, SimpleList, List, ShowController, ShowView, Edit, Create, 
-    Datagrid, TextField, ShowButton, EditButton, DisabledInput, LongTextInput, TextInput, NumberInput
+    Datagrid, TextField, ShowButton, EditButton, DisabledInput, LongTextInput, TextInput, NumberInput,
 } from 'react-admin/lib';
 import {DateTimeInput} from 'react-admin-date-inputs'
 import {required} from 'react-admin'
 import PEMTextField from './PEMTextField'
 import uuidV1 from 'uuid/v1'
+import EditSaveButton from './EditSaveButton';
 
 const KeypairFilter = props => (
     <Filter {...props}>
         <TextInput label="pos.search" source="kp.sn" alwaysOn />
-        <DateInput source="createdAt" />
+        <DateTimeInput source="createdAt" />
     </Filter>
 );
 
@@ -34,10 +35,10 @@ export const KeypairList = (props) => (
             medium={
                 <Datagrid>
                     <TextField source="id" />
-                    <UrlField label='密钥对编号' source="kp.sn" title="下载密钥对" />
-                    <UrlField label='证书编号标识' source="cert.sn" title="下载证书" />
+                    <UrlField source="kp.sn" title="下载密钥对" />
+                    <UrlField source="cert.sn" title="下载证书" />
                    <BooleanField source="status" />
-                    <DateField label='创建时间' source="createdAt" showTime />
+                    <DateField source="createdAt" showTime />
                     <ShowButton />
                     <EditButton />
                 </Datagrid>
@@ -58,9 +59,9 @@ export const KeypairShow = (props) => (
                 <TabbedShowLayout>
                     <Tab label="resources.keypairs.tabs.tab1">
                         <NumberField source="id" />
-                        <TextField label='密钥对编号' source="kp.sn" />
-                        <TextField label='生成算法名称' source="kp.alg.name" />
-                        <TextField label='生成算法参数' source="kp.alg.param" />
+                        <TextField source="kp.sn" />
+                        <TextField source="kp.alg.name" />
+                        <TextField source="kp.alg.param" />
                     </Tab>
                     <Tab label="resources.keypairs.tabs.tab2">
                         <TextField label='证书拥有者(Subject)' source="cert.distinguishName"/>
@@ -77,7 +78,7 @@ export const KeypairShow = (props) => (
                             controllerProps.record && controllerProps.record.kp.alg.name === 'EC' &&
                             <TextField label='Hex格式公钥' source="kp.pubKeyHex" />
                         }
-                        <PEMTextField label='PEM格式私钥' source="kp.prvKeyPEM" />
+                        <PEMTextField label={`PEM格式私钥${/ENCRYPTED/.test(controllerProps.record.kp.prvKeyPEM) ? '(**已加密)' : '(**未加密)'}`} source="kp.prvKeyPEM" />
                     </Tab>
                 </TabbedShowLayout>
             </ShowView>
@@ -88,7 +89,7 @@ export const KeypairShow = (props) => (
 
 export const KeypairEdit = (props) => (
     <Edit title={<KeypairTitle />} {...props}>
-        <TabbedForm>
+        <TabbedForm toolbar={null}>
             <FormTab label="resources.keypairs.tabs.tab1">
                 <DisabledInput source="id" />
                 <DisabledInput label='密钥对编号' source="kp.sn" />
@@ -106,12 +107,35 @@ export const KeypairEdit = (props) => (
             </FormTab>
             <FormTab label="resources.keypairs.tabs.tab3">
                 <LongTextInput disabled label='公钥PEM信息' source="kp.pubKeyPEM" />
-                <LongTextInput disabled label='私钥PEM信息' source="kp.prvKeyPEM" />
+                <LongTextInput source="kp.prvKeyPEM" style={{display: 'none'}} />
+                <FormDataConsumer>
+                    {
+                        ({formData, ...rest}) => {
+                            const isEncrypted = /ENCRYPTED/.test(formData.kp.prvKeyPEM)
+                            return <LongTextInput disabled label={`私钥PEM信息${isEncrypted ? '(**已加密)' : '(**未加密)'}`} source="kp.prvKeyPEM" />
+                        }
+                    }
+                </FormDataConsumer>
             </FormTab>
             <FormTab label="resources.keypairs.tabs.tab4">
-                <TextInput source="pwd_old" type="password" />
-                <TextInput source="pwd1" type="password" />
-                <TextInput source="pwd2" type="password" />
+                <FormDataConsumer>
+                    {
+                        ({formData, ...rest}) => {
+                            const isEncrypted = /ENCRYPTED/.test(formData.kp.prvKeyPEM)
+                            return isEncrypted ? <TextInput label='旧密码' source="kp.pwdOld" type="password" {...rest}/> : null
+                        }
+                    }
+                </FormDataConsumer>
+                <TextInput source="kp.pwd1" type="password" />
+                <TextInput source="kp.pwd2" type="password" />
+                <FormDataConsumer>
+                    {
+                        ({formData, ...rest}) => (
+                            <EditSaveButton record={formData}/>
+                        )
+                    }
+                </FormDataConsumer>
+
             </FormTab>
         </TabbedForm>
     </Edit>
@@ -128,73 +152,69 @@ export const KeypairCreate = (props) => {
     const keypairDefaultValue={cert: {sn : parseInt(uuidV1(), 16)}}
     return (
     <Create {...props}>
-        <TabbedForm redirect="list" defaultValue={keypairDefaultValue}>
-            <FormTab label="resources.keypairs.tabs.tab1">
-                <RadioButtonGroupInput label='新建方式' source='createMethod' choices={createMethodChoices} validate={required()}/>
-                <FormDataConsumer>
-                    {
-                        ({formData, ...rest}) => {
-                            const method = formData.createMethod
-                            if(method === 'new')
-                                return <RadioButtonGroupInput label='非对称密钥算法' source='kp.alg.name' choices={cryptoAlgNameChoices} validate={required()} {...rest}/>
-                            if(method === 'import')
-                                return (
-                                    <FileInput source="files" label="导入密钥对" accept="application/pdf" validate={required()} {...rest}>
-                                        <FileField source="fimp" title="title" />
-                                    </FileInput>
-                                )
-                            else
-                                return null
-                        }
+        <SimpleForm redirect="list" defaultValue={keypairDefaultValue}>
+            <RadioButtonGroupInput label='新建方式' source='createMethod' choices={createMethodChoices} validate={required()}/>
+            <FormDataConsumer>
+                {
+                    ({formData, ...rest}) => {
+                        const method = formData.createMethod
+                        if(method === 'new')
+                            return <RadioButtonGroupInput label='非对称密钥算法' source='kp.alg.name' choices={cryptoAlgNameChoices} validate={required()} {...rest}/>
+                        if(method === 'import')
+                            return (
+                                <FileInput source="files" label="导入密钥对" accept="application/pdf" validate={required()} {...rest}>
+                                    <FileField source="fimp" title="title" />
+                                </FileInput>
+                            )
+                        else
+                            return null
                     }
-                </FormDataConsumer>
-                <FormDataConsumer>
-                    {
-                        ({formData, ...rest}) => {
-                            const kp = formData.kp
-                            const method = formData.createMethod
-                            if(kp && kp.alg && kp.alg.name === 'EC' && method === 'new')
-                                return <SelectInput label='曲线名' source='kp.alg.param' choices={cryptoAlgParamECChoices} validate={required()} {...rest}/>
-                            if(kp && kp.alg && kp.alg.name === 'RSA' && method === 'new')
-                                return <SelectInput label='密钥长度' source='kp.alg.param' choices={cryptoAlgParamRSAChoices} validate={required()} {...rest} />
-                            else
-                                return null
-                        }
+                }
+            </FormDataConsumer>
+            <FormDataConsumer>
+                {
+                    ({formData, ...rest}) => {
+                        const kp = formData.kp
+                        const method = formData.createMethod
+                        if(kp && kp.alg && kp.alg.name === 'EC' && method === 'new')
+                            return <SelectInput label='曲线名' source='kp.alg.param' choices={cryptoAlgParamECChoices} validate={required()} {...rest}/>
+                        if(kp && kp.alg && kp.alg.name === 'RSA' && method === 'new')
+                            return <SelectInput label='密钥长度' source='kp.alg.param' choices={cryptoAlgParamRSAChoices} validate={required()} {...rest} />
+                        else
+                            return null
                     }
-                </FormDataConsumer>
-                <FormDataConsumer>
-                    {
-                        ({formData, ...rest}) => {
-                            const kp = formData.kp
-                            const method = formData.createMethod
-                            if(method === 'new' && kp && kp.alg && kp.alg.name && kp.alg.param){
-                                return (
-                                    <div style={{display: 'inline-grid'}}>
-                                        <NumberInput label='证书序列号' source='cert.sn' validate={required()}/>
-                                        {
-                                            kp.alg.name === 'EC' ?
-                                                <SelectInput label='证书签名算法' source='cert.sigAlg' choices={certSignatureAlgECChoices} validate={required()} {...rest}/>
-                                                :
-                                                <SelectInput label='证书签名算法' source='cert.sigAlg' choices={certSignatureAlgRSAChoices} validate={required()} {...rest}/>
+                }
+            </FormDataConsumer>
+            <FormDataConsumer>
+                {
+                    ({formData, ...rest}) => {
+                        const kp = formData.kp
+                        const method = formData.createMethod
+                        if(method === 'new' && kp && kp.alg && kp.alg.name && kp.alg.param){
+                            return (
+                                <div style={{display: 'inline-grid'}}>
+                                    <TextInput label='私钥加密密码' source="kp.pwd1" type="password" />
+                                    <TextInput label='私钥加密密码确认' source="kp.pwd2" type="password" />
+                                    <NumberInput label='证书序列号' source='cert.sn' validate={required()}/>
+                                    {
+                                        kp.alg.name === 'EC' ?
+                                            <SelectInput label='证书签名算法' source='cert.sigAlg' choices={certSignatureAlgECChoices} validate={required()} {...rest}/>
+                                            :
+                                            <SelectInput label='证书签名算法' source='cert.sigAlg' choices={certSignatureAlgRSAChoices} validate={required()} {...rest}/>
 
-                                        }
-                                        <DateTimeInput label='证书起始有效期' source='cert.validityStart' validate={required()} options={{format: 'YYYY/MM/dd, HH:mm:ss', clearable: true}}/>
-                                        <DateTimeInput label='证书终止有效期' source='cert.validityEnd' validate={required()} options={{format: 'YYYY/MM/dd, HH:mm:ss', clearable: true}}/>
-                                        <TextInput label='证书拥有者/发行者识别名' placeholder='Distinguish Name' source='cert.distinguishName' validate={required()} />
-                                    </div>
-                                )
-                            }
-                            else
-                                return null
+                                    }
+                                    <DateTimeInput label='证书起始有效期' source='cert.validityStart' validate={required()} options={{format: 'YYYY/MM/dd, HH:mm:ss', clearable: true}} {...rest}/>
+                                    <DateTimeInput label='证书终止有效期' source='cert.validityEnd' validate={required()} options={{format: 'YYYY/MM/dd, HH:mm:ss', clearable: true}} {...rest}/>
+                                    <TextInput label='证书拥有者/发行者识别名' placeholder='Distinguish Name' source='cert.distinguishName' validate={required()} />
+                                </div>
+                            )
                         }
+                        else
+                            return null
                     }
-                </FormDataConsumer>
-            </FormTab>
-            <FormTab label="resources.keypairs.tabs.tab4">
-                <TextInput source="pwd1" type="password" />
-                <TextInput source="pwd2" type="password" />
-            </FormTab>
-        </TabbedForm>
+                }
+            </FormDataConsumer>
+        </SimpleForm>
     </Create>
     )
 };

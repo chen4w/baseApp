@@ -71,12 +71,15 @@ export default (type, resource, params) => {
             d.createdAt = new Date()
 
             const keypair = Crypto.CreateKeypair(d.kp.alg.name, d.kp.alg.param)
-            const prvKeyPEM = Crypto.GetKeyPEM(keypair.prvKeyObj)
+            const prvKeyPEM = Crypto.GetKeyPEM(keypair.prvKeyObj, d.kp.pwd1)
+            //d.kp.pwd = Crypto.GetHashVal(d.kp.pwd1).toString('hex')
+            delete d.kp.pwd1
+            delete d.kp.pwd2
             const pubKeyPEM = Crypto.GetKeyPEM(keypair.pubKeyObj)
-            d.kp.prvKeyHex = keypair.prvKeyObj.prvKeyHex
             d.kp.prvKeyPEM = prvKeyPEM
-            d.kp.pubKeyHex = keypair.pubKeyObj.pubKeyHex
             d.kp.pubKeyPEM = pubKeyPEM
+            if(d.kp.alg.name === 'EC')
+                d.kp.pubKeyHex = keypair.pubKeyObj.pubKeyHex
             d.kp.sn = Crypto.GetHashVal(Crypto.GetHashVal(pubKeyPEM), 'RIPEMD160').toString('hex')
 
             let startUnixTimeStr = d.cert.validityStart.getTime().toString()
@@ -91,11 +94,29 @@ export default (type, resource, params) => {
             return indexdbRest.create(resource, d).then(r => ({data: r.result}))
         case UPDATE:
             const uID = parseInt(params.id, 10)
-            const uData = params.data
+            let uData = params.data
+            const pwdOld = uData.kp.pwdOld
+
+            try {
+                uData.kp.prvKeyPEM = Crypto.GetKeyPEM(Crypto.ImportKey(uData.kp.prvKeyPEM, pwdOld), uData.kp.pwd1) 
+                delete uData.kp.pwdOld
+                delete uData.kp.pwd1
+                delete uData.kp.pwd2
+            }
+            catch(e){
+                console.error(e)
+                return new Promise((_, reject) => {
+                    if(e === 'malformed plain PKCS8 private key(code:001)')
+                        reject(new Error('您输入的旧密码错误'))
+                    else
+                        reject(new Error(e))
+                }
+                )
+            }
+
             return indexdbRest.update(resource, uID, uData).then(r => ({data: r.result}))
         case DELETE:
             const dID = parseInt(params.id, 10)
-            let prevR
             return indexdbRest.delete(resource, dID).then(r => ({data: r.result}))
         default:
             throw new Error(`Unsupported data provider request type ${type}`)

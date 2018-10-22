@@ -173,18 +173,27 @@ export default {
             name: '密钥对',
             fields: {
                 id: '序号',
-                sn: '密钥标识',
                 algorithm: '生成算法',
                 desc: '备注',
                 prv_key: '私钥',
                 pub_key: '公钥',
                 pub_cert: '证书',
-                sn_cert: '证书标识',
-                created: '生成时间',
+                createdAt: '生成时间',
                 fimp: '导出文件',
-                pwd_old: '旧密码',
-                pwd1: '请输入密码',
-                pwd2: '再一次输入密码',
+                kp: {
+                    sn: '密钥标识',
+                    alg: {
+                        name: '生成算法',
+                        param: '生成算法参数',
+                    },
+                    pwdOld: '旧密码',
+                    pwd1: '请输入密码',
+                    pwd2: '再一次输入密码'
+                },
+                cert: {
+                    sn: '证书标识'
+
+                },
                 status: '状态'
             }
         },
