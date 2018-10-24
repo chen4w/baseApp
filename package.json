@@ -11,6 +11,7 @@
     "flat-plain-object": "^1.0.0",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
+    "js-file-download": "^0.4.4",
     "jsrsasign": "^8.0.12",
     "lodash": "^4.17.10",
     "pluralize": "^7.0.0",

@@ -9,7 +9,7 @@ import indexDataProvider from '../../dataprovider/ra-data-indexdb'
 class EditSaveButton extends Component {
     handleClick = () => {
         const { push, record, showNotification, fetchStart, fetchEnd } = this.props;
-        const updatedRecord = { ...record, is_approved: true };
+        const updatedRecord = { ...record};
         fetchStart()
         indexDataProvider(UPDATE, 'keypairs', {id: record.id, data: updatedRecord})
             .then(() => {

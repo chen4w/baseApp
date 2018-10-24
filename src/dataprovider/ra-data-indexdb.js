@@ -78,10 +78,9 @@ export default (type, resource, params) => {
             const pubKeyPEM = Crypto.GetKeyPEM(keypair.pubKeyObj)
             d.kp.prvKeyPEM = prvKeyPEM
             d.kp.pubKeyPEM = pubKeyPEM
-            if(d.kp.alg.name === 'EC')
-                d.kp.pubKeyHex = keypair.pubKeyObj.pubKeyHex
             d.kp.sn = Crypto.GetHashVal(Crypto.GetHashVal(pubKeyPEM), 'RIPEMD160').toString('hex')
 
+            // Todo: fix timestamp bug
             let startUnixTimeStr = d.cert.validityStart.getTime().toString()
             startUnixTimeStr = startUnixTimeStr.slice(0, -3)
             let endUnixTimeStr = d.cert.validityEnd.getTime().toString()

@@ -10,6 +10,8 @@ import {required} from 'react-admin'
 import PEMTextField from './PEMTextField'
 import uuidV1 from 'uuid/v1'
 import EditSaveButton from './EditSaveButton';
+import SaveAsButton from './SaveAsButton'
+import DownloadUrlField from './DownloadUrlField';
 
 const KeypairFilter = props => (
     <Filter {...props}>
@@ -35,9 +37,9 @@ export const KeypairList = (props) => (
             medium={
                 <Datagrid>
                     <TextField source="id" />
-                    <UrlField source="kp.sn" title="下载密钥对" />
-                    <UrlField source="cert.sn" title="下载证书" />
-                   <BooleanField source="status" />
+                    <DownloadUrlField source="kp.sn" title="下载密钥对" />
+                    <DownloadUrlField source="cert.sn" title="下载证书" />
+                    <BooleanField source="status" />
                     <DateField source="createdAt" showTime />
                     <ShowButton />
                     <EditButton />
@@ -54,8 +56,8 @@ const KeypairTitle = ({ record }) => {
 export const KeypairShow = (props) => (
     <ShowController title={<KeypairTitle/>} {...props}>
         {
-            controllerProps => 
-            <ShowView {...props} {...controllerProps}>
+            controllerProps => ( 
+            <ShowView {...props} {...controllerProps}> 
                 <TabbedShowLayout>
                     <Tab label="resources.keypairs.tabs.tab1">
                         <NumberField source="id" />
@@ -71,17 +73,24 @@ export const KeypairShow = (props) => (
                         <DateField label='终止有效期(Valid Util)' source="cert.validityEnd" showTime/>
                         <TextField label='签名算法(Signature Alg)' source="cert.sigAlg"/>
                         <PEMTextField label='PEM格式证书信息' source="cert.certPEM" />
+                        <SaveAsButton source='cert.certPEM' />
                     </Tab>
                     <Tab label="resources.keypairs.tabs.tab3">
                         <PEMTextField label='PEM格式公钥' source="kp.pubKeyPEM" />
+                        <SaveAsButton source='kp.pubKeyPEM' />
+                        <div style={{height: '45px'}}/>
                         {
-                            controllerProps.record && controllerProps.record.kp.alg.name === 'EC' &&
-                            <TextField label='Hex格式公钥' source="kp.pubKeyHex" />
+                            controllerProps.record &&
+                            <PEMTextField label={`PEM格式私钥${/ENCRYPTED/.test(controllerProps.record.kp.prvKeyPEM) ? 
+                                '(**已加密)' : '(**未加密)'}`} 
+                                source="kp.prvKeyPEM"
+                            />
                         }
-                        <PEMTextField label={`PEM格式私钥${/ENCRYPTED/.test(controllerProps.record.kp.prvKeyPEM) ? '(**已加密)' : '(**未加密)'}`} source="kp.prvKeyPEM" />
+                        <SaveAsButton source='kp.prvKeyPEM' />
                     </Tab>
                 </TabbedShowLayout>
             </ShowView>
+            )
         }
     </ShowController>
 )
