@@ -7,20 +7,20 @@ import fileDownload from 'js-file-download';
 class SaveAsButton extends Component{
     handleClick = () => {
         const {record, source} = this.props;
-        let suffix;
+        let fileName;
         switch(source){
             case 'cert.certPEM':
-                suffix = '.cer';
+                fileName = record.cert.sn + '.cer';
                 break;
             case 'kp.pubKeyPEM':
-                suffix = '.pub';
+                fileName = record.kp.sn + '.pub';
                 break;
             case 'kp.prvKeyPEM':
-                suffix = '.pkcs8';
+                fileName = record.kp.sn + '.pkcs8';
                 break;
             default:
         } 
-        fileDownload(get(record, source), `${record.cert.sn}${suffix}`)
+        fileDownload(get(record, source), fileName);
     }
 
     render(){

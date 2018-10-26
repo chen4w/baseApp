@@ -2996,7 +2996,7 @@ fakerest@^2.1.0:
 
 fast-deep-equal@^1.0.0:
   version "1.1.0"
-  resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-1.1.0.tgz#c053477817c86b51daa853c81e059b733d023614"
+  resolved "http://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-1.1.0.tgz#c053477817c86b51daa853c81e059b733d023614"
 
 fast-deep-equal@^2.0.1:
   version "2.0.1"
@@ -6330,8 +6330,8 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     strip-json-comments "~2.0.1"
 
 rclink@^1.0.4:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/rclink/-/rclink-1.0.5.tgz#06c469f672154f0c2c01899dd80221413d6f8c97"
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/rclink/-/rclink-1.0.8.tgz#fdd72cfb9e00c31e3820d8062f3dcd78a1d8001c"
   dependencies:
     dexie "^2.0.4"
     jsrsasign "^8.0.12"

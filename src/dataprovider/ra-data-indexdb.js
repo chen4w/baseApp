@@ -23,7 +23,8 @@ const schema = {
 }
 
 // Init For test
-const initData = {
+const initData = {};
+/*
     keypairs: [
         {kp: {sn: '1316EC91876CDEE5', alg: {name: 'EC', param: 'secp256r1'}}, cert: {sn: '12345678'}, createdAt: new Date(), status: false, ownerID: 1},
         {kp: {sn: '2316EC91876CDEE5', alg: {name: 'EC', param: 'secp256r1'}}, cert: {sn: '22345678'}, createdAt: new Date(), status: true, ownerID: 1},
@@ -40,6 +41,7 @@ const initData = {
         {kp: {sn: '1716EC91876CDEE5', alg: {name: 'EC', param: 'secp256k1'}}, cert: {sn: '16345678'}, createdAt: new Date(), status: true, ownerID: 1},
     ]
 }
+*/
 
 export default (type, resource, params) => {
     const indexdbRest = new IndexDBRest("BAR", 1, schema, initData) 
@@ -70,25 +72,50 @@ export default (type, resource, params) => {
             d.status = false
             d.createdAt = new Date()
 
-            const keypair = Crypto.CreateKeypair(d.kp.alg.name, d.kp.alg.param)
-            const prvKeyPEM = Crypto.GetKeyPEM(keypair.prvKeyObj, d.kp.pwd1)
-            //d.kp.pwd = Crypto.GetHashVal(d.kp.pwd1).toString('hex')
-            delete d.kp.pwd1
-            delete d.kp.pwd2
-            const pubKeyPEM = Crypto.GetKeyPEM(keypair.pubKeyObj)
-            d.kp.prvKeyPEM = prvKeyPEM
-            d.kp.pubKeyPEM = pubKeyPEM
-            d.kp.sn = Crypto.GetHashVal(Crypto.GetHashVal(pubKeyPEM), 'RIPEMD160').toString('hex')
+            let prvKeyPEM;
+            let pubKeyPEM;
+            let certPEM;
 
-            // Todo: fix timestamp bug
-            let startUnixTimeStr = d.cert.validityStart.getTime().toString()
-            startUnixTimeStr = startUnixTimeStr.slice(0, -3)
-            let endUnixTimeStr = d.cert.validityEnd.getTime().toString()
-            endUnixTimeStr = endUnixTimeStr.slice(0, -3)
+            if(d.keypairImported){
+                const pemInfo = d.keypairImported.src;
+                const prvKeyRex = /-*BEGIN.*\s+PRIVATE.*\s+KEY-*\r\n[\w+=\/\r\n]*-*END.*\s+PRIVATE.*\s+KEY-*\r\n/i;
+                const certRex = /-*BEGIN.*\s+CERTIFICATE-*\r\n[\w+=\/\r\n]*-*END.*\s+CERTIFICATE-*\r\n/i;
+                prvKeyPEM = prvKeyRex.exec(pemInfo)[0];
+                certPEM = certRex.exec(pemInfo)[0];
+                const pubKeyObj = Crypto.ImportKey(certPEM);
+                pubKeyPEM = Crypto.GetKeyPEM(pubKeyObj);
 
-            const certPEM = Crypto.CreateSelfSignedCertificate(d.cert.sn, d.cert.sigAlg, d.cert.distinguishName, 
-                startUnixTimeStr, endUnixTimeStr, keypair)
-            d.cert.certPEM = certPEM
+                d.kp = {alg: {name: pubKeyObj.type || 'RSA', param: pubKeyObj.curveName 
+                    || ((pubKeyObj.n && pubKeyObj.n.t === 40) ? 1024 : 2048)}};
+                d.kp.prvKeyPEM = prvKeyPEM;
+                d.kp.pubKeyPEM = pubKeyPEM;
+                d.kp.sn = Crypto.GetHashVal(Crypto.GetHashVal(pubKeyPEM), 'RIPEMD160').toString('hex')
+
+                const cert = Crypto.ImportCertificate(certPEM);
+                d.cert = {sn: parseInt(cert.getSerialNumberHex(), 16), sigAlg: cert.getSignatureAlgorithmField(),
+                    distinguishName: cert.getSubjectString(), validityStart: new Date(cert.getNotBeforeUnixTimestamp() * 1000),
+                    validityEnd: new Date(cert.getNotAfterUnixTimestamp() * 1000), certPEM: certPEM};
+                
+                delete d.keypairImported;
+            }
+            else{
+                const keypair = Crypto.CreateKeypair(d.kp.alg.name, d.kp.alg.param)
+                prvKeyPEM = Crypto.GetKeyPEM(keypair.prvKeyObj, d.kp.pwd1)
+                //d.kp.pwd = Crypto.GetHashVal(d.kp.pwd1).toString('hex')
+                delete d.kp.pwd1
+                delete d.kp.pwd2
+                pubKeyPEM = Crypto.GetKeyPEM(keypair.pubKeyObj)
+                d.kp.prvKeyPEM = prvKeyPEM
+                d.kp.pubKeyPEM = pubKeyPEM
+                d.kp.sn = Crypto.GetHashVal(Crypto.GetHashVal(pubKeyPEM), 'RIPEMD160').toString('hex')
+
+                // Todo: fix timestamp bug
+                const startUnixTime = parseInt(d.cert.validityStart.getTime() / 1000)
+                const endUnixTime = parseInt(d.cert.validityEnd.getTime() / 1000)
+                certPEM = Crypto.CreateSelfSignedCertificate(d.cert.sn, d.cert.sigAlg, d.cert.distinguishName, 
+                    startUnixTime, endUnixTime, keypair)
+                d.cert.certPEM = certPEM
+            }
 
             return indexdbRest.create(resource, d).then(r => ({data: r.result}))
         case UPDATE:

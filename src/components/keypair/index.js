@@ -81,7 +81,7 @@ export const KeypairShow = (props) => (
                         <div style={{height: '45px'}}/>
                         {
                             controllerProps.record &&
-                            <PEMTextField label={`PEM格式私钥${/ENCRYPTED/.test(controllerProps.record.kp.prvKeyPEM) ? 
+                            <PEMTextField label={`PEM格式私钥${/ENCRYPTED/i.test(controllerProps.record.kp.prvKeyPEM) ? 
                                 '(**已加密)' : '(**未加密)'}`} 
                                 source="kp.prvKeyPEM"
                             />
@@ -171,7 +171,7 @@ export const KeypairCreate = (props) => {
                             return <RadioButtonGroupInput label='非对称密钥算法' source='kp.alg.name' choices={cryptoAlgNameChoices} validate={required()} {...rest}/>
                         if(method === 'import')
                             return (
-                                <FileInput source="files" label="导入密钥对" accept="application/pdf" validate={required()} {...rest}>
+                                <FileInput source="keypairFile" label="导入密钥对" accept=".pem" validate={required()} {...rest}>
                                     <FileField source="fimp" title="title" />
                                 </FileInput>
                             )

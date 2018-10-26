@@ -1,7 +1,16 @@
-const convertFileToBase64 = file =>
+const convertFile = (file, targetType) =>
     new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.readAsDataURL(file.rawFile);
+        switch(targetType){
+            case 'base64':
+                reader.readAsDataURL(file.rawFile);
+                break;
+            case 'utf8':
+                reader.readAsText(file.rawFile);
+                break;
+            default:
+                reader.readAsArrayBuffer(file.rawFile);
+        }
 
         reader.onload = () => {
             resolve({
@@ -13,7 +22,7 @@ const convertFileToBase64 = file =>
     });
 
 const addUploadCapabilities = requestHandler => (type, resource, params) => {
-    if ((type === 'UPDATE'|| type === 'CREATE') && resource === 'File') {
+    if ((type === 'UPDATE'|| type === 'CREATE') && (resource === 'File' || resource === 'keypairs' )) {
         if (params.data.pictures && params.data.pictures.length) {
             // only freshly dropped pictures are instance of File
             const formerPictures = params.data.pictures.filter(
@@ -23,7 +32,7 @@ const addUploadCapabilities = requestHandler => (type, resource, params) => {
                 p => p.rawFile instanceof File
             );
 
-            return Promise.all(newPictures.map(convertFileToBase64))
+            return Promise.all(newPictures.map((picture) => convertFile(picture, 'base64')))
                 .then(base64Pictures =>
                     base64Pictures.map(picture64 => {
                         //picture64
@@ -36,6 +45,19 @@ const addUploadCapabilities = requestHandler => (type, resource, params) => {
                 ).then(transformedNewPictures => requestHandler("GET_LIST", resource, 
                     {filter:{},pagination:{page:1,perPage:10},sort:{field: "id", order: "DESC"}}))
         }
+
+        if(params.data.keypairFile){
+            return convertFile(params.data.keypairFile, 'utf8')
+            .then(keypair =>
+                requestHandler(type, resource, {
+                    data: {
+                        keypairImported: keypair
+                    }
+                })
+            )
+        }
+
+        return requestHandler(type, resource, params);
     }
 
     return requestHandler(type, resource, params);

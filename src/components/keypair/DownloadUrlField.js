@@ -20,10 +20,11 @@ class DownloadUrlField extends Component{
     }
 
     render(){
-        const {record, source} = this.props;
+        const {record, source, title} = this.props;
         return (
             <a 
                 href='javascript:void(0)' 
+                title={title}
                 onClick={this.handleClick}
             >
                 {get(record, source)}
@@ -35,7 +36,8 @@ class DownloadUrlField extends Component{
 DownloadUrlField.propTypes = {
     label: PropTypes.string,
     record: PropTypes.object,
-    source: PropTypes.string.isRequired
+    source: PropTypes.string.isRequired,
+    title: PropTypes.string
 }
 DownloadUrlField.defaultProps = {addLabel: true}
 

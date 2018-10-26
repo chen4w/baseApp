@@ -65,7 +65,7 @@ class App extends Component {
                this.setState({
                     dataProvider: (type, resource, params) => {
                         if(resource==='keypairs')
-                            return indexDataProvider(type, resource, params);
+                            return addUploadCapabilities(indexDataProvider)(type, resource, params);
                             //return fakeDataProvider(type, resource, params);
                         else
                             return upDataProvider(type, resource, params);
