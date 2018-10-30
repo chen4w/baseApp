@@ -1,6 +1,6 @@
-import {Crypto} from 'rclink'
 import {IndexDBRest} from 'rclink'
 import FlatPlainObj from 'flat-plain-object'
+import AdjustFormData from './adjustFormData';
 import {
     GET_LIST,
     GET_ONE,
@@ -46,6 +46,9 @@ const initData = {};
 export default (type, resource, params) => {
     const indexdbRest = new IndexDBRest("BAR", 1, schema, initData) 
     log(type, resource, params)
+
+    let adjustedFormData;
+
     switch(type){
         case GET_LIST: 
             const {page, perPage} = params.pagination
@@ -58,8 +61,7 @@ export default (type, resource, params) => {
                 range: r
             }
 
-            return indexdbRest.getCollection(resource, query).then(r => {
-                return {
+            return indexdbRest.getCollection(resource, query).then(r => { return {
                     data: r.result,
                     total: r.totalCount
                 }
@@ -69,78 +71,27 @@ export default (type, resource, params) => {
             return indexdbRest.getOne(resource, gID).then(r => ({ data: r.result}))
         case CREATE:
             let d = params.data
-            d.status = false
-            d.createdAt = new Date()
+            adjustedFormData = AdjustFormData(type, resource, d);
+            return indexdbRest.create(resource, adjustedFormData)
+                .then(r => ({data: r.result}))
+                .catch(e => new Promise((_, reject) => {
+                    reject(new Error("密钥对已存在！"));
+                }));
 
-            let prvKeyPEM;
-            let pubKeyPEM;
-            let certPEM;
-
-            if(d.keypairImported){
-                const pemInfo = d.keypairImported.src;
-                const prvKeyRex = /-*BEGIN.*\s+PRIVATE.*\s+KEY-*\r\n[\w+=\/\r\n]*-*END.*\s+PRIVATE.*\s+KEY-*\r\n/i;
-                const certRex = /-*BEGIN.*\s+CERTIFICATE-*\r\n[\w+=\/\r\n]*-*END.*\s+CERTIFICATE-*\r\n/i;
-                prvKeyPEM = prvKeyRex.exec(pemInfo)[0];
-                certPEM = certRex.exec(pemInfo)[0];
-                const pubKeyObj = Crypto.ImportKey(certPEM);
-                pubKeyPEM = Crypto.GetKeyPEM(pubKeyObj);
-
-                d.kp = {alg: {name: pubKeyObj.type || 'RSA', param: pubKeyObj.curveName 
-                    || ((pubKeyObj.n && pubKeyObj.n.t === 40) ? 1024 : 2048)}};
-                d.kp.prvKeyPEM = prvKeyPEM;
-                d.kp.pubKeyPEM = pubKeyPEM;
-                d.kp.sn = Crypto.GetHashVal(Crypto.GetHashVal(pubKeyPEM), 'RIPEMD160').toString('hex')
-
-                const cert = Crypto.ImportCertificate(certPEM);
-                d.cert = {sn: parseInt(cert.getSerialNumberHex(), 16), sigAlg: cert.getSignatureAlgorithmField(),
-                    distinguishName: cert.getSubjectString(), validityStart: new Date(cert.getNotBeforeUnixTimestamp() * 1000),
-                    validityEnd: new Date(cert.getNotAfterUnixTimestamp() * 1000), certPEM: certPEM};
-                
-                delete d.keypairImported;
-            }
-            else{
-                const keypair = Crypto.CreateKeypair(d.kp.alg.name, d.kp.alg.param)
-                prvKeyPEM = Crypto.GetKeyPEM(keypair.prvKeyObj, d.kp.pwd1)
-                //d.kp.pwd = Crypto.GetHashVal(d.kp.pwd1).toString('hex')
-                delete d.kp.pwd1
-                delete d.kp.pwd2
-                pubKeyPEM = Crypto.GetKeyPEM(keypair.pubKeyObj)
-                d.kp.prvKeyPEM = prvKeyPEM
-                d.kp.pubKeyPEM = pubKeyPEM
-                d.kp.sn = Crypto.GetHashVal(Crypto.GetHashVal(pubKeyPEM), 'RIPEMD160').toString('hex')
-
-                // Todo: fix timestamp bug
-                const startUnixTime = parseInt(d.cert.validityStart.getTime() / 1000)
-                const endUnixTime = parseInt(d.cert.validityEnd.getTime() / 1000)
-                certPEM = Crypto.CreateSelfSignedCertificate(d.cert.sn, d.cert.sigAlg, d.cert.distinguishName, 
-                    startUnixTime, endUnixTime, keypair)
-                d.cert.certPEM = certPEM
-            }
-
-            return indexdbRest.create(resource, d).then(r => ({data: r.result}))
         case UPDATE:
             const uID = parseInt(params.id, 10)
             let uData = params.data
-            const pwdOld = uData.kp.pwdOld
-
-            try {
-                uData.kp.prvKeyPEM = Crypto.GetKeyPEM(Crypto.ImportKey(uData.kp.prvKeyPEM, pwdOld), uData.kp.pwd1) 
-                delete uData.kp.pwdOld
-                delete uData.kp.pwd1
-                delete uData.kp.pwd2
+            
+            try{
+                adjustedFormData = AdjustFormData(type, resource, uData);
             }
             catch(e){
-                console.error(e)
                 return new Promise((_, reject) => {
-                    if(e === 'malformed plain PKCS8 private key(code:001)')
-                        reject(new Error('您输入的旧密码错误'))
-                    else
-                        reject(new Error(e))
-                }
-                )
+                    reject(e);
+                })
             }
 
-            return indexdbRest.update(resource, uID, uData).then(r => ({data: r.result}))
+            return indexdbRest.update(resource, uID, adjustedFormData).then(r => ({data: r.result}))
         case DELETE:
             const dID = parseInt(params.id, 10)
             return indexdbRest.delete(resource, dID).then(r => ({data: r.result}))
