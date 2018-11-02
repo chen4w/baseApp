@@ -15,6 +15,8 @@ import EditSaveButton from './EditSaveButton';
 import SaveAsButton from './SaveAsButton'
 import DownloadUrlField from './DownloadUrlField';
 import CertificateExpiryStatusField from './CertificateExpiryStatusField';
+import PEMContentPanelField from './PEMContentPanelField';
+import { Divider } from '@material-ui/core';
 
 const KeypairFilter = props => (
     <Filter {...props}>
@@ -81,13 +83,13 @@ export const KeypairShow = (props) => (
                         <DateField label='开始有效期(Valid From)' source="cert.validityStart" showTime/>
                         <DateField label='终止有效期(Valid Util)' source="cert.validityEnd" showTime/>
                         <TextField label='签名算法(Signature Alg)' source="cert.sigAlg"/>
-                        <PEMTextField label='PEM格式证书信息' source="cert.certPEM" />
-                        <SaveAsButton source='cert.certPEM' />
+                        <PEMContentPanelField source="cert.certPEM"/>
                     </Tab>
                     <Tab label="resources.keypairs.tabs.tab3">
                         <PEMTextField label='PEM格式公钥' source="kp.pubKeyPEM" />
                         <SaveAsButton source='kp.pubKeyPEM' />
-                        <div style={{height: '45px'}}/>
+                        <div style={{height: '25px'}}/>
+                        <Divider />
                         {
                             controllerProps.record &&
                             <PEMTextField label={`PEM格式私钥${/ENCRYPTED/i.test(controllerProps.record.kp.prvKeyPEM) ? 
