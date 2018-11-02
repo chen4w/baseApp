@@ -59,7 +59,7 @@ class App extends Component {
     }
     componentDidMount() {
         buildGraphQLProvider({
-            clientOptions: { uri: 'http://192.168.31.137:4466/' }
+            clientOptions: { uri: 'http://192.168.31.190:4466/' }
           }).then(dataProvider => {
               const upDataProvider = addUploadCapabilities(dataProvider)
                this.setState({

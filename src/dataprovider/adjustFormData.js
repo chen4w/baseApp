@@ -1,13 +1,35 @@
 import {Crypto} from 'rclink';
-import {CREATE, UPDATE} from 'react-admin';
+import {
+    GET_LIST,
+    CREATE,
+    UPDATE,
+} from 'react-admin';
 
 const adjustFormData = (type, resource, formData) => {
-    let d = formData;
+    let d = formData ;
     switch(type){
+        case GET_LIST:
+            // 此时，formData是filter对象
+            // 深拷贝, 以防止改变原filter对象引起组件异常
+            d = JSON.parse(JSON.stringify(formData))
+            if(resource === 'keypairs')
+                if(d && d.cert){
+                    if(d.cert.validityEnd === 'expired'){
+                        d.cert.validityEnd = ['below', new Date().toISOString()];
+                    }
+                    else if(d.cert.validityEnd === 'unExpired'){
+                        d.cert.validityEnd = ['aboveOrEqual', new Date().toISOString()];
+                    }
+                }
+                if(d && d.createdAtLocale){
+                    const filterDate = new Date(d.createdAtLocale);
+                    d.createdAtLocale = filterDate.toLocaleDateString();
+                }
+            break;
         case CREATE:
             if(resource === 'keypairs'){
-                d.status = false
-                d.createdAt = new Date()
+                d.createdAt = new Date().toISOString();
+                d.createdAtLocale = new Date().toLocaleString();
 
                 let prvKeyPEM;
                 let pubKeyPEM;
@@ -30,8 +52,12 @@ const adjustFormData = (type, resource, formData) => {
 
                     const cert = Crypto.ImportCertificate(certPEM);
                     d.cert = {sn: parseInt(cert.getSerialNumberHex(), 16), sigAlg: cert.getSignatureAlgorithmField(),
-                        distinguishName: cert.getSubjectString(), validityStart: new Date(cert.getNotBeforeUnixTimestamp() * 1000),
-                        validityEnd: new Date(cert.getNotAfterUnixTimestamp() * 1000), certPEM: certPEM};
+                        distinguishName: cert.getSubjectString(), 
+                        validityStart: new Date(cert.getNotBeforeUnixTimestamp() * 1000)
+                            .toISOString(),
+                        validityEnd: new Date(cert.getNotAfterUnixTimestamp() * 1000)
+                            .toISOString(), 
+                        certPEM: certPEM};
                     
                     delete d.keypairImported;
                 }
@@ -52,6 +78,8 @@ const adjustFormData = (type, resource, formData) => {
                     certPEM = Crypto.CreateSelfSignedCertificate(d.cert.sn, d.cert.sigAlg, d.cert.distinguishName, 
                         startUnixTime, endUnixTime, keypair)
                     d.cert.certPEM = certPEM
+                    d.cert.validityStart = d.cert.validityStart.toISOString()
+                    d.cert.validityEnd = d.cert.validityEnd.toISOString()
                 }
             }
             break;

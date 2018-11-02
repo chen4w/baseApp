@@ -191,10 +191,8 @@ export default {
                     pwd2: '再一次输入密码'
                 },
                 cert: {
-                    sn: '证书标识'
-
+                    sn: '证书标识',
                 },
-                status: '状态'
             }
         },
         users: {

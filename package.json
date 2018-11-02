@@ -8,7 +8,7 @@
     "concurrently": "^4.0.1",
     "dexie": "^2.0.4",
     "fakerest": "^2.1.0",
-    "flat-plain-object": "^1.0.0",
+    "flat-plain-object": "^1.0.5",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "js-file-download": "^0.4.4",

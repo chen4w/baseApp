@@ -1,6 +1,5 @@
-import {IndexDBRest} from 'rclink'
-import FlatPlainObj from 'flat-plain-object'
-import AdjustFormData from './adjustFormData';
+import IndexDBRest from './indexdbRest'
+import adjustFormData from './adjustFormData';
 import {
     GET_LIST,
     GET_ONE,
@@ -54,9 +53,8 @@ export default (type, resource, params) => {
             const {page, perPage} = params.pagination
             const s = [params.sort.field, params.sort.order]
             const r = [(page-1)*perPage, page*perPage - 1]  
-            const f = FlatPlainObj(params.filter, '.') 
             const query = {
-                filter: f,
+                filter: adjustFormData(type, resource, params.filter),
                 sort: s,
                 range: r
             }
@@ -71,7 +69,7 @@ export default (type, resource, params) => {
             return indexdbRest.getOne(resource, gID).then(r => ({ data: r.result}))
         case CREATE:
             let d = params.data
-            adjustedFormData = AdjustFormData(type, resource, d);
+            adjustedFormData = adjustFormData(type, resource, d);
             return indexdbRest.create(resource, adjustedFormData)
                 .then(r => ({data: r.result}))
                 .catch(e => new Promise((_, reject) => {
@@ -83,7 +81,7 @@ export default (type, resource, params) => {
             let uData = params.data
             
             try{
-                adjustedFormData = AdjustFormData(type, resource, uData);
+                adjustedFormData = adjustFormData(type, resource, uData);
             }
             catch(e){
                 return new Promise((_, reject) => {

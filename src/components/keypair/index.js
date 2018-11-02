@@ -1,22 +1,31 @@
 import React from 'react';
 import {
     FormTab, TabbedForm, TabbedShowLayout, Tab, SimpleForm, ReferenceField, FormDataConsumer, RadioButtonGroupInput, SelectInput,
-    Filter, DateInput, BooleanField, NumberField, 
+    Filter, BooleanField, NumberField,
     UrlField, DateField, FileInput, FileField, Responsive, SimpleList, List, ShowController, ShowView, Edit, Create, 
     Datagrid, TextField, ShowButton, EditButton, DisabledInput, LongTextInput, TextInput, NumberInput,
 } from 'react-admin/lib';
-import {DateTimeInput} from 'react-admin-date-inputs'
+import DateFnsUtils from 'material-ui-pickers/utils/date-fns-utils-old'
+import {zhCN} from "date-fns/locale"
+import {DateTimeInput, DateInput} from 'react-admin-date-inputs'
 import {required} from 'react-admin'
 import PEMTextField from './PEMTextField'
 import uuidV1 from 'uuid/v1'
 import EditSaveButton from './EditSaveButton';
 import SaveAsButton from './SaveAsButton'
 import DownloadUrlField from './DownloadUrlField';
+import CertificateExpiryStatusField from './CertificateExpiryStatusField';
 
 const KeypairFilter = props => (
     <Filter {...props}>
-        <TextInput label="pos.search" source="kp.sn" alwaysOn />
-        <DateTimeInput source="createdAt" />
+        <TextInput source="kp.sn" alwaysOn />
+        <TextInput source="cert.sn" />
+        <SelectInput
+            label="证书状态"
+            source='cert.validityEnd'
+            choices={[{id: "unExpired", name: "未过期"}, {id: "expired", name: "已过期"}]}
+        />
+        <DateInput label="生成时间" isRequired={false} source="createdAtLocale" options={{format: "YYYY/MM/dd", clearable: true}} provierOptions={{utils: DateFnsUtils, locale: zhCN}}/>
     </Filter>
 );
 
@@ -39,7 +48,7 @@ export const KeypairList = (props) => (
                     <TextField source="id" />
                     <DownloadUrlField source="kp.sn" title="下载密钥对" />
                     <DownloadUrlField source="cert.sn" title="下载证书" />
-                    <BooleanField source="status" />
+                    <CertificateExpiryStatusField label="证书有效状态" source="cert.validityEnd" />
                     <DateField source="createdAt" showTime />
                     <ShowButton />
                     <EditButton />
