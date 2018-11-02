@@ -28,7 +28,8 @@ type Transaction {
 
 type Network {
   id: ID! @unique
-  name: String
+  name: String!
+  seedip:String!
   genesisBlock:  File @relation(name: "NWGenesis")
   certList: File @relation(name: "NWCerts")
 }

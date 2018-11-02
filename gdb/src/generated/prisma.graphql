@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Fri Nov 02 2018 14:17:19 GMT+0800 (中国标准时间)
+# timestamp: Fri Nov 02 2018 17:13:33 GMT+0800 (中国标准时间)
 
 type AggregateBlock {
   count: Int!
@@ -1049,9 +1049,9 @@ type NetPeer implements Node {
   id: ID!
   nodename: String!
   seedip: String!
-  config: String!
+  rtGraph: String!
+  config(where: FileWhereInput): File
   keypair(where: FileWhereInput): File
-  rtGraph: String
   status: Int
 }
 
@@ -1068,9 +1068,9 @@ type NetPeerConnection {
 input NetPeerCreateInput {
   nodename: String!
   seedip: String!
-  config: String!
-  rtGraph: String
+  rtGraph: String!
   status: Int
+  config: FileCreateOneInput
   keypair: FileCreateOneInput
 }
 
@@ -1090,8 +1090,6 @@ enum NetPeerOrderByInput {
   nodename_DESC
   seedip_ASC
   seedip_DESC
-  config_ASC
-  config_DESC
   rtGraph_ASC
   rtGraph_DESC
   status_ASC
@@ -1106,8 +1104,7 @@ type NetPeerPreviousValues {
   id: ID!
   nodename: String!
   seedip: String!
-  config: String!
-  rtGraph: String
+  rtGraph: String!
   status: Int
 }
 
@@ -1153,9 +1150,9 @@ input NetPeerSubscriptionWhereInput {
 input NetPeerUpdateInput {
   nodename: String
   seedip: String
-  config: String
   rtGraph: String
   status: Int
+  config: FileUpdateOneInput
   keypair: FileUpdateOneInput
 }
 
@@ -1288,46 +1285,6 @@ input NetPeerWhereInput {
 
   """All values not ending with the given string."""
   seedip_not_ends_with: String
-  config: String
-
-  """All values that are not equal to given value."""
-  config_not: String
-
-  """All values that are contained in given list."""
-  config_in: [String!]
-
-  """All values that are not contained in given list."""
-  config_not_in: [String!]
-
-  """All values less than the given value."""
-  config_lt: String
-
-  """All values less than or equal the given value."""
-  config_lte: String
-
-  """All values greater than the given value."""
-  config_gt: String
-
-  """All values greater than or equal the given value."""
-  config_gte: String
-
-  """All values containing the given string."""
-  config_contains: String
-
-  """All values not containing the given string."""
-  config_not_contains: String
-
-  """All values starting with the given string."""
-  config_starts_with: String
-
-  """All values not starting with the given string."""
-  config_not_starts_with: String
-
-  """All values ending with the given string."""
-  config_ends_with: String
-
-  """All values not ending with the given string."""
-  config_not_ends_with: String
   rtGraph: String
 
   """All values that are not equal to given value."""
@@ -1390,6 +1347,7 @@ input NetPeerWhereInput {
 
   """All values greater than or equal the given value."""
   status_gte: Int
+  config: FileWhereInput
   keypair: FileWhereInput
 }
 
@@ -1399,7 +1357,8 @@ input NetPeerWhereUniqueInput {
 
 type Network implements Node {
   id: ID!
-  name: String
+  name: String!
+  seedip: String!
   genesisBlock(where: FileWhereInput): File
   certList(where: FileWhereInput): File
 }
@@ -1415,7 +1374,8 @@ type NetworkConnection {
 }
 
 input NetworkCreateInput {
-  name: String
+  name: String!
+  seedip: String!
   genesisBlock: FileCreateOneInput
   certList: FileCreateOneInput
 }
@@ -1434,6 +1394,8 @@ enum NetworkOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  seedip_ASC
+  seedip_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -1442,7 +1404,8 @@ enum NetworkOrderByInput {
 
 type NetworkPreviousValues {
   id: ID!
-  name: String
+  name: String!
+  seedip: String!
 }
 
 type NetworkSubscriptionPayload {
@@ -1486,6 +1449,7 @@ input NetworkSubscriptionWhereInput {
 
 input NetworkUpdateInput {
   name: String
+  seedip: String
   genesisBlock: FileUpdateOneInput
   certList: FileUpdateOneInput
 }
@@ -1579,6 +1543,46 @@ input NetworkWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  seedip: String
+
+  """All values that are not equal to given value."""
+  seedip_not: String
+
+  """All values that are contained in given list."""
+  seedip_in: [String!]
+
+  """All values that are not contained in given list."""
+  seedip_not_in: [String!]
+
+  """All values less than the given value."""
+  seedip_lt: String
+
+  """All values less than or equal the given value."""
+  seedip_lte: String
+
+  """All values greater than the given value."""
+  seedip_gt: String
+
+  """All values greater than or equal the given value."""
+  seedip_gte: String
+
+  """All values containing the given string."""
+  seedip_contains: String
+
+  """All values not containing the given string."""
+  seedip_not_contains: String
+
+  """All values starting with the given string."""
+  seedip_starts_with: String
+
+  """All values not starting with the given string."""
+  seedip_not_starts_with: String
+
+  """All values ending with the given string."""
+  seedip_ends_with: String
+
+  """All values not ending with the given string."""
+  seedip_not_ends_with: String
   genesisBlock: FileWhereInput
   certList: FileWhereInput
 }

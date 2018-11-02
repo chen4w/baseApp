@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Show, TabbedShowLayout, Tab,
+    Show, TabbedShowLayout, Tab,Edit,EditButton,
     FormTab, TabbedForm, ReferenceField,
     ReferenceInput, SelectInput, RichTextField,
     DateField, Responsive, SimpleList, List, Create, Datagrid, TextField,
@@ -27,7 +27,7 @@ export const NodeList = (props) => (
                     <TextField source="seedip" />
                     <TextField source="rtGraph" />
                     <ApproveButton />
-                    <ShowButton />
+                    <EditButton />
                 </Datagrid>
             }
         />
@@ -79,28 +79,61 @@ export const NodeCreate = (props) => (
                 <TextInput source="rtGraph" />
             </FormTab>
 
-            <FormTab label="resources.Network.tabs.tab2">
-                <ReferenceField
+            <FormTab label="resources.Network.tabs.tab6">
+                <ReferenceInput
                 label="私钥文件"
                 source="keypair.id"
                 reference="File"
                 >
                 <SelectInput optionText="title" />
-                </ReferenceField>
+                </ReferenceInput>
             </FormTab>
             
             <FormTab label="resources.Network.tabs.tab3">
-                <ReferenceField
+                <ReferenceInput
                 label="配置文件"
                 source="config.id"
                 reference="File"
                 >
                 <SelectInput optionText="title" />
-                </ReferenceField>
+                </ReferenceInput>
             </FormTab>
         </TabbedForm>
     </Create>
 );
 
+
+export const NodeEdit = props => (
+    <Edit {...props}>
+      <TabbedForm>
+            <FormTab label="resources.Network.tabs.tab1">
+                <TextField source="nodename" />
+                <TextField source="seedip" />
+                <TextField source="rtGraph" />
+            </FormTab>
+
+            <FormTab label="resources.Network.tabs.tab6">
+                <ReferenceInput
+                label="私钥文件"
+                source="keypair.id"
+                reference="File"
+                >
+                <SelectInput optionText="title" />
+                </ReferenceInput>
+            </FormTab>
+            
+            <FormTab label="resources.Network.tabs.tab3">
+                <ReferenceInput
+                label="配置文件"
+                source="config.id"
+                reference="File"
+                >
+                <SelectInput optionText="title" />
+                </ReferenceInput>
+            </FormTab>
+        </TabbedForm>
+    </Edit>
+  );
+  
 
 

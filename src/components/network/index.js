@@ -37,7 +37,7 @@ export const NetworkList = props => (
         <Datagrid>
           <TextField source="id" />
           <TextField source="name" />
-          <ApproveButton />
+          <TextField source="seedip" />
           <EditButton />
         </Datagrid>
       }
@@ -55,6 +55,7 @@ export const NetworkShow = props => (
       <Tab label="resources.Network.tabs.tab1">
         <TextField source="id" />
         <TextField source="name" />
+        <TextField source="seedip" />
       </Tab>
       <Tab label="resources.Network.tabs.tab2">
         <ReferenceField
@@ -84,15 +85,16 @@ export const NetworkCreate = props => (
     <TabbedForm>
       <FormTab label="resources.Network.tabs.tab1">
         <TextInput source="name" />
+        <TextInput source="seedip" />
       </FormTab>
       <FormTab label="resources.Network.tabs.tab2">
-      <ReferenceField
+      <ReferenceInput
           label="创世块文件"
           source="genesisBlock.id"
           reference="File"
         >
           <SelectInput optionText="title" />
-        </ReferenceField>
+        </ReferenceInput>
       </FormTab>
       <FormTab label="resources.Network.tabs.tab4">
         <ReferenceInput
@@ -112,16 +114,16 @@ export const NetworkEdit = props => (
     <TabbedForm>
       <FormTab label="resources.Network.tabs.tab1">
         <TextInput source="name" />
-        
+        <TextInput source="seedip" />
       </FormTab>
       <FormTab label="resources.Network.tabs.tab2">
-      <ReferenceField
+      <ReferenceInput
           label="创世块文件"
           source="genesisBlock.id"
           reference="File"
         >
           <SelectInput optionText="title" />
-        </ReferenceField>
+        </ReferenceInput>
       </FormTab>
       
       <FormTab label="resources.Network.tabs.tab4">
