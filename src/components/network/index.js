@@ -37,7 +37,6 @@ export const NetworkList = props => (
         <Datagrid>
           <TextField source="id" />
           <TextField source="name" />
-          <UrlField source="seed" />
           <ApproveButton />
           <EditButton />
         </Datagrid>
@@ -56,15 +55,17 @@ export const NetworkShow = props => (
       <Tab label="resources.Network.tabs.tab1">
         <TextField source="id" />
         <TextField source="name" />
-        <TextField source="seed" />
-        <TextField source="rtGraph" />
       </Tab>
       <Tab label="resources.Network.tabs.tab2">
-        <RichTextField source="genesisBlock" />
+        <ReferenceField
+          label="创世块文件"
+          source="genesisBlock.id"
+          reference="File"
+        >
+          <TextField source="title" />
+        </ReferenceField>
       </Tab>
-      <Tab label="resources.Network.tabs.tab3">
-        <RichTextField source="config" stripTags />
-      </Tab>
+      
       <Tab label="resources.Network.tabs.tab4">
         <ReferenceField
           label="信任证书列表"
@@ -83,14 +84,15 @@ export const NetworkCreate = props => (
     <TabbedForm>
       <FormTab label="resources.Network.tabs.tab1">
         <TextInput source="name" />
-        <TextInput source="seed" />
-        <TextInput source="rtGraph" />
       </FormTab>
       <FormTab label="resources.Network.tabs.tab2">
-        <LongTextInput source="genesisBlock" />
-      </FormTab>
-      <FormTab label="resources.Network.tabs.tab3">
-        <LongTextInput source="config" />
+      <ReferenceField
+          label="创世块文件"
+          source="genesisBlock.id"
+          reference="File"
+        >
+          <SelectInput optionText="title" />
+        </ReferenceField>
       </FormTab>
       <FormTab label="resources.Network.tabs.tab4">
         <ReferenceInput
@@ -110,15 +112,18 @@ export const NetworkEdit = props => (
     <TabbedForm>
       <FormTab label="resources.Network.tabs.tab1">
         <TextInput source="name" />
-        <TextInput source="seed" />
-        <TextInput source="rtGraph" />
+        
       </FormTab>
       <FormTab label="resources.Network.tabs.tab2">
-        <LongTextInput source="genesisBlock" />
+      <ReferenceField
+          label="创世块文件"
+          source="genesisBlock.id"
+          reference="File"
+        >
+          <SelectInput optionText="title" />
+        </ReferenceField>
       </FormTab>
-      <FormTab label="resources.Network.tabs.tab3">
-        <LongTextInput source="config" />
-      </FormTab>
+      
       <FormTab label="resources.Network.tabs.tab4">
         <ReferenceInput
           label="信任证书列表"

@@ -1,7 +1,8 @@
 {
   "version": "0.2.0",
   "configurations": [
-    {
+    
+    /*{
       "type": "node",
       "request": "launch",
       "name": "Jest All",
@@ -24,14 +25,14 @@
       "windows": {
         "program": "${workspaceFolder}/node_modules/jest/bin/jest",
       }
-    },
+    },*/
 
     {
       "name": "funcdebug",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/src/server/deployservice/test/testshell4node.js"
-    },
+      "program": "${workspaceFolder}/src/server/deployservice/test/testRW4Hocon.js"
+    }/*,
 
     {
     "name": "Chrome",
@@ -42,6 +43,6 @@
     "sourceMapPathOverrides": {
       "webpack:///src/*": "${webRoot}/*"
     }
-  }
+    }*/
 ]
 }

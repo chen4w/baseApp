@@ -29,24 +29,17 @@ type Transaction {
 type Network {
   id: ID! @unique
   name: String
-  seed: String
-  genesisBlock: String
-  config: String
-  keypair: File @relation(name: "NWKeypair")
+  genesisBlock:  File @relation(name: "NWGenesis")
   certList: File @relation(name: "NWCerts")
-  pictures: [File!]! @relation(name: "NWPics")
-  rtGraph: String
-  taskId: String
-  status: Int
-  peers:[NetPeer!]!
 }
 
 type NetPeer {
   id: ID! @unique
-  net: Network
-  keypair: File 
-  rtGraph: String
-  taskId: String
+  nodename:String!
+  seedip: String!
+  rtGraph: String!
+  config: File @relation(name: "NWConfig") 
+  keypair: File @relation(name: "NWKeypair") 
   status: Int
 }
 
