@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Admin, Resource } from 'react-admin/lib';
 
 import { CertList, CertShow } from './components/cert';
-import { KeypairList, KeypairEdit, KeypairCreate } from './components/keypair';
+import { KeypairList, KeypairShow, KeypairEdit, KeypairCreate } from './components/keypair';
 import { AccountList, AccountEdit, AccountCreate } from './components/account';
 import { TransList, TransShow, TransCreate } from './components/transaction';
 import { NetworkList, NetworkShow,  NetworkEdit, NetworkCreate } from './components/network';
@@ -59,13 +59,13 @@ class App extends Component {
     }
     componentDidMount() {
         buildGraphQLProvider({
-            clientOptions: { uri: 'http://localhost:4466/' }
+            clientOptions: { uri: 'http://192.168.31.190:4466/' }
           }).then(dataProvider => {
               const upDataProvider = addUploadCapabilities(dataProvider)
                this.setState({
                     dataProvider: (type, resource, params) => {
                         if(resource==='keypairs')
-                            return indexDataProvider(type, resource, params);
+                            return addUploadCapabilities(indexDataProvider)(type, resource, params);
                             //return fakeDataProvider(type, resource, params);
                         else
                             return upDataProvider(type, resource, params);
@@ -86,7 +86,7 @@ class App extends Component {
         return (
             <Admin dataProvider={dataProvider} title="RepChain基础服务" authProvider={authProvider}
             locale="cn" i18nProvider={i18nProvider} dashboard={Dashboard} >
-                <Resource name="keypairs" list={KeypairList}  edit={KeypairEdit} create={KeypairCreate} icon={KeypairIcon}/>
+                <Resource name="keypairs" list={KeypairList} show={KeypairShow} edit={KeypairEdit} create={KeypairCreate} icon={KeypairIcon}/>
                 <Resource name="Network" list={NetworkList}   edit={NetworkEdit} show={NetworkShow}  create={NetworkCreate} icon={NetworkIcon}/>
                 <Resource name="NetPeer" list={NodeList}  show={NodeShow} create={NodeCreate} icon={NodeIcon}/>
                  <Resource name="Block" list={BlockList}  show={BlockShow}  icon={BlockIcon}/>
