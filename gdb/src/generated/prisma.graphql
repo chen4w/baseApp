@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Fri Nov 02 2018 17:13:33 GMT+0800 (中国标准时间)
+# timestamp: Fri Nov 02 2018 18:53:47 GMT+0800 (中国标准时间)
 
 type AggregateBlock {
   count: Int!
@@ -1052,7 +1052,7 @@ type NetPeer implements Node {
   rtGraph: String!
   config(where: FileWhereInput): File
   keypair(where: FileWhereInput): File
-  status: Int
+  status: String
 }
 
 """A connection to a list of items."""
@@ -1069,7 +1069,7 @@ input NetPeerCreateInput {
   nodename: String!
   seedip: String!
   rtGraph: String!
-  status: Int
+  status: String
   config: FileCreateOneInput
   keypair: FileCreateOneInput
 }
@@ -1105,7 +1105,7 @@ type NetPeerPreviousValues {
   nodename: String!
   seedip: String!
   rtGraph: String!
-  status: Int
+  status: String
 }
 
 type NetPeerSubscriptionPayload {
@@ -1151,7 +1151,7 @@ input NetPeerUpdateInput {
   nodename: String
   seedip: String
   rtGraph: String
-  status: Int
+  status: String
   config: FileUpdateOneInput
   keypair: FileUpdateOneInput
 }
@@ -1325,28 +1325,46 @@ input NetPeerWhereInput {
 
   """All values not ending with the given string."""
   rtGraph_not_ends_with: String
-  status: Int
+  status: String
 
   """All values that are not equal to given value."""
-  status_not: Int
+  status_not: String
 
   """All values that are contained in given list."""
-  status_in: [Int!]
+  status_in: [String!]
 
   """All values that are not contained in given list."""
-  status_not_in: [Int!]
+  status_not_in: [String!]
 
   """All values less than the given value."""
-  status_lt: Int
+  status_lt: String
 
   """All values less than or equal the given value."""
-  status_lte: Int
+  status_lte: String
 
   """All values greater than the given value."""
-  status_gt: Int
+  status_gt: String
 
   """All values greater than or equal the given value."""
-  status_gte: Int
+  status_gte: String
+
+  """All values containing the given string."""
+  status_contains: String
+
+  """All values not containing the given string."""
+  status_not_contains: String
+
+  """All values starting with the given string."""
+  status_starts_with: String
+
+  """All values not starting with the given string."""
+  status_not_starts_with: String
+
+  """All values ending with the given string."""
+  status_ends_with: String
+
+  """All values not ending with the given string."""
+  status_not_ends_with: String
   config: FileWhereInput
   keypair: FileWhereInput
 }

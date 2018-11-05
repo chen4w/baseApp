@@ -41,7 +41,7 @@ type NetPeer {
   rtGraph: String!
   config: File @relation(name: "NWConfig") 
   keypair: File @relation(name: "NWKeypair") 
-  status: Int
+  status: String @default(value: "rejected")
 }
 
 type File {

@@ -9,14 +9,14 @@ export const reviewApprove = (id, data, basePath) => ({
     type: REVIEW_APPROVE,
     payload: { id, data: { ...data, status: 'accepted' }, basePath },
     meta: {
-        resource: 'Network',
+        resource: 'nodes',
         fetch: UPDATE,
         onSuccess: {
             notification: {
                 body: 'resources.nodes.notification.approved_success',
                 level: 'info',
             },
-            redirectTo: '/Network',
+            redirectTo: '/nodes',
             basePath,
         },
         onFailure: {

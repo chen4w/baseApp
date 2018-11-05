@@ -2,7 +2,7 @@ const express = require('express');
 const { Prisma } = require('prisma-binding')
 const filedir = '../public'
 const multer = require('multer');
-const {getAttchFileName} = require('../src/server/deployservice/getAttchment.js')
+const {getAttchFileName,getFileForfileType} = require('../src/server/deployservice/getAttchment.js')
 const upload = multer({
   dest: filedir+'/uploads/' // this saves your file into a directory called "uploads"
 }); 
@@ -35,6 +35,10 @@ app.post('/upload', upload.single('file-to-upload'), (req, res) => {
   
   app.get('/download/:attchmentid', function (req, res) {
     getAttchFileName(req, res, pdb,filedir);
+  });
+
+  app.get('/getFile/:filetype/:attchmentid', function (req, res) {
+    getFileForfileType(req, res, pdb,filedir);
   });
 
 
