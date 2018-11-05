@@ -6,7 +6,7 @@ import { KeypairList, KeypairShow, KeypairEdit, KeypairCreate } from './componen
 import { AccountList, AccountEdit, AccountCreate } from './components/account';
 import { TransList, TransShow, TransCreate } from './components/transaction';
 import { NetworkList, NetworkShow,  NetworkEdit, NetworkCreate } from './components/network';
-import { NodeList, NodeShow, NodeCreate } from './components/node';
+import { NodeList, NodeEdit, NodeShow, NodeCreate } from './components/node';
 import { BlockList, BlockShow } from './components/block';
 import { FileList, FileCreate ,FileShow} from './components/file';
 
@@ -88,7 +88,7 @@ class App extends Component {
             locale="cn" i18nProvider={i18nProvider} dashboard={Dashboard} >
                 <Resource name="keypairs" list={KeypairList} show={KeypairShow} edit={KeypairEdit} create={KeypairCreate} icon={KeypairIcon}/>
                 <Resource name="Network" list={NetworkList}   edit={NetworkEdit} show={NetworkShow}  create={NetworkCreate} icon={NetworkIcon}/>
-                <Resource name="NetPeer" list={NodeList}  show={NodeShow} create={NodeCreate} icon={NodeIcon}/>
+                <Resource name="NetPeer" list={NodeList} edit={NodeEdit} show={NodeShow} create={NodeCreate} icon={NodeIcon}/>
                  <Resource name="Block" list={BlockList}  show={BlockShow}  icon={BlockIcon}/>
                  <Resource name="Transaction" list={TransList}  show={TransShow} create={TransCreate} icon={TransIcon}/>
                  <Resource name="File" list={FileList}   show={FileShow} create={FileCreate} icon={AttachIcon}/>

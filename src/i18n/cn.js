@@ -57,7 +57,7 @@ export default {
             name: '节点',
             tabs: {
                 tab1: '基本项',
-                tab2: '创世块',
+                tab2: '私钥文件',
                 tab3: '配置',
                 tab4: '信任证书列表'
             },
@@ -67,6 +67,9 @@ export default {
                 addr:'地址',
                 pid:'组网',
                 cid:'证书',
+                nodename:'节点名称',
+                seedip:'种子节点IP地址',
+                rtGraph:'实时图URL',
                 created: '生成时间'
             }
         },
@@ -77,14 +80,15 @@ export default {
                 tab2: '创世块',
                 tab3: '配置',
                 tab4: '信任证书列表',
-                tab5: '区块列表'
+                tab5: '区块列表',
+                tab6: '私钥文件'
             },
              fields: {
                 id: '序号',
                 netId: '组网标识',
                 config:'配置',
                 genesisBlock: '创世区块',
-                seed:'种子节点',
+                seedip:'种子节点IP地址',
                 rtGraph:'实时图URL',
                 name: '名称',
                 created: '生成时间'

@@ -14,6 +14,7 @@
     "js-file-download": "^0.4.4",
     "jsrsasign": "^8.0.12",
     "lodash": "^4.17.10",
+    "nodemon": "^1.18.4",
     "pluralize": "^7.0.0",
     "ra-data-graphcool": "^2.2.2",
     "ra-data-graphql": "^2.2.2",
@@ -23,6 +24,7 @@
     "ra-language-chinese": "^2.0.1",
     "ra-language-english": "^2.0.2",
     "rclink": "^1.0.4",
+    "hocon-parser":"^1.0.1",
     "react": "^16.4.1",
     "react-admin": "^2.1.1",
     "react-admin-date-inputs": "^1.1.0",
@@ -35,7 +37,7 @@
     "jest": {
       "testEnvironment": "node"
     },
-    "start": "concurrently 'yarn react-start' 'cd server && yarn start'",
+    "start": "concurrently \"yarn react-start\" \"cd server && yarn start\"",
     "build": "concurrently 'yarn react-build' 'cd server && yarn build'",
     "react-start": "react-scripts start",
     "react-build": "react-scripts build",

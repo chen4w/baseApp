@@ -2,11 +2,73 @@
 
 var fs = require('fs');
 var path = require('path');
+var count = 1;
+function getFileForfileType(req, res, pdb,filedir){
+    var ftype = req.params.filetype;
+    var aid = req.params.attchmentid;
+    count++;
+    console.log('ftype='+ftype+",aid="+aid+",coutn"+count);
+    if(ftype == 'pkey-file'){
+        console.log('ftype='+ftype);
+        pdb.query.netPeers({where:{
+            nodename:aid
+          }}, `{ id keypair{id url} }`
+        ).then((data) => {
+            var  pkfileid = '';
+            var  url = '';
+            if(data != null & data.length == 1 ){
+                pkfileid = data[0].keypair.id;
+                url = data[0].keypair.url;
+            }
+            expFile(res,url,pkfileid,filedir);
+          });
+    }else if(ftype == 'node-config'){
+        pdb.query.netPeers({where:{
+            nodename:aid
+          }}, `{ id config{id url} }`
+        ).then((data) => {
+            var  cffileid = '';
+            var  url = '';
+            if(data != null & data.length == 1 ){
+                cffileid = data[0].config.id;
+                url = data[0].config.url;
+            }
+            expFile(res,url,cffileid,filedir);
+          });
+    }else if(ftype == 'mainchain-certlist-file'){
+        pdb.query.networks({where:{
+            name:aid
+          }}, `{ id certList{id url} }`
+        ).then((data) => {
+            var  certlistfileid = '';
+            var  url = '';
+            if(data != null & data.length == 1 ){
+                certlistfileid = data[0].certList.id;
+                url = data[0].certList.url;
+            }
+            expFile(res,url,certlistfileid,filedir);
+          });
+    }else if(ftype == 'mainchain-gensis-file'){
+        pdb.query.networks({where:{
+            name:aid
+          }}, `{ id genesisBlock{id url} }`
+        ).then((data) => {
+            var  genesisfileid = '';
+            var  url = '';
+            if(data != null & data.length == 1 ){
+                genesisfileid = data[0].genesisBlock.id;
+                url = data[0].genesisBlock.url;
+            }
+            expFile(res,url,genesisfileid,filedir);
+          });
+    }
+    
+}
 
-function getAttchFileName(req,res,pdb,filedir){
+function getAttchForFileId(aid,res,pdb,filedir){
     pdb.query.files({
         where:{
-          id:req.params.attchmentid
+          id:aid
         }
       }
     ).then((data) => {
@@ -14,13 +76,17 @@ function getAttchFileName(req,res,pdb,filedir){
         if(data != null & data.length == 1 ){
             filerealname = data[0].url;
         }
-        expFile(res,filerealname,req.params.attchmentid,filedir);
+        expFile(res,filerealname,aid,filedir);
       });
+}
+
+function getAttchFileName(req,res,pdb,filedir){
+    getAttchForFileId(req.params.attchmentid,res,pdb,filedir)
 }
 
 
 function expFile(res,filerealname,aid,filedir){
-        //console.log('real name='+filerealname);
+        console.log('real name='+filerealname);
 
         if(filerealname != ''){
           //console.log("mypath="+path.resolve('../public'));  
@@ -39,3 +105,4 @@ function expFile(res,filerealname,aid,filedir){
 }
 
 module.exports.getAttchFileName = getAttchFileName;
+module.exports.getFileForfileType = getFileForfileType;
