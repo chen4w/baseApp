@@ -1,6 +1,6 @@
-本项目的建立采用 [Create React App](https://marmelab.com/react-admin/Tutorial.html).
+> 本项目的建立采用 [Create React App](https://marmelab.com/react-admin/Tutorial.html).
 
-##项目介绍
+## 项目介绍
 本项目为[RepChain](https://gitee.com/BTAJL/repchain)
 的应用提供可复用的UI支持，包括：
 - 概览：简要信息展示
@@ -12,26 +12,25 @@
 - 区块管理：从区块链同步数据之后，提供区块检索、查看、验证 （只读检索和查看）
 - 交易管理：从区块链同步数据之后，提供交易检索、查看、验证 （只读检索和查看，构造和新建签名交易）
 
-##如何运行bar
+## 如何运行bar
 git clone到本地之后，
 - `yarn install` 安装依赖
 - `yarn start` 启动服务
-
-##通过brew安装prisma工具
-- brew tap prisma/prisma
-- brew install prisma
-##如何运行graphql服务[gdb](https://github.com/prisma/prisma/blob/master/docs/1.9/03-Tutorials2/08-Bootstrapping-Boilerplates/02-Node.md)
-- `cd gdb `
+## 通过brew安装prisma工具
+- `brew tap prisma/prisma`
+- `brew install prisma`
+## 如何运行graphql服务[gdb](https://github.com/prisma/prisma/blob/master/docs/1.9/03-Tutorials2/08-Bootstrapping-Boilerplates/02-Node.md)
+- `cd gdb`
 - `yarn install` 安装依赖
-- 安装docker
-- `cd database`切换到gdb/database目录
-- `docker-compose up -d` 启动prisma 和mysql5.7的docker实例
+- 安装[docker](https://docs.docker.com/install/)以及[docker-compose](https://docs.docker.com/compose/install/)
+- `cd database` 切换到gdb/database目录
+- `docker-compose up -d` 启动prisma和mysql5.7的docker实例
 - datamodel.graphql  按需要修改数据schema,然后`prisma deploy` 部署schema
 
 - `yarn start` 启动app服务
 - `yarn dev` 启动app服务（数据操作子集）和db服务（数据操作全集）
 
-##关于自动化测试选型
+## 关于自动化测试选型
 - Jest：nodejs单元测试
 - Jest+ Puppeteer：浏览器端无头测试，集成测试，e2e测试
 - Cypress：e2e测试
@@ -42,4 +41,3 @@ git clone到本地之后，
 - 本项目拟采用Jest作为nodejs单元测试，
 - 采用Jest+ Puppeteer作为集成测试
 - 针对密钥对管理的indexedDB，采用独立的DataProvider以及独立的测试手段
-

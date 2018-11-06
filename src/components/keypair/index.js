@@ -5,8 +5,8 @@ import {
     UrlField, DateField, FileInput, FileField, Responsive, SimpleList, List, ShowController, ShowView, Edit, Create, 
     Datagrid, TextField, ShowButton, EditButton, DisabledInput, LongTextInput, TextInput, NumberInput,
 } from 'react-admin/lib';
-import DateFnsUtils from 'material-ui-pickers/utils/date-fns-utils-old'
-import {zhCN} from "date-fns/locale"
+import DateFnsUtils from 'material-ui-pickers/utils/date-fns-utils';
+import zhLocale from 'date-fns/locale/zh-CN';
 import {DateTimeInput, DateInput} from 'react-admin-date-inputs'
 import {required} from 'react-admin'
 import PEMTextField from './PEMTextField'
@@ -27,7 +27,7 @@ const KeypairFilter = props => (
             source='cert.validityEnd'
             choices={[{id: "unExpired", name: "未过期"}, {id: "expired", name: "已过期"}]}
         />
-        <DateInput label="生成时间" isRequired={false} source="createdAtLocale" options={{format: "YYYY/MM/dd", clearable: true}} provierOptions={{utils: DateFnsUtils, locale: zhCN}}/>
+        <DateInput label="生成时间" source="createdAtLocale" options={{format: "YYYY/MM/dd", showTodayButton: true}} providerOptions={{utils: DateFnsUtils, locale: zhLocale}}/>
     </Filter>
 );
 
@@ -223,8 +223,10 @@ export const KeypairCreate = (props) => {
                                             <SelectInput label='证书签名算法' source='cert.sigAlg' choices={certSignatureAlgRSAChoices} validate={required()} {...rest}/>
 
                                     }
-                                    <DateTimeInput label='证书起始有效期' source='cert.validityStart' validate={required()} options={{format: 'YYYY/MM/dd, HH:mm:ss', clearable: true}} {...rest}/>
-                                    <DateTimeInput label='证书终止有效期' source='cert.validityEnd' validate={required()} options={{format: 'YYYY/MM/dd, HH:mm:ss', clearable: true}} {...rest}/>
+                                    <DateTimeInput label='证书起始有效期' source='cert.validityStart' validate={required()} options={{format: 'YYYY/MM/dd, HH:mm:ss', showTodayButton: true}}
+                                        providerOptions={{utils: DateFnsUtils, locale: zhLocale}} {...rest}/>
+                                    <DateTimeInput label='证书终止有效期' source='cert.validityEnd' validate={required()} options={{format: 'YYYY/MM/dd, HH:mm:ss', showTodayButton: true}}
+                                        providerOptions={{utils: DateFnsUtils, locale: zhLocale}} {...rest}/>
                                     <TextInput label='证书拥有者/发行者识别名' placeholder='Distinguish Name' source='cert.distinguishName' validate={required()} />
                                 </div>
                             )
