@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sun Sep 16 2018 20:39:58 GMT+0800 (中国标准时间)
+# timestamp: Tue Nov 06 2018 20:12:46 GMT+0800 (中国标准时间)
 
 type AggregateBlock {
   count: Int!
@@ -157,10 +157,17 @@ input BlockUpdateInput {
   transactions: TransactionUpdateManyWithoutBlockerInput
 }
 
-input BlockUpdateOneWithoutTransactionsInput {
+input BlockUpdateManyMutationInput {
+  hash: String
+  preHash: String
+  pid: Int
+  height: Int
+  transCount: Int
+}
+
+input BlockUpdateOneRequiredWithoutTransactionsInput {
   create: BlockCreateWithoutTransactionsInput
   connect: BlockWhereUniqueInput
-  delete: Boolean
   update: BlockUpdateWithoutTransactionsDataInput
   upsert: BlockUpsertWithoutTransactionsInput
 }
@@ -555,6 +562,19 @@ input FileUpdateManyInput {
   delete: [FileWhereUniqueInput!]
   update: [FileUpdateWithWhereUniqueNestedInput!]
   upsert: [FileUpsertWithWhereUniqueNestedInput!]
+}
+
+input FileUpdateManyMutationInput {
+  pname: String
+  pid: ID
+  purpose: String
+  name: String
+  title: String
+  size: Int
+  secret: String
+  contentType: String
+  src: String
+  url: String
 }
 
 input FileUpdateOneInput {
@@ -1050,12 +1070,12 @@ type Mutation {
   upsertNetwork(where: NetworkWhereUniqueInput!, create: NetworkCreateInput!, update: NetworkUpdateInput!): Network!
   upsertNetPeer(where: NetPeerWhereUniqueInput!, create: NetPeerCreateInput!, update: NetPeerUpdateInput!): NetPeer!
   upsertFile(where: FileWhereUniqueInput!, create: FileCreateInput!, update: FileUpdateInput!): File!
-  updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
-  updateManyBlocks(data: BlockUpdateInput!, where: BlockWhereInput): BatchPayload!
-  updateManyTransactions(data: TransactionUpdateInput!, where: TransactionWhereInput): BatchPayload!
-  updateManyNetworks(data: NetworkUpdateInput!, where: NetworkWhereInput): BatchPayload!
-  updateManyNetPeers(data: NetPeerUpdateInput!, where: NetPeerWhereInput): BatchPayload!
-  updateManyFiles(data: FileUpdateInput!, where: FileWhereInput): BatchPayload!
+  updateManyPosts(data: PostUpdateManyMutationInput!, where: PostWhereInput): BatchPayload!
+  updateManyBlocks(data: BlockUpdateManyMutationInput!, where: BlockWhereInput): BatchPayload!
+  updateManyTransactions(data: TransactionUpdateManyMutationInput!, where: TransactionWhereInput): BatchPayload!
+  updateManyNetworks(data: NetworkUpdateManyMutationInput!, where: NetworkWhereInput): BatchPayload!
+  updateManyNetPeers(data: NetPeerUpdateManyMutationInput!, where: NetPeerWhereInput): BatchPayload!
+  updateManyFiles(data: FileUpdateManyMutationInput!, where: FileWhereInput): BatchPayload!
   deleteManyPosts(where: PostWhereInput): BatchPayload!
   deleteManyBlocks(where: BlockWhereInput): BatchPayload!
   deleteManyTransactions(where: TransactionWhereInput): BatchPayload!
@@ -1072,8 +1092,8 @@ enum MutationType {
 
 type NetPeer implements Node {
   id: ID!
-  net(where: NetworkWhereInput): Network
-  keypair(where: FileWhereInput): File
+  net: Network
+  keypair: File
   rtGraph: String
   taskId: String
   status: Int
@@ -1185,6 +1205,12 @@ input NetPeerUpdateInput {
   status: Int
   net: NetworkUpdateOneWithoutPeersInput
   keypair: FileUpdateOneInput
+}
+
+input NetPeerUpdateManyMutationInput {
+  rtGraph: String
+  taskId: String
+  status: Int
 }
 
 input NetPeerUpdateManyWithoutNetInput {
@@ -1379,8 +1405,8 @@ type Network implements Node {
   seed: String
   genesisBlock: String
   config: String
-  keypair(where: FileWhereInput): File
-  certList(where: FileWhereInput): File
+  keypair: File
+  certList: File
   pictures(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File!]
   rtGraph: String
   taskId: String
@@ -1524,6 +1550,16 @@ input NetworkUpdateInput {
   certList: FileUpdateOneInput
   pictures: FileUpdateManyInput
   peers: NetPeerUpdateManyWithoutNetInput
+}
+
+input NetworkUpdateManyMutationInput {
+  name: String
+  seed: String
+  genesisBlock: String
+  config: String
+  rtGraph: String
+  taskId: String
+  status: Int
 }
 
 input NetworkUpdateOneWithoutPeersInput {
@@ -1998,6 +2034,12 @@ input PostUpdateInput {
   text: String
 }
 
+input PostUpdateManyMutationInput {
+  isPublished: Boolean
+  title: String
+  text: String
+}
+
 input PostWhereInput {
   """Logical AND on all given filters."""
   AND: [PostWhereInput!]
@@ -2183,7 +2225,7 @@ type Transaction implements Node {
   signature: String
   blockId: String
   timeStamp: DateTime
-  blocker(where: BlockWhereInput): Block!
+  blocker: Block!
 }
 
 """A connection to a list of items."""
@@ -2318,7 +2360,18 @@ input TransactionUpdateInput {
   signature: String
   blockId: String
   timeStamp: DateTime
-  blocker: BlockUpdateOneWithoutTransactionsInput
+  blocker: BlockUpdateOneRequiredWithoutTransactionsInput
+}
+
+input TransactionUpdateManyMutationInput {
+  type: Int
+  txId: String
+  cname: String
+  action: String
+  ipt: String
+  signature: String
+  blockId: String
+  timeStamp: DateTime
 }
 
 input TransactionUpdateManyWithoutBlockerInput {
