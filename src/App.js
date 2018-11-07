@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
 import { Admin, Resource } from 'react-admin/lib';
 
-import { CertList, CertShow } from './components/cert';
 import { KeypairList, KeypairShow, KeypairEdit, KeypairCreate } from './components/keypair';
-import { AccountList, AccountEdit, AccountCreate } from './components/account';
 import { TransList, TransShow, TransCreate } from './components/transaction';
 import { NetworkList, NetworkShow,  NetworkEdit, NetworkCreate } from './components/network';
 import { NodeList, NodeEdit, NodeShow, NodeCreate } from './components/node';
 import { BlockList, BlockShow } from './components/block';
 import { FileList, FileCreate ,FileShow} from './components/file';
 
-import CertIcon from '@material-ui/icons/Description';
 import KeypairIcon from '@material-ui/icons/VpnKey';
-import AccountIcon from '@material-ui/icons/Group';
 import TransIcon from '@material-ui/icons/Cached';
 import NetworkIcon from '@material-ui/icons/GroupWork';
 import NodeIcon from '@material-ui/icons/Computer';
@@ -59,7 +55,7 @@ class App extends Component {
     }
     componentDidMount() {
         buildGraphQLProvider({
-            clientOptions: { uri: 'http://192.168.31.190:4466/' }
+            clientOptions: { uri: 'http://localhost:4466/' }
           }).then(dataProvider => {
               const upDataProvider = addUploadCapabilities(dataProvider)
                this.setState({

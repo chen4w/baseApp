@@ -3595,6 +3595,10 @@ hmac-drbg@^1.0.0:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.1"
 
+hocon-parser@^1.0.1:
+  version "1.0.1"
+  resolved "http://registry.npm.taobao.org/hocon-parser/download/hocon-parser-1.0.1.tgz#b79b66143999b255e08b673c83291b5e363f0b78"
+
 hoist-non-react-statics@^2.3.0, hoist-non-react-statics@^2.3.1, hoist-non-react-statics@^2.5.0, hoist-non-react-statics@^2.5.4:
   version "2.5.5"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.5.5.tgz#c5903cf409c0dfd908f388e619d86b9c1174cb47"

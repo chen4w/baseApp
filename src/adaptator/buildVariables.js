@@ -13,7 +13,7 @@ import isObject from 'lodash/isObject';
 import getFinalType from './utils/getFinalType';
 import { computeFieldsToAddRemoveUpdate } from './utils/computeAddRemoveUpdate';
 
-import { PRISMA_CONNECT, PRISMA_DISCONNECT, PRISMA_UPDATE } from './constants/mutations';
+import { PRISMA_CONNECT, PRISMA_DISCONNECT } from './constants/mutations';
 
 //TODO: Object filter weren't tested yet
 const buildGetListVariables = introspectionResults => (resource, aorFetchType, params) => {
@@ -57,7 +57,7 @@ const buildGetListVariables = introspectionResults => (resource, aorFetchType, p
     const parts = key.split('.');
 
     if (parts.length > 1) {
-      if (parts[1] == 'id') {
+      if (parts[1] === 'id') {
         const type = introspectionResults.types.find(
           t => t.name === `${resource.type.name}WhereInput`
         );
@@ -143,7 +143,7 @@ const buildUpdateVariables = introspectionResults => (resource, aorFetchType, pa
 
       //TODO: Make connect, disconnect and update overridable
       //TODO: Make updates working
-      const { fieldsToAdd, fieldsToRemove, fieldsToUpdate } = computeFieldsToAddRemoveUpdate(
+      const { fieldsToAdd, fieldsToRemove } = computeFieldsToAddRemoveUpdate(
         params.previousData[`${key}Ids`],
         params.data[`${key}Ids`]
       );

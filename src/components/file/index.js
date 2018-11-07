@@ -12,11 +12,9 @@ import {
   Responsive,
   SimpleList,
   List,
-  Edit,
   Create,
   Datagrid,
   TextField,
-  EditButton,
   DisabledInput,
   SimpleForm,
   TextInput

@@ -1,14 +1,12 @@
 import React from 'react';
 import {
-    Filter, DateInput,
+    Filter, 
     Show, TabbedShowLayout, Tab,
-    FormTab, TabbedForm, ReferenceField,
-    ReferenceInput, SelectInput, RichTextField,
-    DateField, Responsive, SimpleList, List, Create, Datagrid, TextField,
+    Responsive, SimpleList, List,  Datagrid, TextField,
     ShowButton, ReferenceManyField, TextInput
 } from 'react-admin/lib';
 
-import { CardActions, CreateButton, RefreshButton } from 'react-admin';
+import { CardActions, RefreshButton } from 'react-admin';
 
 const PostActions = ({ resource, filters, displayedFilters, filterValues, basePath, showFilter }) => (
     <CardActions>

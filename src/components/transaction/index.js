@@ -1,8 +1,8 @@
 import React from 'react';
 import {
     Show,TabbedShowLayout,Tab,
-    FormTab, TabbedForm, ReferenceField,
-    Filter, DateInput, RichTextField,
+    FormTab, TabbedForm, 
+    Filter, RichTextField,
     DateField, Responsive, SimpleList, List, Create, Datagrid, TextField,
      ShowButton, LongTextInput, TextInput
 } from 'react-admin/lib';

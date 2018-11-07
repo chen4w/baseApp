@@ -2,9 +2,9 @@ import React from 'react';
 import {
     Show, TabbedShowLayout, Tab,Edit,EditButton,
     FormTab, TabbedForm, ReferenceField,
-    ReferenceInput, SelectInput, RichTextField,
-    DateField, Responsive, SimpleList, List, Create, Datagrid, TextField,
-    ShowButton, LongTextInput, TextInput
+    ReferenceInput, SelectInput, 
+    Responsive, SimpleList, List, Create, Datagrid, TextField,
+    TextInput
 } from 'react-admin/lib';
 import ApproveButton from './ApproveButton';
 

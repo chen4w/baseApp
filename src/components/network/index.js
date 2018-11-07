@@ -7,11 +7,8 @@ import {
   TabbedForm,
   ReferenceInput,
   Edit,
-  UrlField,
-  RichTextField,
   ReferenceField,
   SelectInput,
-  ImageField,
   Responsive,
   SimpleList,
   List,
@@ -19,7 +16,6 @@ import {
   Datagrid,
   TextField,
   EditButton,
-  LongTextInput,
   TextInput
 } from "react-admin/lib";
 import ApproveButton from "../node/ApproveButton";

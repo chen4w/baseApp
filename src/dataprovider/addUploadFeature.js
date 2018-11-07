@@ -33,9 +33,6 @@ const addUploadCapabilities = requestHandler => (type, resource, params) => {
     if ((type === 'UPDATE'|| type === 'CREATE') && (resource === 'File' || resource === 'keypairs' )) {
         if (params.data.pictures && params.data.pictures.length) {
             // only freshly dropped pictures are instance of File
-            const formerPictures = params.data.pictures.filter(
-                p => !(p.rawFile instanceof File)
-            );
             const newPictures = params.data.pictures.filter(
                 p => p.rawFile instanceof File
             );
