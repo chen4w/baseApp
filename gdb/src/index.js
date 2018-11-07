@@ -43,7 +43,7 @@ const processUpload = async upload => {
   return recordFile({ id, filename, mimetype, encoding, path })
 }
 async function subscribeNode(pdb) {
-  const subscription = await pdb.subscription.file({ 
+  const subscription = await pdb.subscription.network({ 
     where: { mutation_in: ['CREATED','UPDATED'] } }
   )
   subscription.next().then(res => {
@@ -104,7 +104,58 @@ const pdb = new Prisma({
   debug: true, // log all GraphQL queries & mutations sent to the Prisma API
   // secret: 'mysecret123', // only needed if specified in `database/prisma.yml`
 });
-subscribeNode(pdb);
+//subscribeNode(pdb);
+const { execute } = require('apollo-link');
+const { WebSocketLink } = require('apollo-link-ws');
+const { SubscriptionClient } = require('subscriptions-transport-ws');
+const ws = require('ws');
+
+const getWsClient = function(wsurl) {
+  const client = new SubscriptionClient(
+    wsurl, {reconnect: true}, ws
+  );
+  return client;
+};
+
+// wsurl: GraphQL endpoint
+// query: GraphQL query (use gql`` from the 'graphql-tag' library)
+// variables: Query variables object
+const createSubscriptionObservable = (wsurl, query, variables) => {
+  const link = new WebSocketLink(getWsClient(wsurl));
+  return execute(link, {query: query, variables: variables});
+};
+const gql = require('graphql-tag');
+// A subscription query to get changes for author with parametrised id 
+// using $id as a query variable
+const SUBSCRIBE_QUERY = gql`
+subscription network {
+  network {
+    mutation
+    node {
+      id
+      name
+    }
+  }
+}
+`;
+
+function subtest() {
+  const subscriptionClient = createSubscriptionObservable(
+    'ws://localhost:4466/', // GraphQL endpoint
+    SUBSCRIBE_QUERY,                                       // Subscription query
+    {}                                                // Query variables
+  );
+  var consumer = subscriptionClient.subscribe(eventData => {
+    // Do something on receipt of the event
+    console.log("Received event: ");
+    console.log(JSON.stringify(eventData, null, 2));
+  }, (err) => {
+    console.log('Err');
+    console.log(err);
+  });
+}
+subtest();
+
 
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
