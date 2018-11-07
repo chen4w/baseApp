@@ -109,7 +109,7 @@ export const NodeEdit = props => (
             <FormTab label="resources.Network.tabs.tab1">
                 <TextField source="nodename" />
                 <TextField source="seedip" />
-                <TextField source="rtGraph" />
+                <TextInput source="rtGraph" />
             </FormTab>
 
             <FormTab label="resources.Network.tabs.tab6">

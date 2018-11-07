@@ -42,6 +42,15 @@ const processUpload = async upload => {
   const { id, path } = await storeUpload({ stream, filename })
   return recordFile({ id, filename, mimetype, encoding, path })
 }
+async function subscribeNode(pdb) {
+  const subscription = await pdb.subscription.file({ 
+    where: { mutation_in: ['CREATED','UPDATED'] } }
+  )
+  subscription.next().then(res => {
+    console.log('got some value')
+    console.log(res)
+  })
+}
 
 const resolvers = {
   Query: {
@@ -95,6 +104,8 @@ const pdb = new Prisma({
   debug: true, // log all GraphQL queries & mutations sent to the Prisma API
   // secret: 'mysecret123', // only needed if specified in `database/prisma.yml`
 });
+subscribeNode(pdb);
+
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
