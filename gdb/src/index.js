@@ -1,10 +1,10 @@
 const { GraphQLServer } = require('graphql-yoga')
 const { Prisma } = require('prisma-binding')
 const protobuf = require("protobufjs")
-const {EventTube} = require('rclink')
-const {saveBlock} = require('./sync')
+const { EventTube } = require('rclink')
+const { saveBlock } = require('./sync')
 
-const fs =require('fs')
+const fs = require('fs')
 const mkdirp = require('mkdirp');
 const shortid = require('shortid');
 const lowdb = require('lowdb')
@@ -41,15 +41,6 @@ const processUpload = async upload => {
   const { stream, filename, mimetype, encoding } = await upload
   const { id, path } = await storeUpload({ stream, filename })
   return recordFile({ id, filename, mimetype, encoding, path })
-}
-async function subscribeNode(pdb) {
-  const subscription = await pdb.subscription.network({ 
-    where: { mutation_in: ['CREATED','UPDATED'] } }
-  )
-  subscription.next().then(res => {
-    console.log('got some value')
-    console.log(res)
-  })
 }
 
 const resolvers = {
@@ -104,26 +95,7 @@ const pdb = new Prisma({
   debug: true, // log all GraphQL queries & mutations sent to the Prisma API
   // secret: 'mysecret123', // only needed if specified in `database/prisma.yml`
 });
-//subscribeNode(pdb);
-const { execute } = require('apollo-link');
-const { WebSocketLink } = require('apollo-link-ws');
-const { SubscriptionClient } = require('subscriptions-transport-ws');
-const ws = require('ws');
 
-const getWsClient = function(wsurl) {
-  const client = new SubscriptionClient(
-    wsurl, {reconnect: true}, ws
-  );
-  return client;
-};
-
-// wsurl: GraphQL endpoint
-// query: GraphQL query (use gql`` from the 'graphql-tag' library)
-// variables: Query variables object
-const createSubscriptionObservable = (wsurl, query, variables) => {
-  const link = new WebSocketLink(getWsClient(wsurl));
-  return execute(link, {query: query, variables: variables});
-};
 const gql = require('graphql-tag');
 // A subscription query to get changes for author with parametrised id 
 // using $id as a query variable
@@ -139,27 +111,19 @@ subscription network {
 }
 `;
 
-function subtest() {
-  const subscriptionClient = createSubscriptionObservable(
-    'ws://localhost:4466/', // GraphQL endpoint
-    SUBSCRIBE_QUERY,                                       // Subscription query
-    {}                                                // Query variables
-  );
-  var consumer = subscriptionClient.subscribe(eventData => {
-    // Do something on receipt of the event
-    console.log("Received event: ");
-    console.log(JSON.stringify(eventData, null, 2));
-  }, (err) => {
-    console.log('Err');
-    console.log(err);
-  });
-}
-subtest();
-
+const { subscribe } = require('./subscribe');
+subscribe('ws://localhost:4466/', SUBSCRIBE_QUERY, function (eventData) {
+  console.log(JSON.stringify(eventData, null, 2));
+}, function (err) {
+  console.log(err);
+});
 
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
+  resolverValidationOptions :{
+    requireResolversForResolveType: false
+  }, 
   context: req => ({
     ...req,
     db: pdb,
@@ -168,22 +132,22 @@ const server = new GraphQLServer({
 
 
 function startEvents() {
-  var Message,Block;
-  protobuf.load("protos/peer.proto").then(function(root) {
+  var Message, Block;
+  protobuf.load("protos/peer.proto").then(function (root) {
     Message = root.lookupType("rep.protos.Event");
     Block = root.lookupType("rep.protos.Block");
-    var et = new EventTube('ws://localhost:8081/event',function(evt){
+    var et = new EventTube('ws://localhost:8081/event', function (evt) {
       var msg = Message.decode(evt.data);
       //出块通知 TODO 确保块内全部交易写入
       if (msg.action == 2 && msg.from != 'Block') {
-        var blk =  msg.blk;
-        saveBlock(blk,pdb)
+        var blk = msg.blk;
+        saveBlock(blk, pdb)
       }
       //TODO 调用pdb to mutation createBlock
-    })            
+    })
   });
-} 
- 
+}
+
 //startEvents();      
 
 //TODO 通过rclink restAPI主动请求高度，请求本地缺失block,调用pdb to mutation createBlock
