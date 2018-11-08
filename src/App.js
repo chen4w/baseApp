@@ -4,7 +4,7 @@ import { Admin, Resource } from 'react-admin/lib';
 import { KeypairList, KeypairShow, KeypairEdit, KeypairCreate } from './components/keypair';
 import { TransList, TransShow, TransCreate } from './components/transaction';
 import { NetworkList, NetworkShow,  NetworkEdit, NetworkCreate } from './components/network';
-import { NodeList, NodeEdit, NodeShow, NodeCreate } from './components/node';
+import { NodeList, NodeEdit, NodeShow, NodeCreate } from './components/netpeer';
 import { BlockList, BlockShow } from './components/block';
 import { FileList, FileCreate ,FileShow} from './components/file';
 

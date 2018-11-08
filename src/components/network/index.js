@@ -18,7 +18,7 @@ import {
   EditButton,
   TextInput
 } from "react-admin/lib";
-import ApproveButton from "../node/ApproveButton";
+import ApproveButton from "../netpeer/ApproveButton";
 
 export const NetworkList = props => (
   <List {...props} bulkActions={false}>
