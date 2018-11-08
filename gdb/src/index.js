@@ -1,7 +1,7 @@
 const { GraphQLServer } = require('graphql-yoga')
 const { Prisma } = require('prisma-binding')
 const protobuf = require("protobufjs")
-const { EventTube } = require('rclink')
+const { EventTube } = require('./events')
 const { saveBlock } = require('./sync')
 
 const fs = require('fs')
@@ -106,6 +106,7 @@ subscription network {
     node {
       id
       name
+      seedip
     }
   }
 }
