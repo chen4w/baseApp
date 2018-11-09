@@ -130,6 +130,12 @@ export default {
             }
         },
         File: {
+            notification: {
+                upload_success: '文件上传完成',
+                upload_error: '错误: 文件上传失败',
+                remove_success: '文件删除完成',
+                remove_error: '错误: 文件删除失败',
+            },
             name: '附件',
             tabs: {
                 tab1: '基本项',
@@ -139,7 +145,10 @@ export default {
              fields: {
                 id: '序号',
                 name: '名称',
+                title: '题名',
                 size: '大小',
+                url: '位置',
+                pictures: '附件集合'
             }
         },
         certs: {
