@@ -7,7 +7,7 @@ export const REVIEW_APPROVE_SUCCESS = 'REVIEW_APPROVE_SUCCESS';
 
 export const reviewApprove = (id, data, basePath) => ({
     type: REVIEW_APPROVE,
-    payload: { id, data: { ...data, status: 'accepted' }, basePath },
+    payload: { id, data: { ...data, status: 'starting' }, basePath },
     meta: {
         resource: 'NetPeer',
         fetch: UPDATE,

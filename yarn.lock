@@ -6403,6 +6403,12 @@ ra-language-english@^2.1.3, ra-language-english@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/ra-language-english/-/ra-language-english-2.3.0.tgz#d25247bd148a57b02ff0480a66388220ee72ef16"
 
+ra-realtime@^2.4.1:
+  version "2.4.1"
+  resolved "http://registry.npm.taobao.org/ra-realtime/download/ra-realtime-2.4.1.tgz#101eefd1aea997f4997d0c1ec4b82ed359b7c8db"
+  dependencies:
+    lodash "~4.17.5"
+
 ra-ui-materialui@^2.1.5, ra-ui-materialui@^2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/ra-ui-materialui/-/ra-ui-materialui-2.4.1.tgz#3f9dd524d84d3f41bfd72ad4f2700730861591ee"
