@@ -3,6 +3,7 @@ const { Prisma } = require('prisma-binding')
 const filedir = '../public'
 const multer = require('multer');
 const {getAttchFileName,getFileForfileType} = require('../src/server/deployservice/getAttchment.js')
+const {StartOrStopService} = require('../src/server/deployservice/startOrStopNode.js')
 const upload = multer({
   dest: filedir+'/uploads/' // this saves your file into a directory called "uploads"
 }); 
@@ -41,5 +42,9 @@ app.post('/upload', upload.single('file-to-upload'), (req, res) => {
     getFileForfileType(req, res, pdb,filedir);
   });
 
+  app.get('/startNode/:nodename/:actionname', function (req, res) {
+    console.log('entry start node');
+    StartOrStopService(req, res, pdb);
+  });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

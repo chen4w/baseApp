@@ -11,22 +11,21 @@ function ValidServer(url,callback){
 function RequestOfValid(url){
     return new Promise(function (resolve, reject) {
         http.get(url, (res) => {
-        const { statusCode } = res;
-        //console.log('1');
-        let error;
-        if (statusCode == 200) {
-            resolve({result: false});
-        } else {
-            resolve({result: false});
-        }
+            const { statusCode } = res;
+
+            if (statusCode == 200) {
+                resolve({result: true});
+            } else {
+                resolve({result: true});
+            }
         }).on('error', (e) => {
-            //console.log('2');
             resolve({result: false});
         });
     });
 }
 
 module.exports.ValidServer = ValidServer;
+module.exports.RequestOfValid = RequestOfValid;
 
 let url = 'http://localhost:8080/wxg_digimus/login.html';
 ValidServer(url,function(r){
