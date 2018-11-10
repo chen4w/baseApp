@@ -1,21 +1,22 @@
 import React from 'react';
 import {
-    Show,TabbedShowLayout,Tab,
-    FormTab, TabbedForm, 
+    Show, TabbedShowLayout, Tab,
+    FormTab, TabbedForm,
     Filter, RichTextField,
     DateField, Responsive, SimpleList, List, Create, Datagrid, TextField,
-     ShowButton, LongTextInput, TextInput
+    ShowButton, LongTextInput, TextInput
 } from 'react-admin/lib';
 
 const TransFilter = props => (
     <Filter {...props}>
-        <TextInput label="txId" source="txId" alwaysOn />
+        <TextInput label="txId" source="txId_contains" alwaysOn />
     </Filter>
 );
 
 export const TransList = (props) => (
     <List {...props}
         filters={<TransFilter />}
+        sort={{ field: "timeStamp", order: "DESC" }}
         bulkActions={false}>
         <Responsive
             small={
@@ -27,10 +28,9 @@ export const TransList = (props) => (
             }
             medium={
                 <Datagrid>
-                    <TextField source="id" />
+                    <DateField source="timeStamp" showTime />
                     <TextField source="txId" />
                     <TextField source="cname" />
-                    <DateField source="timeStamp" showTime/>                    
                     <ShowButton />
                 </Datagrid>
             }
@@ -50,7 +50,7 @@ export const TransShow = (props) => (
                 <TextField source="txId" />
                 <TextField source="blockId" />
                 <TextField source="signature" />
-                <DateField source="created" />
+                <DateField source="timeStamp" />
             </Tab>
             <Tab label="resources.Transaction.tabs.tab2">
                 <TextField source="cid" />

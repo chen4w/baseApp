@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Wed Nov 07 2018 09:06:24 GMT+0800 (中国标准时间)
+# timestamp: Sat Nov 10 2018 09:59:26 GMT+0800 (中国标准时间)
 
 type AggregateBlock {
   count: Int!
@@ -37,6 +37,7 @@ type Block implements Node {
   pid: Int
   height: Int
   transCount: Int
+  timeStamp: DateTime
   transactions(where: TransactionWhereInput, orderBy: TransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Transaction!]
 }
 
@@ -56,6 +57,7 @@ input BlockCreateInput {
   pid: Int
   height: Int
   transCount: Int
+  timeStamp: DateTime
   transactions: TransactionCreateManyWithoutBlockerInput
 }
 
@@ -70,6 +72,7 @@ input BlockCreateWithoutTransactionsInput {
   pid: Int
   height: Int
   transCount: Int
+  timeStamp: DateTime
 }
 
 """An edge in a connection."""
@@ -94,6 +97,8 @@ enum BlockOrderByInput {
   height_DESC
   transCount_ASC
   transCount_DESC
+  timeStamp_ASC
+  timeStamp_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -107,6 +112,7 @@ type BlockPreviousValues {
   pid: Int
   height: Int
   transCount: Int
+  timeStamp: DateTime
 }
 
 type BlockSubscriptionPayload {
@@ -154,6 +160,7 @@ input BlockUpdateInput {
   pid: Int
   height: Int
   transCount: Int
+  timeStamp: DateTime
   transactions: TransactionUpdateManyWithoutBlockerInput
 }
 
@@ -171,6 +178,7 @@ input BlockUpdateWithoutTransactionsDataInput {
   pid: Int
   height: Int
   transCount: Int
+  timeStamp: DateTime
 }
 
 input BlockUpsertWithoutTransactionsInput {
@@ -373,6 +381,28 @@ input BlockWhereInput {
 
   """All values greater than or equal the given value."""
   transCount_gte: Int
+  timeStamp: DateTime
+
+  """All values that are not equal to given value."""
+  timeStamp_not: DateTime
+
+  """All values that are contained in given list."""
+  timeStamp_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  timeStamp_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  timeStamp_lt: DateTime
+
+  """All values less than or equal the given value."""
+  timeStamp_lte: DateTime
+
+  """All values greater than the given value."""
+  timeStamp_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  timeStamp_gte: DateTime
   transactions_every: TransactionWhereInput
   transactions_some: TransactionWhereInput
   transactions_none: TransactionWhereInput

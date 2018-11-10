@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-    Filter, 
+    Filter, DateField,
     Show, TabbedShowLayout, Tab,
-    Responsive, SimpleList, List,  Datagrid, TextField,
+    Responsive, SimpleList, List, Datagrid, TextField,
     ShowButton, ReferenceManyField, TextInput
 } from 'react-admin/lib';
 
@@ -23,13 +23,14 @@ const PostActions = ({ resource, filters, displayedFilters, filterValues, basePa
 
 const BlockFilter = props => (
     <Filter {...props}>
-        <TextInput label="hash" source="hash" alwaysOn />
+        <TextInput label="hash" source="hash_contains" alwaysOn />
     </Filter>
 );
 
 export const BlockList = (props) => (
     <List {...props}
         filters={<BlockFilter />}
+        sort={{ field: "timeStamp", order: "DESC" }}
         bulkActions={false}
         actions={<PostActions />}>
 
@@ -42,8 +43,10 @@ export const BlockList = (props) => (
             }
             medium={
                 <Datagrid>
-                    <TextField source="id" />
+                    <DateField source="timeStamp" showTime />
                     <TextField source="hash" />
+                    <TextField source="transCount" />
+
                     <ShowButton />
                 </Datagrid>
             }
@@ -60,13 +63,14 @@ export const BlockShow = (props) => (
         <TabbedShowLayout>
             <Tab label="resources.Block.tabs.tab1">
                 <TextField source="id" />
+                <DateField source="timeStamp" />
                 <TextField source="height" />
                 <TextField source="preHash" />
                 <TextField source="hash" />
             </Tab>
             <Tab label="resources.Block.tabs.tab2">
                 <ReferenceManyField
-                    reference="Transaction"                    
+                    reference="Transaction"
                     target="blocker"
                     addLabel={false}
                 >

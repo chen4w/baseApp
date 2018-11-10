@@ -4,7 +4,8 @@ const ECODE_HEX = 'hex';
 async function saveBlock(blk,pdb) {
   var blk_data = {
     hash: Buffer.from(blk.stateHash).toString(ECODE_BIN),
-    transCount: blk.transactions.length
+    transCount: blk.transactions.length,
+    timeStamp: new Date(blk.timestamp.seconds * 1000 + Math.floor(blk.timestamp.nanos / 1000))
   };
   if(blk.previousBlockHash)
     blk_data.preHash = Buffer.from(blk.previousBlockHash).toString(ECODE_BIN);

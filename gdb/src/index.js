@@ -133,24 +133,24 @@ const server = new GraphQLServer({
 })
 
 
-function startEvents() {
+function startEvents(ws_url) {
   var Message, Block;
   protobuf.load("protos/peer.proto").then(function (root) {
     Message = root.lookupType("rep.protos.Event");
     Block = root.lookupType("rep.protos.Block");
-    var et = new EventTube('ws://localhost:8081/event', function (evt) {
+    var et = new EventTube(ws_url, function (evt) {
       var msg = Message.decode(evt.data);
       //出块通知 TODO 确保块内全部交易写入
       if (msg.action == 2 && msg.from != 'Block') {
         var blk = msg.blk;
         saveBlock(blk, pdb)
       }
-      //TODO 调用pdb to mutation createBlock
+      console.log('subscribe RepChain events on '+ws_url)
     })
   });
 }
 
-//startEvents();      
+startEvents('ws://localhost:8081/event');      
 
 //TODO 通过rclink restAPI主动请求高度，请求本地缺失block,调用pdb to mutation createBlock
 //TODO 前端react admin 通过graphql检索、分页、排序数据

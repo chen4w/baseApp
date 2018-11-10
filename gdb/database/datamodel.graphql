@@ -11,6 +11,7 @@ type Block {
   pid: Int
   height: Int
   transCount: Int,
+  timeStamp: DateTime,
   transactions:[Transaction!]!
 }
 type Transaction {
