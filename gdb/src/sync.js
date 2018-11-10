@@ -5,7 +5,7 @@ async function saveBlock(blk,pdb) {
   var blk_data = {
     hash: Buffer.from(blk.stateHash).toString(ECODE_BIN),
     transCount: blk.transactions.length,
-    timeStamp: new Date(blk.timestamp.seconds * 1000 + Math.floor(blk.timestamp.nanos / 1000))
+    timeStamp: new Date(blk.timestamp.seconds * 1000 - 8 * 3600 * 1000)
   };
   if(blk.previousBlockHash)
     blk_data.preHash = Buffer.from(blk.previousBlockHash).toString(ECODE_BIN);
@@ -29,7 +29,7 @@ async function saveBlock(blk,pdb) {
       ipt:tx.payload.ctorMsg.args.toString(),
       signature: tx.signature.toString(ECODE_HEX),
       //nodejs只支持到毫秒
-      timeStamp: new Date(tx.timestamp.seconds * 1000 + Math.floor(tx.timestamp.nanos / 1000)),
+      timeStamp: new Date(tx.timestamp.seconds * 1000 - 8 * 3600 * 1000),
       blocker :{connect:{id:obj_blk.id}}
     }
     pdb.mutation.createTransaction(
