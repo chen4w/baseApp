@@ -25,7 +25,7 @@ import {
 
 const FileFilter = props => (
   <Filter {...props}>
-    <TextInput label="title" source="title" alwaysOn />
+    <TextInput label="title" source="title_contains" alwaysOn />
   </Filter>
 );
 
