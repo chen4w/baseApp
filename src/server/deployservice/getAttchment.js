@@ -3,6 +3,7 @@
 var fs = require('fs');
 var path = require('path');
 var count = 1;
+
 function getFileForfileType(req, res, pdb,filedir){
     var ftype = req.params.filetype;
     var aid = req.params.attchmentid;

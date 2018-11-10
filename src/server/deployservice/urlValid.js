@@ -14,11 +14,14 @@ function RequestOfValid(url){
             const { statusCode } = res;
 
             if (statusCode == 200) {
+                //console.log('url  200');
                 resolve({result: true});
             } else {
+                //console.log('url  300');
                 resolve({result: true});
             }
         }).on('error', (e) => {
+            //console.log('url error');
             resolve({result: false});
         });
     });

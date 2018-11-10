@@ -2,10 +2,30 @@
 let fsop = require('fs');
 let pathop = require('path');
 let request = require('request');
+var os=require('os');
 
-const RepChainPath = 'E:\\iscas\\repchain';
+var RepChainPath = 'E:\\iscas\\repchain';
+if(os.type != 'Windows_NT'){
+    RepChainPath = '/home/iscas/repchain';
+}
+
 const keyFileSuffix = '.jks';//gm pem
 const DownloadFileService = 'getFile';
+
+var nodename = '-1';
+var fileinfos = [
+    {   filename:RepChainPath + pathop.sep + 'conf' + pathop.sep + 'system.conf',
+        fileurl:''},
+    {   filename:RepChainPath + pathop.sep + 'jks' + pathop.sep +
+                'mykeystore_'+nodename+'.jks',
+        fileurl:''},
+    {   filename:RepChainPath + pathop.sep + 'json' + pathop.sep +
+                'gensis.json',
+        fileurl:''},
+    {   filename:RepChainPath + pathop.sep + 'jks' + pathop.sep +
+                'mytruststore'+ keyFileSuffix,
+        fileurl:''}
+];
 
 
 //判断文件是否存在
@@ -79,20 +99,8 @@ function  SystemFileIsExist(fileinfos,index,callback){
     }
 }
 
-var nodename = '-1';
-var fileinfos = [
-    {   filename:RepChainPath + pathop.sep + 'conf' + pathop.sep + 'system.conf',
-        fileurl:''},
-    {   filename:RepChainPath + pathop.sep + 'jks' + pathop.sep +
-                'mykeystore_'+nodename+'.jks',
-        fileurl:''},
-    {   filename:RepChainPath + pathop.sep + 'json' + pathop.sep +
-                'gensis.json',
-        fileurl:''},
-    {   filename:RepChainPath + pathop.sep + 'jks' + pathop.sep +
-                'mytruststore'+ keyFileSuffix,
-        fileurl:''}
-];
+
+
 
 function ConfigFileMgr(pdb,nodename){
     return new Promise(function (resolve, reject) {
@@ -102,7 +110,9 @@ function ConfigFileMgr(pdb,nodename){
             }
         }
         ).then((data) => {
-            console
+            
+           
+
             var seedip = 'http://'+data[0].seedip+':5000/getFile/';
             var localip = 'http://'+data[0].rtGraph+':5000/getFile/';
             fileinfos[0].fileurl = localip + 'node-config/'+nodename;
@@ -124,4 +134,5 @@ function ConfigFileMgr(pdb,nodename){
 }
 
 module.exports.ConfigFileMgr = ConfigFileMgr;
+module.exports.RepChainPath = RepChainPath;
 
