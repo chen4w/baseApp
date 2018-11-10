@@ -1,6 +1,6 @@
 const protobuf = require("protobufjs")
 const fs = require('fs')
-const {saveBlock} = require('./sync')
+const {saveBlock} = require('./saveblock')
 
 describe('App同步区块链数据验证', () => {
     var Block,blk=null;

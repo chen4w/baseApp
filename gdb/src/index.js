@@ -1,14 +1,14 @@
 const { GraphQLServer } = require('graphql-yoga')
 const { Prisma } = require('prisma-binding')
-const protobuf = require("protobufjs")
-const { EventTube } = require('./events')
-const { saveBlock } = require('./sync')
+
+const {startSyncPush, startSyncPull} = require('./sync')
 
 const fs = require('fs')
 const mkdirp = require('mkdirp');
 const shortid = require('shortid');
 const lowdb = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
+
 
 const uploadDir = './uploads'
 const db = new lowdb(new FileSync('db.json'))
@@ -89,7 +89,7 @@ const resolvers = {
   },
 }
 
-const pdb = new Prisma({
+const prisma = new Prisma({
   typeDefs: 'src/generated/prisma.graphql', // the auto-generated GraphQL schema of the Prisma API
   endpoint: 'http://localhost:4466', // the endpoint of the Prisma API
   debug: true, // log all GraphQL queries & mutations sent to the Prisma API
@@ -123,34 +123,19 @@ subscribe('ws://localhost:4466/', SUBSCRIBE_QUERY, function (eventData) {
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
-  resolverValidationOptions :{
+  resolverValidationOptions: {
     requireResolversForResolveType: false
-  }, 
+  },
   context: req => ({
     ...req,
-    db: pdb,
+    db: prisma,
   }),
 })
 
 
-function startEvents(ws_url) {
-  var Message, Block;
-  protobuf.load("protos/peer.proto").then(function (root) {
-    Message = root.lookupType("rep.protos.Event");
-    Block = root.lookupType("rep.protos.Block");
-    var et = new EventTube(ws_url, function (evt) {
-      var msg = Message.decode(evt.data);
-      //出块通知 TODO 确保块内全部交易写入
-      if (msg.action == 2 && msg.from != 'Block') {
-        var blk = msg.blk;
-        saveBlock(blk, pdb)
-      }
-      console.log('subscribe RepChain events on '+ws_url)
-    })
-  });
-}
 
-startEvents('ws://localhost:8081/event');      
+//startSyncPush('ws://localhost:8081/event',prisma);
+startSyncPull('http://localhost:8081/',prisma,5000);
 
 //TODO 通过rclink restAPI主动请求高度，请求本地缺失block,调用pdb to mutation createBlock
 //TODO 前端react admin 通过graphql检索、分页、排序数据

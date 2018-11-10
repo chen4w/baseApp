@@ -19,6 +19,8 @@
     "prisma-binding": "^2.1.6",
     "protobufjs": "^6.8.8",
     "react-apollo": "^2.2.4",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2",
     "shortid": "^2.2.13",
     "subscriptions-transport-ws": "^0.9.15",
     "ws": "^6.1.0"
