@@ -34,6 +34,7 @@ export const NetworkList = props => (
           <TextField source="id" />
           <TextField source="name" />
           <TextField source="seedip" />
+          <TextField source="syncHeight" />          
           <EditButton />
         </Datagrid>
       }

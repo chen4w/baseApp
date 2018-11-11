@@ -1,6 +1,6 @@
 const protobuf = require("protobufjs")
 const { EventTube } = require('./rclink/events')
-const { saveBlock } = require('./saveblock')
+const { saveBlock,updateNetInfo ,getNetInfo} = require('./saveblock')
 const { RestAPI } = require('./rclink/rest')
 
 const root_proto = protobuf.loadSync("protos/peer.proto");
@@ -22,19 +22,22 @@ function startSyncPush(ws_url, prisma) {
             var blk = msg.blk;
             saveBlock(blk, prisma)
         }
-        console.log('subscribe RepChain events on ' + ws_url)
     })
 }
 
-function startSyncPull(api_url, prisma, span) {
+function startSyncPull(api_url, prisma) {
     //启动pull方式的区块数据同步
     var h_sync = 0;
     const ra = new RestAPI(api_url);
-    pullBlock(ra, 1, prisma, span);
+    getNetInfo(prisma).then(net0 => {
+        console.log(net0)
+        pullBlock(ra, net0.syncHeight, prisma, net0.id);    
+    })
 }
 
 var tm_pull = null;
-function pullBlock(ra, h, prisma, span) {
+const span_pull = 200;
+function pullBlock(ra, h, prisma, netId) {
     console.log('pull Block ' + h);
     if (!tm_pull) {
         clearTimeout(tm_pull);
@@ -52,15 +55,16 @@ function pullBlock(ra, h, prisma, span) {
             } else {
                 console.log('block[' + prevHash + '] exists.')
             }
+            updateNetInfo(prisma,{syncHeight:h},netId);
             setTimeout(function () {
-                pullBlock(ra, h + 1, prisma, span);
-            }, span);
+                pullBlock(ra, h + 1, prisma,netId );
+            }, span_pull);
         });
     }).catch(function (err) {
         console.log(err);
         setTimeout(function () {
-            pullBlock(ra, h, prisma, span);
-        }, span);
+            pullBlock(ra, h, prisma, netId);
+        }, span_pull);
     });
 
 }
