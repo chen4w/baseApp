@@ -10,9 +10,11 @@ type Block {
   preHash: String
   pid: Int
   height: Int
-  transCount: Int,
+  transCount: Int
+  tps: Int
   timeStamp: DateTime,
   transactions:[Transaction!]!
+  net: Network @relation(name: "BlkNet")
 }
 type Transaction {
   id: ID! @unique
@@ -33,6 +35,9 @@ type Network {
   seedip:String!
   genesisBlock:  File @relation(name: "NWGenesis")
   certList: File @relation(name: "NWCerts")
+  syncHeight: Int
+  blockCount: Int
+  transCount: Int,
 }
 
 type NetPeer {

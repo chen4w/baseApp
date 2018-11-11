@@ -2,6 +2,7 @@ const { GraphQLServer } = require('graphql-yoga')
 const { Prisma } = require('prisma-binding')
 
 const {startSyncPush, startSyncPull} = require('./sync')
+const cfg = require('config');
 
 const fs = require('fs')
 const mkdirp = require('mkdirp');
@@ -91,8 +92,8 @@ const resolvers = {
 
 const prisma = new Prisma({
   typeDefs: 'src/generated/prisma.graphql', // the auto-generated GraphQL schema of the Prisma API
-  endpoint: 'http://localhost:4466', // the endpoint of the Prisma API
-  debug: true, // log all GraphQL queries & mutations sent to the Prisma API
+  endpoint: cfg.get('Prisma.endpoint'), // the endpoint of the Prisma API
+  debug: false, // log all GraphQL queries & mutations sent to the Prisma API
   // secret: 'mysecret123', // only needed if specified in `database/prisma.yml`
 });
 
@@ -114,7 +115,7 @@ subscription netPeer {
 `;
 
 const { subscribe } = require('./subscribe');
-subscribe('ws://localhost:4466/', SUBSCRIBE_QUERY, function (eventData) {
+subscribe(cfg.get('Prisma.url_subscribe'), SUBSCRIBE_QUERY, function (eventData) {
   console.log(JSON.stringify(eventData, null, 2));
 }, function (err) {
   console.log(err);
@@ -134,10 +135,10 @@ const server = new GraphQLServer({
 
 
 
-//startSyncPush('ws://localhost:8081/event',prisma);
-startSyncPull('http://localhost:8081/',prisma,5000);
+startSyncPush(cfg.get('RepChain.default.url_subscribe'),prisma);
+startSyncPull(cfg.get('RepChain.default.url_api'),prisma,100);
 
 //TODO 通过rclink restAPI主动请求高度，请求本地缺失block,调用pdb to mutation createBlock
 //TODO 前端react admin 通过graphql检索、分页、排序数据
 //TODO 前端react admin 订阅graphql,主动刷新
-server.start(() => console.log('Server is running on http://localhost:4000'))
+server.start(() => console.log('Server is running on '+server.options.port))

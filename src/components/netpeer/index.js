@@ -72,7 +72,7 @@ export const NodeShow = (props) => (
 
 export const NodeCreate = (props) => (
     <Create {...props}>
-        <TabbedForm>
+        <TabbedForm  redirect="list">
             <FormTab label="resources.Network.tabs.tab1">
                 <TextInput source="nodename" />
                 <TextInput source="seedip" />

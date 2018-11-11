@@ -78,7 +78,7 @@ export const NetworkShow = props => (
 
 export const NetworkCreate = props => (
   <Create {...props}>
-    <TabbedForm>
+    <TabbedForm  redirect="list">
       <FormTab label="resources.Network.tabs.tab1">
         <TextInput source="name" />
         <TextInput source="seedip" />

@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sat Nov 10 2018 09:59:26 GMT+0800 (中国标准时间)
+# timestamp: Sun Nov 11 2018 15:26:13 GMT+0800 (中国标准时间)
 
 type AggregateBlock {
   count: Int!
@@ -37,8 +37,10 @@ type Block implements Node {
   pid: Int
   height: Int
   transCount: Int
+  tps: Int
   timeStamp: DateTime
   transactions(where: TransactionWhereInput, orderBy: TransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Transaction!]
+  net(where: NetworkWhereInput): Network
 }
 
 """A connection to a list of items."""
@@ -57,8 +59,10 @@ input BlockCreateInput {
   pid: Int
   height: Int
   transCount: Int
+  tps: Int
   timeStamp: DateTime
   transactions: TransactionCreateManyWithoutBlockerInput
+  net: NetworkCreateOneInput
 }
 
 input BlockCreateOneWithoutTransactionsInput {
@@ -72,7 +76,9 @@ input BlockCreateWithoutTransactionsInput {
   pid: Int
   height: Int
   transCount: Int
+  tps: Int
   timeStamp: DateTime
+  net: NetworkCreateOneInput
 }
 
 """An edge in a connection."""
@@ -97,6 +103,8 @@ enum BlockOrderByInput {
   height_DESC
   transCount_ASC
   transCount_DESC
+  tps_ASC
+  tps_DESC
   timeStamp_ASC
   timeStamp_DESC
   updatedAt_ASC
@@ -112,6 +120,7 @@ type BlockPreviousValues {
   pid: Int
   height: Int
   transCount: Int
+  tps: Int
   timeStamp: DateTime
 }
 
@@ -160,8 +169,10 @@ input BlockUpdateInput {
   pid: Int
   height: Int
   transCount: Int
+  tps: Int
   timeStamp: DateTime
   transactions: TransactionUpdateManyWithoutBlockerInput
+  net: NetworkUpdateOneInput
 }
 
 input BlockUpdateOneWithoutTransactionsInput {
@@ -178,7 +189,9 @@ input BlockUpdateWithoutTransactionsDataInput {
   pid: Int
   height: Int
   transCount: Int
+  tps: Int
   timeStamp: DateTime
+  net: NetworkUpdateOneInput
 }
 
 input BlockUpsertWithoutTransactionsInput {
@@ -381,6 +394,28 @@ input BlockWhereInput {
 
   """All values greater than or equal the given value."""
   transCount_gte: Int
+  tps: Int
+
+  """All values that are not equal to given value."""
+  tps_not: Int
+
+  """All values that are contained in given list."""
+  tps_in: [Int!]
+
+  """All values that are not contained in given list."""
+  tps_not_in: [Int!]
+
+  """All values less than the given value."""
+  tps_lt: Int
+
+  """All values less than or equal the given value."""
+  tps_lte: Int
+
+  """All values greater than the given value."""
+  tps_gt: Int
+
+  """All values greater than or equal the given value."""
+  tps_gte: Int
   timeStamp: DateTime
 
   """All values that are not equal to given value."""
@@ -406,6 +441,7 @@ input BlockWhereInput {
   transactions_every: TransactionWhereInput
   transactions_some: TransactionWhereInput
   transactions_none: TransactionWhereInput
+  net: NetworkWhereInput
 }
 
 input BlockWhereUniqueInput {
@@ -1034,38 +1070,38 @@ type Mutation {
   createPost(data: PostCreateInput!): Post!
   createBlock(data: BlockCreateInput!): Block!
   createTransaction(data: TransactionCreateInput!): Transaction!
-  createNetwork(data: NetworkCreateInput!): Network!
   createNetPeer(data: NetPeerCreateInput!): NetPeer!
+  createNetwork(data: NetworkCreateInput!): Network!
   createFile(data: FileCreateInput!): File!
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateBlock(data: BlockUpdateInput!, where: BlockWhereUniqueInput!): Block
   updateTransaction(data: TransactionUpdateInput!, where: TransactionWhereUniqueInput!): Transaction
-  updateNetwork(data: NetworkUpdateInput!, where: NetworkWhereUniqueInput!): Network
   updateNetPeer(data: NetPeerUpdateInput!, where: NetPeerWhereUniqueInput!): NetPeer
+  updateNetwork(data: NetworkUpdateInput!, where: NetworkWhereUniqueInput!): Network
   updateFile(data: FileUpdateInput!, where: FileWhereUniqueInput!): File
   deletePost(where: PostWhereUniqueInput!): Post
   deleteBlock(where: BlockWhereUniqueInput!): Block
   deleteTransaction(where: TransactionWhereUniqueInput!): Transaction
-  deleteNetwork(where: NetworkWhereUniqueInput!): Network
   deleteNetPeer(where: NetPeerWhereUniqueInput!): NetPeer
+  deleteNetwork(where: NetworkWhereUniqueInput!): Network
   deleteFile(where: FileWhereUniqueInput!): File
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   upsertBlock(where: BlockWhereUniqueInput!, create: BlockCreateInput!, update: BlockUpdateInput!): Block!
   upsertTransaction(where: TransactionWhereUniqueInput!, create: TransactionCreateInput!, update: TransactionUpdateInput!): Transaction!
-  upsertNetwork(where: NetworkWhereUniqueInput!, create: NetworkCreateInput!, update: NetworkUpdateInput!): Network!
   upsertNetPeer(where: NetPeerWhereUniqueInput!, create: NetPeerCreateInput!, update: NetPeerUpdateInput!): NetPeer!
+  upsertNetwork(where: NetworkWhereUniqueInput!, create: NetworkCreateInput!, update: NetworkUpdateInput!): Network!
   upsertFile(where: FileWhereUniqueInput!, create: FileCreateInput!, update: FileUpdateInput!): File!
   updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
   updateManyBlocks(data: BlockUpdateInput!, where: BlockWhereInput): BatchPayload!
   updateManyTransactions(data: TransactionUpdateInput!, where: TransactionWhereInput): BatchPayload!
-  updateManyNetworks(data: NetworkUpdateInput!, where: NetworkWhereInput): BatchPayload!
   updateManyNetPeers(data: NetPeerUpdateInput!, where: NetPeerWhereInput): BatchPayload!
+  updateManyNetworks(data: NetworkUpdateInput!, where: NetworkWhereInput): BatchPayload!
   updateManyFiles(data: FileUpdateInput!, where: FileWhereInput): BatchPayload!
   deleteManyPosts(where: PostWhereInput): BatchPayload!
   deleteManyBlocks(where: BlockWhereInput): BatchPayload!
   deleteManyTransactions(where: TransactionWhereInput): BatchPayload!
-  deleteManyNetworks(where: NetworkWhereInput): BatchPayload!
   deleteManyNetPeers(where: NetPeerWhereInput): BatchPayload!
+  deleteManyNetworks(where: NetworkWhereInput): BatchPayload!
   deleteManyFiles(where: FileWhereInput): BatchPayload!
 }
 
@@ -1409,6 +1445,9 @@ type Network implements Node {
   seedip: String!
   genesisBlock(where: FileWhereInput): File
   certList(where: FileWhereInput): File
+  syncHeight: Int
+  blockCount: Int
+  transCount: Int
 }
 
 """A connection to a list of items."""
@@ -1424,8 +1463,16 @@ type NetworkConnection {
 input NetworkCreateInput {
   name: String!
   seedip: String!
+  syncHeight: Int
+  blockCount: Int
+  transCount: Int
   genesisBlock: FileCreateOneInput
   certList: FileCreateOneInput
+}
+
+input NetworkCreateOneInput {
+  create: NetworkCreateInput
+  connect: NetworkWhereUniqueInput
 }
 
 """An edge in a connection."""
@@ -1444,6 +1491,12 @@ enum NetworkOrderByInput {
   name_DESC
   seedip_ASC
   seedip_DESC
+  syncHeight_ASC
+  syncHeight_DESC
+  blockCount_ASC
+  blockCount_DESC
+  transCount_ASC
+  transCount_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -1454,6 +1507,9 @@ type NetworkPreviousValues {
   id: ID!
   name: String!
   seedip: String!
+  syncHeight: Int
+  blockCount: Int
+  transCount: Int
 }
 
 type NetworkSubscriptionPayload {
@@ -1495,11 +1551,38 @@ input NetworkSubscriptionWhereInput {
   node: NetworkWhereInput
 }
 
+input NetworkUpdateDataInput {
+  name: String
+  seedip: String
+  syncHeight: Int
+  blockCount: Int
+  transCount: Int
+  genesisBlock: FileUpdateOneInput
+  certList: FileUpdateOneInput
+}
+
 input NetworkUpdateInput {
   name: String
   seedip: String
+  syncHeight: Int
+  blockCount: Int
+  transCount: Int
   genesisBlock: FileUpdateOneInput
   certList: FileUpdateOneInput
+}
+
+input NetworkUpdateOneInput {
+  create: NetworkCreateInput
+  connect: NetworkWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: NetworkUpdateDataInput
+  upsert: NetworkUpsertNestedInput
+}
+
+input NetworkUpsertNestedInput {
+  update: NetworkUpdateDataInput!
+  create: NetworkCreateInput!
 }
 
 input NetworkWhereInput {
@@ -1631,6 +1714,72 @@ input NetworkWhereInput {
 
   """All values not ending with the given string."""
   seedip_not_ends_with: String
+  syncHeight: Int
+
+  """All values that are not equal to given value."""
+  syncHeight_not: Int
+
+  """All values that are contained in given list."""
+  syncHeight_in: [Int!]
+
+  """All values that are not contained in given list."""
+  syncHeight_not_in: [Int!]
+
+  """All values less than the given value."""
+  syncHeight_lt: Int
+
+  """All values less than or equal the given value."""
+  syncHeight_lte: Int
+
+  """All values greater than the given value."""
+  syncHeight_gt: Int
+
+  """All values greater than or equal the given value."""
+  syncHeight_gte: Int
+  blockCount: Int
+
+  """All values that are not equal to given value."""
+  blockCount_not: Int
+
+  """All values that are contained in given list."""
+  blockCount_in: [Int!]
+
+  """All values that are not contained in given list."""
+  blockCount_not_in: [Int!]
+
+  """All values less than the given value."""
+  blockCount_lt: Int
+
+  """All values less than or equal the given value."""
+  blockCount_lte: Int
+
+  """All values greater than the given value."""
+  blockCount_gt: Int
+
+  """All values greater than or equal the given value."""
+  blockCount_gte: Int
+  transCount: Int
+
+  """All values that are not equal to given value."""
+  transCount_not: Int
+
+  """All values that are contained in given list."""
+  transCount_in: [Int!]
+
+  """All values that are not contained in given list."""
+  transCount_not_in: [Int!]
+
+  """All values less than the given value."""
+  transCount_lt: Int
+
+  """All values less than or equal the given value."""
+  transCount_lte: Int
+
+  """All values greater than the given value."""
+  transCount_gt: Int
+
+  """All values greater than or equal the given value."""
+  transCount_gte: Int
   genesisBlock: FileWhereInput
   certList: FileWhereInput
 }
@@ -1902,20 +2051,20 @@ type Query {
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   blocks(where: BlockWhereInput, orderBy: BlockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Block]!
   transactions(where: TransactionWhereInput, orderBy: TransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Transaction]!
-  networks(where: NetworkWhereInput, orderBy: NetworkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Network]!
   netPeers(where: NetPeerWhereInput, orderBy: NetPeerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [NetPeer]!
+  networks(where: NetworkWhereInput, orderBy: NetworkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Network]!
   files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File]!
   post(where: PostWhereUniqueInput!): Post
   block(where: BlockWhereUniqueInput!): Block
   transaction(where: TransactionWhereUniqueInput!): Transaction
-  network(where: NetworkWhereUniqueInput!): Network
   netPeer(where: NetPeerWhereUniqueInput!): NetPeer
+  network(where: NetworkWhereUniqueInput!): Network
   file(where: FileWhereUniqueInput!): File
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
   blocksConnection(where: BlockWhereInput, orderBy: BlockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BlockConnection!
   transactionsConnection(where: TransactionWhereInput, orderBy: TransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TransactionConnection!
-  networksConnection(where: NetworkWhereInput, orderBy: NetworkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NetworkConnection!
   netPeersConnection(where: NetPeerWhereInput, orderBy: NetPeerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NetPeerConnection!
+  networksConnection(where: NetworkWhereInput, orderBy: NetworkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NetworkConnection!
   filesConnection(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FileConnection!
 
   """Fetches an object given its ID"""
@@ -1929,8 +2078,8 @@ type Subscription {
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   block(where: BlockSubscriptionWhereInput): BlockSubscriptionPayload
   transaction(where: TransactionSubscriptionWhereInput): TransactionSubscriptionPayload
-  network(where: NetworkSubscriptionWhereInput): NetworkSubscriptionPayload
   netPeer(where: NetPeerSubscriptionWhereInput): NetPeerSubscriptionPayload
+  network(where: NetworkSubscriptionWhereInput): NetworkSubscriptionPayload
   file(where: FileSubscriptionWhereInput): FileSubscriptionPayload
 }
 
