@@ -20,15 +20,27 @@ const styles = {
     },
 };
 
+const xhr = new XMLHttpRequest(); 
+const commitNodeStatusHandler = (cnodename,cstatus) =>{
+    if(cstatus=='start'){
+        xhr.open('GET', '/startNode/'+cnodename+'/start', true);
+    }else if(cstatus == 'stop'){
+        xhr.open('GET', '/startNode/'+cnodename+'/stop', true);
+    }
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    //console.log('cstatus='+cstatus);
+    xhr.send();
+}
+
 class ApproveButton extends Component {
     handleApprove = () => {
         const { reviewApprove, record } = this.props;
-        reviewApprove(record.id, record);
+        commitNodeStatusHandler(record.nodename,'start');
     };
 
     handleReject = () => {
         const { reviewReject, record } = this.props;
-        reviewReject(record.id, record);
+        commitNodeStatusHandler(record.nodename,'stop');
     };
 
     render() {
