@@ -16,7 +16,7 @@ export const reviewApprove = (id, data, basePath) => ({
                 body: 'resources.NetPeer.notification.approved_success',
                 level: 'info',
             },
-            redirectTo: '/NetPeer',
+            redirectTo: false,
             basePath,
         },
         onFailure: {
@@ -44,7 +44,7 @@ export const reviewReject = (id, data, basePath) => ({
                 body: 'resources.NetPeer.notification.rejected_success',
                 level: 'info',
             },
-            redirectTo: '/NetPeer',
+            redirectTo: false,
             basePath,
         },
         onFailure: {

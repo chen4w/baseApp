@@ -22,44 +22,62 @@ const apolloClient = new ApolloClient({
 
 const observeRequest = dataProvider => (type, resource, params) => {
     // Filtering so that only posts are updated in real time
-    if (resource !== 'NetPeer') return;
-    
+    var s_gql = null;
+    if (resource == 'NetPeer') {
+        s_gql = gql`
+        subscription netPeer {
+            netPeer {
+            mutation
+            node {
+                id
+                nodename
+                seedip
+                status
+            }
+            }
+        }
+        `
+    }else if (resource == 'Network') {
+        s_gql = gql`
+        subscription network {
+        network {
+            mutation
+            node {
+                id
+                syncHeight
+            }
+        }
+    }
+    `
+    }
+
+    if (s_gql == null)
+        return;
+
     // Use your apollo client methods here or sockets or whatever else including the following very naive polling mechanism
     return {
         subscribe(observer) {
             //todo 用graphql 订阅替换
 
             apolloClient.subscribe({
-                query: gql`
-                subscription netPeer {
-                  netPeer {
-                    mutation
-                    node {
-                      id
-                      nodename
-                      seedip
-                      status
-                    }
-                  }
-                }
-                `,
+                query: s_gql,
                 variables: {}
-              }).subscribe({
-                next (data) {
-                  // Notify your application with the new arrived data
-                  console.log(data);
-                  dataProvider(type, resource, params)
-                    .then(results => observer.next(results)) // New data received, notify the observer
-                    .catch(error => observer.error(error));
+            }).subscribe({
+                next(data) {
+                    // Notify your application with the new arrived data
+                    //console.log(data);
+                    dataProvider(type, resource, params)
+                        .then(results => observer.next(results)) // New data received, notify the observer
+                        .catch(error => observer.error(error));
                 }
-              });
+            });
 
             const subscription = {
                 unsubscribe() {
                     // Clean up after ourselves
                     //clearInterval(intervalId);
                     // Notify the saga that we cleaned up everything
-                    observer.complete();
+                    //observer.complete();
                 }
             };
 

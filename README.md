@@ -18,7 +18,7 @@ git clone到本地之后，
 - `cd server`
 - `yarn install` 安装server依赖
 - `cd ..`
-- `yarn start` 启动服务
+- `yarn start` 同时启动React App和文件上传下载服务
 ## 通过brew安装prisma工具
 - `brew tap prisma/prisma`
 - `brew install prisma`
