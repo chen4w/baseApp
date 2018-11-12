@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Icon } from '@material-ui/core';
+import SaveIcon from '@material-ui/icons/Save';
 import { showNotification, UPDATE, fetchStart, fetchEnd } from 'react-admin';
 import { push } from 'react-router-redux';
 import indexDataProvider from '../../dataprovider/ra-data-indexdb'
 
-const xhr = new XMLHttpRequest(); 
+const xhr = new XMLHttpRequest();
 const uploadFile = file => {
     var formData = new FormData();
     formData.append('file-to-upload', file.rawFile);
@@ -37,14 +38,15 @@ class UploadSaveButton extends Component {
     }
 
     render() {
-        return <Button variant='contained' color='primary'
+        return (<Button
+            variant='contained'
+            color='primary'
             onClick={this.handleClick}
-            style={{ marginTop: '40px', maxWidth: '98px', maxHeight: '50px' }}>
-            <Icon style={{ marginRight: '8px' }}>
-                save
-                    </Icon>
-            上传
-                </Button>
+            style={{ maxWidth: '198px', maxHeight: '50px' }}
+        >
+            <SaveIcon  style={{ marginRight: '8px' }}>Save</SaveIcon >
+            保存
+    </Button>)
     }
 }
 

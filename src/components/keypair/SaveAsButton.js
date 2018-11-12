@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Icon } from '@material-ui/core';
 import get from 'lodash/get';
 import fileDownload from 'js-file-download';
+import SaveIcon from '@material-ui/icons/Save';
 
 class SaveAsButton extends Component{
     handleClick = () => {
@@ -31,7 +32,7 @@ class SaveAsButton extends Component{
                 onClick={this.handleClick}
                 style={{maxWidth: '198px', maxHeight: '50px'}}
             >
-                <Icon style={{marginRight: '8px'}}>saveas</Icon>
+                <SaveIcon  style={{marginRight: '8px'}}>Save</SaveIcon >
                 导出保存
             </Button>
         )
