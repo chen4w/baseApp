@@ -15,6 +15,9 @@
 ## 如何运行bar
 git clone到本地之后，
 - `yarn install` 安装依赖
+- `cd server`
+- `yarn install` 安装server依赖
+- `cd ..`
 - `yarn start` 启动服务
 ## 通过brew安装prisma工具
 - `brew tap prisma/prisma`
