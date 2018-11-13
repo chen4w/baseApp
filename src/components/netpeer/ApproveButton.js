@@ -15,6 +15,9 @@ const styles = {
     accepted: {
         color: 'green',
     },
+    starting:{
+        color: '#3f51b5'
+    },
     rejected: {
         color: 'red',
     },
@@ -37,11 +40,11 @@ class ApproveButton extends Component {
             <span>
                 <IconButton
                     onClick={this.handleApprove}
-                    disabled={record.status === 'accepted'}
+                    disabled={record.status === 'starting'}
                 >
                     <ThumbUp
                         className={
-                            record.status === 'accepted' ? classes.accepted : ''
+                            record.status === 'starting' ? classes.starting : ''
                         }
                     />
                 </IconButton>

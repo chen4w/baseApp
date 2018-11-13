@@ -7,21 +7,21 @@ export const REVIEW_APPROVE_SUCCESS = 'REVIEW_APPROVE_SUCCESS';
 
 export const reviewApprove = (id, data, basePath) => ({
     type: REVIEW_APPROVE,
-    payload: { id, data: { ...data, status: 'accepted' }, basePath },
+    payload: { id, data: { ...data, status: 'starting' }, basePath },
     meta: {
-        resource: 'nodes',
+        resource: 'NetPeer',
         fetch: UPDATE,
         onSuccess: {
             notification: {
-                body: 'resources.nodes.notification.approved_success',
+                body: 'resources.NetPeer.notification.approved_success',
                 level: 'info',
             },
-            redirectTo: '/nodes',
+            redirectTo: false,
             basePath,
         },
         onFailure: {
             notification: {
-                body: 'resources.nodes.notification.approved_error',
+                body: 'resources.NetPeer.notification.approved_error',
                 level: 'warning',
             },
         },
@@ -37,19 +37,19 @@ export const reviewReject = (id, data, basePath) => ({
     type: REVIEW_REJECT,
     payload: { id, data: { ...data, status: 'rejected' }, basePath },
     meta: {
-        resource: 'nodes',
+        resource: 'NetPeer',
         fetch: UPDATE,
         onSuccess: {
             notification: {
-                body: 'resources.nodes.notification.rejected_success',
+                body: 'resources.NetPeer.notification.rejected_success',
                 level: 'info',
             },
-            redirectTo: '/nodes',
+            redirectTo: false,
             basePath,
         },
         onFailure: {
             notification: {
-                body: 'resources.nodes.notification.rejected_error',
+                body: 'resources.NetPeer.notification.rejected_error',
                 level: 'warning',
             },
         },

@@ -2,9 +2,9 @@ import React from 'react';
 import {
     Show, TabbedShowLayout, Tab,Edit,EditButton,
     FormTab, TabbedForm, ReferenceField,
-    ReferenceInput, SelectInput, RichTextField,
-    DateField, Responsive, SimpleList, List, Create, Datagrid, TextField,
-    ShowButton, LongTextInput, TextInput
+    ReferenceInput, SelectInput, 
+    Responsive, SimpleList, List, Create, Datagrid, TextField,
+    TextInput
 } from 'react-admin/lib';
 import ApproveButton from './ApproveButton';
 
@@ -72,7 +72,7 @@ export const NodeShow = (props) => (
 
 export const NodeCreate = (props) => (
     <Create {...props}>
-        <TabbedForm>
+        <TabbedForm  redirect="list">
             <FormTab label="resources.Network.tabs.tab1">
                 <TextInput source="nodename" />
                 <TextInput source="seedip" />
@@ -109,7 +109,7 @@ export const NodeEdit = props => (
             <FormTab label="resources.Network.tabs.tab1">
                 <TextField source="nodename" />
                 <TextField source="seedip" />
-                <TextField source="rtGraph" />
+                <TextInput source="rtGraph" />
             </FormTab>
 
             <FormTab label="resources.Network.tabs.tab6">

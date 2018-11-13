@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
 import { Admin, Resource } from 'react-admin/lib';
 
-import { CertList, CertShow } from './components/cert';
 import { KeypairList, KeypairShow, KeypairEdit, KeypairCreate } from './components/keypair';
-import { AccountList, AccountEdit, AccountCreate } from './components/account';
 import { TransList, TransShow, TransCreate } from './components/transaction';
-import { NetworkList, NetworkShow,  NetworkEdit, NetworkCreate } from './components/network';
-import { NodeList, NodeEdit, NodeShow, NodeCreate } from './components/node';
+import { NetworkList, NetworkShow, NetworkEdit, NetworkCreate } from './components/network';
+import { NodeList, NodeEdit, NodeShow, NodeCreate } from './components/netpeer';
 import { BlockList, BlockShow } from './components/block';
-import { FileList, FileCreate ,FileShow} from './components/file';
+import { FileList, FileCreate, FileShow } from './components/file';
 
-import CertIcon from '@material-ui/icons/Description';
 import KeypairIcon from '@material-ui/icons/VpnKey';
-import AccountIcon from '@material-ui/icons/Group';
 import TransIcon from '@material-ui/icons/Cached';
 import NetworkIcon from '@material-ui/icons/GroupWork';
 import NodeIcon from '@material-ui/icons/Computer';
@@ -26,9 +22,10 @@ import chineseMessages from './i18n/cn';
 
 //import  dataProvider from './dataprovider/data-provider'
 import buildGraphQLProvider from './adaptator';
-import  fakeDataProvider from './dataprovider/fdp'
+import fakeDataProvider from './dataprovider/fdp'
 import indexDataProvider from './dataprovider/ra-data-indexdb'
 import addUploadCapabilities from './dataprovider/addUploadFeature';
+import createRealtimeSaga from "./createRealtimeSaga";
 
 
 const messages = {
@@ -36,19 +33,6 @@ const messages = {
     en: englishMessages,
 }
 const i18nProvider = locale => messages[locale];
-
-/*const App = () => (
-    <Admin title="RepChain基础服务" locale="cn" i18nProvider={i18nProvider} dashboard={Dashboard} 
-    dataProvider={dataProvider} authProvider={authProvider}>
-        <Resource name="certs" list={CertList}  show={CertShow} icon={CertIcon}/>
-        <Resource name="keypairs" list={KeypairList}  edit={KeypairEdit} create={KeypairCreate} icon={KeypairIcon}/>
-        <Resource name="accounts" list={AccountList}  edit={AccountEdit} create={AccountCreate} icon={AccountIcon}/>
-        <Resource name="networks" list={NetworkList}  show={NetworkShow} create={NetworkCreate} icon={NetworkIcon}/>
-        <Resource name="nodes" list={NodeList}  show={NodeShow} create={NodeCreate} icon={NodeIcon}/>
-        <Resource name="Block" list={BlockList}  show={BlockShow}  icon={BlockIcon}/>
-        <Resource name="transactions" list={TransList}  show={TransShow} create={TransCreate} icon={TransIcon}/>
-    </Admin>
-);*/
 
 
 
@@ -59,25 +43,27 @@ class App extends Component {
     }
     componentDidMount() {
         buildGraphQLProvider({
-            clientOptions: { uri: 'http://192.168.31.190:4466/' }
-          }).then(dataProvider => {
-              const upDataProvider = addUploadCapabilities(dataProvider)
-               this.setState({
-                    dataProvider: (type, resource, params) => {
-                        if(resource==='keypairs')
-                            return addUploadCapabilities(indexDataProvider)(type, resource, params);
-                            //return fakeDataProvider(type, resource, params);
-                        else
-                            return upDataProvider(type, resource, params);
-                    }   
-                }                
-               )
+            clientOptions: { uri: 'http://localhost:4466/' }
+        }).then(dataProvider => {
+            const upDataProvider = addUploadCapabilities(dataProvider)
+            const realTimeSaga = createRealtimeSaga(upDataProvider);
+            this.setState({
+                customSagas: realTimeSaga,
+                dataProvider: (type, resource, params) => {
+                    if (resource === 'keypairs')
+                        return addUploadCapabilities(indexDataProvider)(type, resource, params);
+                    //return fakeDataProvider(type, resource, params);
+                    else
+                        return upDataProvider(type, resource, params);
+                }
             }
+            )
+        }
         );
     }
 
     render() {
-        const { dataProvider } = this.state;
+        const { dataProvider,customSagas } = this.state;
 
         if (!dataProvider) {
             return <div>Loading</div>;
@@ -85,13 +71,14 @@ class App extends Component {
 
         return (
             <Admin dataProvider={dataProvider} title="RepChain基础服务" authProvider={authProvider}
-            locale="cn" i18nProvider={i18nProvider} dashboard={Dashboard} >
-                <Resource name="keypairs" list={KeypairList} show={KeypairShow} edit={KeypairEdit} create={KeypairCreate} icon={KeypairIcon}/>
-                <Resource name="Network" list={NetworkList}   edit={NetworkEdit} show={NetworkShow}  create={NetworkCreate} icon={NetworkIcon}/>
-                <Resource name="NetPeer" list={NodeList} edit={NodeEdit} show={NodeShow} create={NodeCreate} icon={NodeIcon}/>
-                 <Resource name="Block" list={BlockList}  show={BlockShow}  icon={BlockIcon}/>
-                 <Resource name="Transaction" list={TransList}  show={TransShow} create={TransCreate} icon={TransIcon}/>
-                 <Resource name="File" list={FileList}   show={FileShow} create={FileCreate} icon={AttachIcon}/>
+                customSagas={[customSagas]}
+                locale="cn" i18nProvider={i18nProvider} dashboard={Dashboard} >
+                <Resource name="keypairs" list={KeypairList} show={KeypairShow} edit={KeypairEdit} create={KeypairCreate} icon={KeypairIcon} />
+                <Resource name="Network" list={NetworkList} edit={NetworkEdit} show={NetworkShow} create={NetworkCreate} icon={NetworkIcon} />
+                <Resource name="NetPeer" list={NodeList} edit={NodeEdit} show={NodeShow} create={NodeCreate} icon={NodeIcon} />
+                <Resource name="Block" list={BlockList} show={BlockShow} icon={BlockIcon} />
+                <Resource name="Transaction" list={TransList} show={TransShow} create={TransCreate} icon={TransIcon} />
+                <Resource name="File" list={FileList} show={FileShow} create={FileCreate} icon={AttachIcon} />
             </Admin>
         );
     }

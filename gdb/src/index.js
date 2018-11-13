@@ -1,14 +1,15 @@
 const { GraphQLServer } = require('graphql-yoga')
 const { Prisma } = require('prisma-binding')
-const protobuf = require("protobufjs")
-const {EventTube} = require('rclink')
-const {saveBlock} = require('./sync')
 
-const fs =require('fs')
+const {startSyncPush, startSyncPull} = require('./sync')
+const cfg = require('config');
+
+const fs = require('fs')
 const mkdirp = require('mkdirp');
 const shortid = require('shortid');
 const lowdb = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
+
 
 const uploadDir = './uploads'
 const db = new lowdb(new FileSync('db.json'))
@@ -89,42 +90,55 @@ const resolvers = {
   },
 }
 
-const pdb = new Prisma({
+const prisma = new Prisma({
   typeDefs: 'src/generated/prisma.graphql', // the auto-generated GraphQL schema of the Prisma API
-  endpoint: 'http://localhost:4466', // the endpoint of the Prisma API
-  debug: true, // log all GraphQL queries & mutations sent to the Prisma API
+  endpoint: cfg.get('Prisma.endpoint'), // the endpoint of the Prisma API
+  debug: false, // log all GraphQL queries & mutations sent to the Prisma API
   // secret: 'mysecret123', // only needed if specified in `database/prisma.yml`
 });
+
+const gql = require('graphql-tag');
+// A subscription query to get changes for author with parametrised id 
+// using $id as a query variable
+const SUBSCRIBE_QUERY = gql`
+subscription netPeer {
+  netPeer {
+    mutation
+    node {
+      id
+      nodename
+      seedip
+      status
+    }
+  }
+}
+`;
+
+const { subscribe } = require('./subscribe');
+subscribe(cfg.get('Prisma.url_subscribe'), SUBSCRIBE_QUERY, function (eventData) {
+  console.log(JSON.stringify(eventData, null, 2));
+}, function (err) {
+  console.log(err);
+});
+
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
+  resolverValidationOptions: {
+    requireResolversForResolveType: false
+  },
   context: req => ({
     ...req,
-    db: pdb,
+    db: prisma,
   }),
 })
 
 
-function startEvents() {
-  var Message,Block;
-  protobuf.load("protos/peer.proto").then(function(root) {
-    Message = root.lookupType("rep.protos.Event");
-    Block = root.lookupType("rep.protos.Block");
-    var et = new EventTube('ws://localhost:8081/event',function(evt){
-      var msg = Message.decode(evt.data);
-      //出块通知 TODO 确保块内全部交易写入
-      if (msg.action == 2 && msg.from != 'Block') {
-        var blk =  msg.blk;
-        saveBlock(blk,pdb)
-      }
-      //TODO 调用pdb to mutation createBlock
-    })            
-  });
-} 
- 
-//startEvents();      
+
+startSyncPush(cfg.get('RepChain.default.url_subscribe'),prisma);
+startSyncPull(cfg.get('RepChain.default.url_api'),prisma,100);
 
 //TODO 通过rclink restAPI主动请求高度，请求本地缺失block,调用pdb to mutation createBlock
 //TODO 前端react admin 通过graphql检索、分页、排序数据
 //TODO 前端react admin 订阅graphql,主动刷新
-server.start(() => console.log('Server is running on http://localhost:4000'))
+server.start(() => console.log('Server is running on '+server.options.port))

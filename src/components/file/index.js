@@ -1,5 +1,8 @@
 import React from "react";
+import UploadSaveButton from './UploadSaveButton';
+
 import {
+  FormDataConsumer,
   ShowButton,
   Show,
   SimpleShowLayout,
@@ -12,11 +15,9 @@ import {
   Responsive,
   SimpleList,
   List,
-  Edit,
   Create,
   Datagrid,
   TextField,
-  EditButton,
   DisabledInput,
   SimpleForm,
   TextInput
@@ -24,7 +25,7 @@ import {
 
 const FileFilter = props => (
   <Filter {...props}>
-    <TextInput label="name" source="name" alwaysOn />
+    <TextInput label="title" source="title_contains" alwaysOn />
   </Filter>
 );
 
@@ -59,24 +60,20 @@ const FileTitle = ({ record }) => {
   return <span> {record ? `"${record.id}"` : ""}</span>;
 };
 
-const PostCreateToolbar = props => (
-  <Toolbar {...props}>
-      <SaveButton
-          label="确定"
-          redirect="list"
-          submitOnEnter={true}
-      />
-  </Toolbar>
-);
-
-
 export const FileCreate = props => (
   <Create {...props}>
-    <SimpleForm toolbar={<PostCreateToolbar />}>
+    <SimpleForm toolbar={null}>
       <DisabledInput source="id" />
       <FileInput multiple source="pictures">
         <FileField source="src" title="title" />
       </FileInput>
+      <FormDataConsumer>
+        {
+          ({ formData, ...rest }) => (
+            <UploadSaveButton record={formData} />
+          )
+        }
+      </FormDataConsumer>
     </SimpleForm>
   </Create>
 );
@@ -86,7 +83,8 @@ export const FileShow = props => (
     <SimpleShowLayout>
       <TextField source="id" />
       <TextField source="title" />
-      
+      <TextField source="size" />
+      <FileField source="url" title="title" />
     </SimpleShowLayout>
   </Show>
 );

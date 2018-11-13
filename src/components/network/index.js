@@ -7,11 +7,8 @@ import {
   TabbedForm,
   ReferenceInput,
   Edit,
-  UrlField,
-  RichTextField,
   ReferenceField,
   SelectInput,
-  ImageField,
   Responsive,
   SimpleList,
   List,
@@ -19,10 +16,9 @@ import {
   Datagrid,
   TextField,
   EditButton,
-  LongTextInput,
   TextInput
 } from "react-admin/lib";
-import ApproveButton from "../node/ApproveButton";
+import ApproveButton from "../netpeer/ApproveButton";
 
 export const NetworkList = props => (
   <List {...props} bulkActions={false}>
@@ -38,6 +34,9 @@ export const NetworkList = props => (
           <TextField source="id" />
           <TextField source="name" />
           <TextField source="seedip" />
+          <TextField source="blockCount" />
+          <TextField source="transCount" />
+          <TextField source="syncHeight" />          
           <EditButton />
         </Datagrid>
       }
@@ -82,7 +81,7 @@ export const NetworkShow = props => (
 
 export const NetworkCreate = props => (
   <Create {...props}>
-    <TabbedForm>
+    <TabbedForm  redirect="list">
       <FormTab label="resources.Network.tabs.tab1">
         <TextInput source="name" />
         <TextInput source="seedip" />
