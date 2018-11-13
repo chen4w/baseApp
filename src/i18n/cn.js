@@ -91,7 +91,10 @@ export default {
                 seedip:'种子节点IP地址',
                 rtGraph:'实时图URL',
                 name: '名称',
-                created: '生成时间'
+                created: '生成时间',
+                transCount: '交易总数',
+                blockCount: '区块高度',
+                syncHeight: '同步高度'
             }
         },
         Transaction: {

@@ -29,7 +29,8 @@ function startSyncPull(api_url, prisma) {
     //启动pull方式的区块数据同步
     var h_sync = 0;
     const ra = new RestAPI(api_url);
-    getNetInfo(prisma).then(net0 => {
+    //获得当前同步高度
+    getNetInfo(api_url, prisma).then(net0 => {
         console.log(net0)
         pullBlock(ra, net0.syncHeight, prisma, net0.id);    
     })
@@ -51,7 +52,7 @@ function pullBlock(ra, h, prisma, netId) {
         prisma.exists.Block({ preHash: prevHash }).then(b_exist => {
             console.log('b_exist:' + b_exist)
             if (!b_exist) {
-                saveBlock(blk, prisma);
+                saveBlock(blk, prisma,netId);
             } else {
                 console.log('block[' + prevHash + '] exists.')
             }

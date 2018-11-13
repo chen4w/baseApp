@@ -1,5 +1,7 @@
 const ECODE_BIN = 'binary';
 const ECODE_HEX = 'hex';
+const NET_DEFAULT = "DEFAULT_NET";
+const { RestAPI } = require('./rclink/rest')
 
 function updateNetInfo(prisma, info, netId) {
   prisma.mutation.updateNetwork({
@@ -8,28 +10,43 @@ function updateNetInfo(prisma, info, netId) {
   });
 }
 
-async function getNetInfo(prisma, netName) {
-  const name = netName || "DEFAULT_NET";
+var default_NetId;
+var blockCount = 0;
+var transCount = 0;
+
+async function getNetInfo(api_url,prisma, netName) {
+  const ra = new RestAPI(api_url);
+  await ra.chaininfo().then(ci=>{
+    blockCount = parseInt(ci.result.height);
+    transCount = parseInt(ci.result.totalTransactions);
+  });
+  //检索组网记录，如果不存在创建之
+  const name = netName || NET_DEFAULT;
   var nets, net0;
   await prisma.query.networks({ where: { name: name } }).then(result => {
     nets = result
   }).catch(err => console.log(err));
 
   if (nets.length > 0) {
+    default_NetId = nets[0].id;
     return nets[0];
   } else {
     await prisma.mutation.createNetwork({
       data: {
         name: name,
         syncHeight: 1,
-        seedip: ""
+        seedip: "",
+        blockCount: 0,
+        transCount: 0
       }
     }).then(result => { net0 = result }).catch(err => console.log(err));
+    default_NetId = net0.id;
     return net0;
   }
 }
 
-async function saveBlock(blk, prisma) {
+
+async function saveBlock(blk, prisma, netId) {
   var blk_data = {
     hash: Buffer.from(blk.stateHash).toString(ECODE_BIN),
     transCount: blk.transactions.length,
@@ -67,6 +84,15 @@ async function saveBlock(blk, prisma) {
       }
     )
     //console.log(tx_data)
+  }
+  //来自push
+  if(!netId){
+    blockCount += 1;
+    transCount += blk.transactions.length;
+    updateNetInfo(
+      prisma,
+      { blockCount: blockCount, transCount: transCount },
+      default_NetId)  
   }
   //console.log(blk_data)  
 }
