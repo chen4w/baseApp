@@ -17,28 +17,29 @@ const styles = theme => ({
         borderRadius: '50%',
         backgroundColor: "#33cccc"
     },
-    title:{
+    title: {
         paddingTop: 40,
+        color: 'white',
+        textAlign: 'center',
+    },
+    description: {
+        textAlign: 'center',
     }
+
 });
 
 
-function PaperSheet(props) {
-    const { classes } = props;
-
-    return (
-        <div >
-            <Paper className={classes.root} square={false}>
-                <Typography className={classes.title} variant="title" component="h3">
-                    1234567
-                 </Typography>
-            </Paper>
-        </div>
-    );
-}
-
-PaperSheet.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
+const PaperSheet = ({ label, value, classes }) => (
+    <div >
+        <Paper className={classes.root} square={false}>
+            <Typography className={classes.title} variant="title" component="h3">
+              {value}
+            </Typography>
+        </Paper>
+        <Typography className={classes.description} variant="caption" noWrap={true}>
+           {label}
+        </Typography>
+    </div>
+)
 
 export default withStyles(styles)(PaperSheet);

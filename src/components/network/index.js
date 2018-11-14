@@ -38,7 +38,7 @@ export const NetworkList = props => (
           <TextField source="seedip" />
           <TextField source="blockCount" />
           <TextField source="transCount" />
-          <TextField source="syncHeight" />          
+          <TextField source="syncHeight" />
           <EditButton />
         </Datagrid>
       }
@@ -47,22 +47,25 @@ export const NetworkList = props => (
 );
 
 const NetworkTitle = ({ record }) => {
-  return <span> {record ? `"${record.name}"` : ""}</span>;
+  return <span> 组网{record ? ` "${record.name}"` : ""}</span>;
 };
 
-export const NetworkShow = props => (
-  <NetSummary/>
-);
+export const NetworkShow = (props) => (
+  <Show actions={false} {...props}>
+    <NetSummary {...props} />
+  </Show>
+)
+
 
 export const NetworkCreate = props => (
   <Create {...props}>
-    <TabbedForm  redirect="list">
+    <TabbedForm redirect="list">
       <FormTab label="resources.Network.tabs.tab1">
         <TextInput source="name" />
         <TextInput source="seedip" />
       </FormTab>
       <FormTab label="resources.Network.tabs.tab2">
-      <ReferenceInput
+        <ReferenceInput
           label="创世块文件"
           source="genesisBlock.id"
           reference="File"
@@ -84,14 +87,14 @@ export const NetworkCreate = props => (
 );
 
 export const NetworkEdit = props => (
-  <Edit {...props}>
+  <Edit title={<NetworkTitle/>} {...props}>
     <TabbedForm>
       <FormTab label="resources.Network.tabs.tab1">
         <TextInput source="name" />
         <TextInput source="seedip" />
       </FormTab>
       <FormTab label="resources.Network.tabs.tab2">
-      <ReferenceInput
+        <ReferenceInput
           label="创世块文件"
           source="genesisBlock.id"
           reference="File"
@@ -99,7 +102,7 @@ export const NetworkEdit = props => (
           <SelectInput optionText="title" />
         </ReferenceInput>
       </FormTab>
-      
+
       <FormTab label="resources.Network.tabs.tab4">
         <ReferenceInput
           label="信任证书列表"

@@ -1,33 +1,31 @@
 import React from 'react';
-import AvtarItem from './avtarItem';
+import PaperItem from './paperItem';
+import PerItem from './perItem';
+
 import Card from '@material-ui/core/Card';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = {
-    card: {
-        float: 'left',
-        margin: '-20px 20px 0 15px',
-        zIndex: 100,
-        borderRadius: 3,
-    },
-    icon: {
-        float: 'right',
-        width: 54,
-        height: 54,
-        padding: 14,
-        color: '#fff',
-    },
+    flex: { display: 'flex' },
+    flexColumn: { display: 'flex', flexDirection: 'column' , margin:50},
+    leftCol: { flex: 1, marginRight: '1em' },
+    rightCol: { flex: 1, marginLeft: '1em' },
+    singleCol: { marginTop: '2em', marginBottom: '2em' },
 };
 
-const NetSummary = ({ Icon, classes, bgColor }) => (
-    <Card className={classes.card} style={{ backgroundColor: bgColor }}>
-       <AvtarItem />
-       <CircularProgress className={classes.progress} variant="static" value={75}size={100}>
-            3332/3234342
-       </CircularProgress>
-    </Card>
+
+const NetSummary = ({ classes, bgColor,record }) => 
+(
+        <div style={styles.flexColumn}>
+            <div style={styles.flex}>
+                <PaperItem label="区块高度" value={record.blockCount} />
+                <PaperItem label="交易数" value={record.transCount} />
+                <PaperItem label="在网节点" value="5"  />
+                <PaperItem label="TPS" value="10"  />
+                <PerItem  label="同步高度" value={record.syncHeight}  total={record.blockCount}/>
+            </div>
+        </div>
 );
 
 export default withStyles(styles)(NetSummary);
