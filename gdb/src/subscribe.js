@@ -18,17 +18,14 @@ const createSubscriptionObservable = (wsurl, query, variables) => {
     return execute(link, { query: query, variables: variables });
 };
 
-function subscribe(ws_url,gql_query,func_cb, func_err) {
+function CustomSubscribe(ws_url,gql_query,func_cb, func_err) {
     const subscriptionClient = createSubscriptionObservable(
         ws_url, // GraphQL endpoint
         gql_query,                                       // Subscription query
         {}                                                // Query variables
-    );
-    subscriptionClient.subscribe(eventData => {
-        // Do something on receipt of the event
+    ).subscribe((eventData)=>{
         func_cb(eventData);
-    }, (err) => {
-        console.log("---Received event error---: "+err);
+    },(err)=>{
         if (func_err) {
             func_err(err)
         }
@@ -36,4 +33,4 @@ function subscribe(ws_url,gql_query,func_cb, func_err) {
 }
 //subtest();
 
-module.exports.subscribe = subscribe;
+module.exports.CustomSubscribe = CustomSubscribe;

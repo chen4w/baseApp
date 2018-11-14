@@ -8,5 +8,15 @@
     "Prisma": {
         "endpoint": "http://localhost:4466",
         "url_subscribe": "ws://localhost:4466/"
-      }
+      },
+    "NodeService":{
+        "ValidServicPath":":8081/web/g1.html",
+        "RepChainSetupPath-win":"E:\\iscas\\repchain",
+        "RepChainSetupPath-linux":"/home/iscas/repchain",
+        "keyFileSuffix":".jks",
+        "DownloadFileServiceName":"getFile",
+        "FileServerPort":"5000",
+        "UploadBaseFileDir":"../public",
+        "UploadMiddleFileDir":"/uploads/"
+    }
   }

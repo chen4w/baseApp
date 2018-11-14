@@ -3,6 +3,7 @@
 var fs = require('fs');
 var path = require('path');
 var count = 1;
+
 function getFileForfileType(req, res, pdb,filedir){
     var ftype = req.params.filetype;
     var aid = req.params.attchmentid;
@@ -37,7 +38,7 @@ function getFileForfileType(req, res, pdb,filedir){
           });
     }else if(ftype == 'mainchain-certlist-file'){
         pdb.query.networks({where:{
-            name:aid
+            seedip:aid
           }}, `{ id certList{id url} }`
         ).then((data) => {
             var  certlistfileid = '';
@@ -50,7 +51,7 @@ function getFileForfileType(req, res, pdb,filedir){
           });
     }else if(ftype == 'mainchain-gensis-file'){
         pdb.query.networks({where:{
-            name:aid
+            seedip:aid
           }}, `{ id genesisBlock{id url} }`
         ).then((data) => {
             var  genesisfileid = '';
