@@ -51,7 +51,7 @@ const NetworkTitle = ({ record }) => {
 };
 
 export const NetworkShow = (props) => (
-  <Show actions={false} {...props}>
+  <Show actions={null} {...props}>
     <NetSummary {...props} />
   </Show>
 )

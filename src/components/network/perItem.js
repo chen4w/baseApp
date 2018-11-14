@@ -36,17 +36,25 @@ const styles = theme => ({
 
 });
 
-const PaperSheet = ({ label, value, total, classes }) => (
+const PaperSheet = ({ label, value, total, classes })  => {
+    const font_size =["display3","display2","display2","display1","headline"];
+    const font_top = [15,25,30,35,40];
+    let len = value.length;
+    let fsize = (len<=font_size.length)? font_size[len-1]:"title";
+    let ftop =  (len<=font_size.length)? font_top[len-1]: 40;
+    
+    return (
     <div >
         <CircularProgress className={classes.fabProgress}  variant="static" value={value*100/total} size={100} />
         <Paper className={classes.root} square={false}>
-            <Typography className={classes.title} variant="title" component="h3">
+            <Typography className={classes.title} variant={fsize} style={{paddingTop:ftop}}>
             {value}
             </Typography>
         </Paper>
-        <Typography className={classes.description} variant="caption" component="h4" noWrap={true}>
+        <Typography className={classes.description} variant="subheading">
             {label}
         </Typography>
     </div>
 )
+    }
 export default withStyles(styles)(PaperSheet);
