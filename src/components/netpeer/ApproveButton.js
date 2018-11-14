@@ -12,13 +12,16 @@ import {
 } from './reviewActions';
 
 const styles = {
-    accepted: {
+    started: {
         color: 'green',
     },
     starting:{
         color: '#3f51b5'
     },
-    rejected: {
+    stopping:{
+        color: 'yellow'
+    },
+    stopped: {
         color: 'red',
     },
 };
@@ -40,21 +43,21 @@ class ApproveButton extends Component {
             <span>
                 <IconButton
                     onClick={this.handleApprove}
-                    disabled={record.status === 'starting'}
+                    disabled={record.status === 'starting' || record.status === 'started'}
                 >
                     <ThumbUp
                         className={
-                            record.status === 'starting' ? classes.starting : ''
+                            record.status === 'started' ? classes.starting : ''
                         }
                     />
                 </IconButton>
                 <IconButton
                     onClick={this.handleReject}
-                    disabled={record.status === 'rejected'}
+                    disabled={record.status === 'stopping' || record.status === 'stopped'}
                 >
                     <ThumbDown
                         className={
-                            record.status === 'rejected' ? classes.rejected : ''
+                            record.status === 'stopped' ? classes.rejected : ''
                         }
                     />
                 </IconButton>

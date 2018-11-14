@@ -10,7 +10,6 @@ const shortid = require('shortid');
 const lowdb = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
 
-
 const uploadDir = './uploads'
 const db = new lowdb(new FileSync('db.json'))
 
@@ -97,30 +96,6 @@ const prisma = new Prisma({
   // secret: 'mysecret123', // only needed if specified in `database/prisma.yml`
 });
 
-const gql = require('graphql-tag');
-// A subscription query to get changes for author with parametrised id 
-// using $id as a query variable
-const SUBSCRIBE_QUERY = gql`
-subscription netPeer {
-  netPeer {
-    mutation
-    node {
-      id
-      nodename
-      seedip
-      status
-    }
-  }
-}
-`;
-
-const { subscribe } = require('./subscribe');
-subscribe(cfg.get('Prisma.url_subscribe'), SUBSCRIBE_QUERY, function (eventData) {
-  console.log(JSON.stringify(eventData, null, 2));
-}, function (err) {
-  console.log(err);
-});
-
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
@@ -131,9 +106,7 @@ const server = new GraphQLServer({
     ...req,
     db: prisma,
   }),
-})
-
-
+});
 
 startSyncPush(cfg.get('RepChain.default.url_subscribe'),prisma);
 startSyncPull(cfg.get('RepChain.default.url_api'),prisma,100);

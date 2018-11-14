@@ -35,7 +35,7 @@ export const REVIEW_REJECT_SUCCESS = 'REVIEW_REJECT_SUCCESS';
 
 export const reviewReject = (id, data, basePath) => ({
     type: REVIEW_REJECT,
-    payload: { id, data: { ...data, status: 'rejected' }, basePath },
+    payload: { id, data: { ...data, status: 'stopping' }, basePath },
     meta: {
         resource: 'NetPeer',
         fetch: UPDATE,
