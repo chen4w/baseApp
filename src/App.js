@@ -63,16 +63,20 @@ class App extends Component {
     }
 
     render() {
-        const { dataProvider,customSagas } = this.state;
+        const { dataProvider, customSagas } = this.state;
 
         if (!dataProvider) {
             return <div>Loading</div>;
         }
 
         return (
-            <Admin dataProvider={dataProvider} title="RepChain基础服务" authProvider={authProvider}
+            <Admin dataProvider={dataProvider}
+                title="My Custom Admin"
+                authProvider={authProvider}
                 customSagas={[customSagas]}
-                locale="cn" i18nProvider={i18nProvider} dashboard={Dashboard} >
+                locale="cn" 
+                i18nProvider={i18nProvider} 
+                dashboard={Dashboard} >
                 <Resource name="keypairs" list={KeypairList} show={KeypairShow} edit={KeypairEdit} create={KeypairCreate} icon={KeypairIcon} />
                 <Resource name="Network" list={NetworkList} edit={NetworkEdit} show={NetworkShow} create={NetworkCreate} icon={NetworkIcon} />
                 <Resource name="NetPeer" list={NodeList} edit={NodeEdit} show={NodeShow} create={NodeCreate} icon={NodeIcon} />

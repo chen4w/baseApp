@@ -1,4 +1,6 @@
 import React from "react";
+import NetSummary from "./summary";
+
 import {
   Show,
   TabbedShowLayout,
@@ -49,34 +51,7 @@ const NetworkTitle = ({ record }) => {
 };
 
 export const NetworkShow = props => (
-  <Show title={<NetworkTitle />} {...props}>
-    <TabbedShowLayout>
-      <Tab label="resources.Network.tabs.tab1">
-        <TextField source="id" />
-        <TextField source="name" />
-        <TextField source="seedip" />
-      </Tab>
-      <Tab label="resources.Network.tabs.tab2">
-        <ReferenceField
-          label="创世块文件"
-          source="genesisBlock.id"
-          reference="File"
-        >
-          <TextField source="title" />
-        </ReferenceField>
-      </Tab>
-      
-      <Tab label="resources.Network.tabs.tab4">
-        <ReferenceField
-          label="信任证书列表"
-          source="certList.id"
-          reference="File"
-        >
-          <TextField source="title" />
-        </ReferenceField>
-      </Tab>
-    </TabbedShowLayout>
-  </Show>
+  <NetSummary/>
 );
 
 export const NetworkCreate = props => (
