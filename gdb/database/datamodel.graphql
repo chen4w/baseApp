@@ -37,7 +37,8 @@ type Network {
   certList: File @relation(name: "NWCerts")
   syncHeight: Int
   blockCount: Int
-  transCount: Int,
+  transCount: Int
+  tps: Float
 }
 
 type NetPeer {

@@ -19,9 +19,10 @@ const NetSummary = ({ classes, bgColor,record }) =>
 (
         <div style={styles.flexColumn}>
             <div style={styles.flex}>
+            <PaperItem label="组网节点" value="5"  />
                 <PaperItem label="区块高度" value={record.blockCount} />
                 <PaperItem label="交易数" value={record.transCount} />
-                <PaperItem label="组网节点" value="5"  />
+                <PaperItem label="TPS" value={record.tps} />
                 <PerItem  label="同步高度" value={record.syncHeight}  total={record.blockCount}/>
             </div>
         </div>

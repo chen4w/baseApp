@@ -45,7 +45,7 @@ async function getNetInfo(api_url,prisma, netName) {
   }
 }
 
-
+var tm_lastBlock = null;
 async function saveBlock(blk, prisma, netId) {
   var blk_data = {
     hash: Buffer.from(blk.stateHash).toString(ECODE_BIN),
@@ -85,13 +85,28 @@ async function saveBlock(blk, prisma, netId) {
     )
     //console.log(tx_data)
   }
-  //来自push
+  //来自push,新出区块
   if(!netId){
     blockCount += 1;
     transCount += blk.transactions.length;
+    var tm_now = process.uptime();
+    var tps =0;
+    if(tm_lastBlock!==null){
+      var tm_span = tm_now - tm_lastBlock;
+      console.log('tm_span:'+ tm_span);
+
+      if(tm_span < 10000){
+        tps = blk.transactions.length / tm_span;
+        tps = Math.floor(tps * 10) / 10 
+      }
+    }
+    console.log('tps:'+ tps);
+    tm_lastBlock = tm_now;
+    console.log('tm_lastBlock:'+ tm_lastBlock);
+
     updateNetInfo(
       prisma,
-      { blockCount: blockCount, transCount: transCount },
+      { blockCount: blockCount, transCount: transCount, tps: tps},
       default_NetId)  
   }
   //console.log(blk_data)  
