@@ -22,7 +22,6 @@ import chineseMessages from './i18n/cn';
 
 //import  dataProvider from './dataprovider/data-provider'
 import buildGraphQLProvider from './adaptator';
-import fakeDataProvider from './dataprovider/fdp'
 import indexDataProvider from './dataprovider/ra-data-indexdb'
 import addUploadCapabilities from './dataprovider/addUploadFeature';
 import createRealtimeSaga from "./createRealtimeSaga";
@@ -49,10 +48,10 @@ class App extends Component {
             const realTimeSaga = createRealtimeSaga(upDataProvider);
             this.setState({
                 customSagas: realTimeSaga,
+                title: "sdfdfdfsdfds",
                 dataProvider: (type, resource, params) => {
                     if (resource === 'keypairs')
                         return addUploadCapabilities(indexDataProvider)(type, resource, params);
-                    //return fakeDataProvider(type, resource, params);
                     else
                         return upDataProvider(type, resource, params);
                 }
@@ -63,7 +62,7 @@ class App extends Component {
     }
 
     render() {
-        const { dataProvider, customSagas } = this.state;
+        const { dataProvider, customSagas,title } = this.state;
 
         if (!dataProvider) {
             return <div>Loading</div>;
@@ -71,7 +70,7 @@ class App extends Component {
 
         return (
             <Admin dataProvider={dataProvider}
-                title="My Custom Admin"
+                title = {title}
                 authProvider={authProvider}
                 customSagas={[customSagas]}
                 locale="cn" 

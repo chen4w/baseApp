@@ -1,9 +1,6 @@
 import React from 'react';
 import PaperItem from './paperItem';
 import PerItem from './perItem';
-
-import Card from '@material-ui/core/Card';
-
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = {

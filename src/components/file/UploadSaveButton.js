@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button, Icon } from '@material-ui/core';
+import { Button} from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
-import { showNotification, UPDATE, fetchStart, fetchEnd } from 'react-admin';
+import { showNotification, fetchStart, fetchEnd } from 'react-admin';
 import { push } from 'react-router-redux';
-import indexDataProvider from '../../dataprovider/ra-data-indexdb'
 
 const xhr = new XMLHttpRequest();
 const uploadFile = file => {

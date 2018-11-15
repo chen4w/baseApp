@@ -3,13 +3,10 @@ import NetSummary from "./summary";
 
 import {
   Show,
-  TabbedShowLayout,
-  Tab,
   FormTab,
   TabbedForm,
   ReferenceInput,
   Edit,
-  ReferenceField,
   SelectInput,
   Responsive,
   SimpleList,
@@ -20,7 +17,6 @@ import {
   EditButton,
   TextInput
 } from "react-admin/lib";
-import ApproveButton from "../netpeer/ApproveButton";
 
 export const NetworkList = props => (
   <List {...props} bulkActions={false}>
