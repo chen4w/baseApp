@@ -19,7 +19,7 @@
     "hocon-parser": "^1.0.1",
     "js-file-download": "^0.4.4",
     "jsrsasign": "^8.0.12",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.11",
     "material-ui-pickers": "^1.0.1",
     "nodemon": "^1.18.4",
     "pluralize": "^7.0.0",
