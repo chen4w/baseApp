@@ -36,6 +36,8 @@ type Network {
   genesisBlock:  File @relation(name: "NWGenesis")
   certList: File @relation(name: "NWCerts")
   syncHeight: Int
+  lastBlockHash: String
+  lastBlockTime: Int
   blockCount: Int
   transCount: Int
   tps: Float
