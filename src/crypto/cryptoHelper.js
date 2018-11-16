@@ -19,9 +19,9 @@ import Jsrsasign from 'jsrsasign';
 import JsrsasignUtil from 'jsrsasign-util';
 import Uuidv1 from 'uuid/v1';
 import Moment from 'moment';
-import settings from '../setting'
 
-settings = new settings();
+const settings = require('config');
+
 
 getHashBytes = function (alg, data) {
     let hash = crypto.createHash(alg);
@@ -98,7 +98,7 @@ CreatePrvKeyByImport = function (prv_key_pem2hex, identity) {
 //Generate X509 PEM certificate signed by self
 //With keyPair info created within CreateKeyPair functionality
 GenCertificateWithPemPrvKey = function (password, user_info, prv_key_pem) {
-    let certificate_file_save_location = settings.certificate_file_location;
+    let certificate_file_save_location = settings.get('Crypto.certificate_file_location');
     if (!VerifyPrvKeyWithPass(prv_key_pem, password))
         throw new Error('解密私钥失败');
     let prv_key_obj = KEYUTIL.getKey(prv_key_pem, password);
@@ -131,7 +131,7 @@ GenCertificateWithPemPrvKey = function (password, user_info, prv_key_pem) {
 GenCertificateWithBinPrvkeyFile = function (password, user_info) {
 
     const identity = user_info.phone;
-    let prv_key_hex = JsrsasignUtil.readFileHexByBin(settings.prvkey_file_location + '/' + identity + '.prvkey');
+    let prv_key_hex = JsrsasignUtil.readFileHexByBin(settings.get('Crypto.prvkey_file_location') + '/' + identity + '.prvkey');
     let prv_key_pem = Jsrsasign.hextopem(prv_key_hex, 'ENCRYPTED PRIVATE KEY');
 
     return GenCertificateWithPemPrvKey(password, user_info, prv_key_pem);
