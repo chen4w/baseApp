@@ -89,9 +89,10 @@ class BlockStorager{
         await this.saveBlockForOnly(blk_data,blk);
         await this.refreshCache4Async(blk,blkHash);
         console.log('save block success,block height='+this.lastheight);
-        
+        return 1;
       }else{
         console.log('do not save ,current block is not next block,reset pull,please');
+        return 0;
       }
   }
 
@@ -116,9 +117,10 @@ class BlockStorager{
     var ctime = ~~blk.timestamp.seconds;
     //console.log('ctime='+ctime);
     var tm_span = ctime - this.lastBlockTime;
-
-    tps = blk.transactions.length / tm_span;
-    tps = Math.floor(tps * 10) / 10;
+    if(tm_span >  0){
+      tps = blk.transactions.length / tm_span;
+      tps = Math.floor(tps * 10) / 10;
+    }
     
     var net_data = { 
       syncHeight: ~~this.lastheight+1, 

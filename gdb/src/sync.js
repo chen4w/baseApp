@@ -18,19 +18,34 @@ class syncher{
         this.ws_url = ws_url;
         this.storage = new BlockStorager(prisma,this.api_url);
         this.storage.InitStorager();
+        this.isPulling = false;
+        this.isPush = false;
         return this;
     }
 
+
+
     startSyncPush() {
+        var self = this;
         //启动push方式的实时区块数据同步
         new EventTube(this.ws_url, function (evt) {
+            //console.log('+++++++entry evt');
             var msg = Message.decode(evt.data);
+            //console.log('$$$$$$$$$$message decode');
             //出块通知 TODO 确保块内全部交易写入
+            //console.log(JSON.stringify(msg));
+            //console.log('msg.action='+msg.action+',msg.to='+msg.to);
             if (msg.action == 2 && msg.from != 'Block') {
-                var blk = msg.blk;
-                if(this.isPulling)
-                if(this.cacheBlks.length < this.cacheMaxLength){
-                    this.cacheBlks.push(blk);
+                //var blk = msg.blk;
+                //console.log('########block');
+                if(!self.isPulling){
+                    //console.log('push start pull');
+                    self.push = false;
+                    self.StartPullBlocks();
+                    console.log('push start pull ok');
+                }else{
+                    self.push = true;
+                    console.log('pushing');
                 }
             }
         })
@@ -40,6 +55,7 @@ class syncher{
         //启动pull方式的区块数据同步
         //console.log(JSON.stringify(this.storage));
         //console.log(this);
+        this.isPulling = true;
         var h_local = this.storage.getLastSyncHeight();
         console.log('h_local='+h_local);
         var h_remote = await this.getNetWorkHeight();
@@ -50,24 +66,25 @@ class syncher{
                 const ra = new RestAPI(this.api_url);
                 console.log('prepare pull height='+(h_local+1));
                 this.pullBlock(ra, h_local+1, h_remote);
+            }else{
+                this.isPulling = false;
+                console.log('StartPullBlocks,pull finish');
             }
         }
-            
-        
-        
     }
 
     async getNetWorkHeight(){
         const ra = new RestAPI(this.api_url);
         var ci = await ra.chaininfo();
         if(ci != null){
+            console.log(JSON.stringify(ci));
             return ci.result.height;
         }else{
             return -1;
         }
     }
 
-    async BlockToStore(res,h,maxh){
+    async BlockToStore(res){
         const buf = res;
         var blk = Block.decode(buf);
 
@@ -75,17 +92,21 @@ class syncher{
         var sha = crypto.createHash('SHA256');
         var blkHash = sha.update(buf).digest('hex'); 
 
-        await this.storage.saveBlock(blk,blkHash);
+        return await this.storage.saveBlock(blk,blkHash);
     }
 
     async pullBlock(ra, h, maxh) {
-        console.log('prepare pull height='+(h));        
+        console.log('pullBlock,prepare pull height='+(h));        
         var res = await ra.blockStream(h);
-        await this.BlockToStore(res,h,maxh);
-            
-        if(h <= maxh){
-            this.pullBlock(ra, h + 1, maxh );
-        }        
+        var r = await this.BlockToStore(res);
+        if(r == 1){
+            if(h < maxh){
+                this.pullBlock(ra, h + 1, maxh );
+            }else{
+                this.isPulling = false;
+                console.log('pullBlock,pull finish');
+            }
+        }    
     }
 
     
