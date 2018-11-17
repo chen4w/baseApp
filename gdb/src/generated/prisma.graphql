@@ -1475,6 +1475,8 @@ type Network implements Node {
   genesisBlock: File
   certList: File
   syncHeight: Int
+  lastBlockHash: String 
+  lastBlockTime: Int
   blockCount: Int
   transCount: Int
   tps: Float
@@ -1494,6 +1496,8 @@ input NetworkCreateInput {
   name: String!
   seedip: String!
   syncHeight: Int
+  lastBlockHash: String 
+  lastBlockTime: Int
   blockCount: Int
   transCount: Int
   tps: Float
@@ -1523,6 +1527,8 @@ enum NetworkOrderByInput {
   seedip_ASC
   seedip_DESC
   syncHeight_ASC
+  lastBlockHash_ASC 
+  lastBlockTime_ASC
   syncHeight_DESC
   blockCount_ASC
   blockCount_DESC
@@ -1541,6 +1547,8 @@ type NetworkPreviousValues {
   name: String!
   seedip: String!
   syncHeight: Int
+  lastBlockHash: String 
+  lastBlockTime: Int
   blockCount: Int
   transCount: Int
   tps: Float
@@ -1589,6 +1597,8 @@ input NetworkUpdateDataInput {
   name: String
   seedip: String
   syncHeight: Int
+  lastBlockHash: String 
+  lastBlockTime: Int
   blockCount: Int
   transCount: Int
   tps: Float
@@ -1600,6 +1610,8 @@ input NetworkUpdateInput {
   name: String
   seedip: String
   syncHeight: Int
+  lastBlockHash: String 
+  lastBlockTime: Int
   blockCount: Int
   transCount: Int
   tps: Float
@@ -1611,6 +1623,8 @@ input NetworkUpdateManyMutationInput {
   name: String
   seedip: String
   syncHeight: Int
+  lastBlockHash: String 
+  lastBlockTime: Int
   blockCount: Int
   transCount: Int
   tps: Float

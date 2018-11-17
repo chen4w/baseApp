@@ -1,7 +1,7 @@
 const ECODE_BIN = 'binary';
 const ECODE_HEX = 'hex';
 const { RestAPI } = require('./rclink/rest');
-const {URL} = require('url');
+
 
 class BlockStorager{
 
@@ -9,6 +9,7 @@ class BlockStorager{
     this.prisma = prisma;
     this.default_NetId =  "";
     this.default_NetName = "DEFAULT_NET";
+    var URL = require('url');
     var p = URL.parse(pullUrl);
     this.seedip = p.hostname;
     console.log(this.seedip);
@@ -18,6 +19,15 @@ class BlockStorager{
     this.transCount = 0;
     this.lastBlockTime = 0;
     this.tps = 0.0;
+    return this;
+  }
+
+  getLastSyncHeight(){
+    return this.lastheight;
+  }
+
+  getLastBlockHash(){
+    return this.lastBlockHash;
   }
 
   async InitStorager() {
@@ -46,71 +56,52 @@ class BlockStorager{
     if(net != null){
       this.default_NetId = net.id;
       this.default_NetName = net.name;
-      this.lastheight = net.syncHeight;
+      if(isNaN(net.syncHeight)){
+        this.lastheight = 0;
+      }else   this.lastheight = net.syncHeight;
       this.lastBlockHash = net.lastBlockHash;
-      this.transCount = net.transCount;
+      if(isNaN(net.transCount)){
+        this.transCount = 0;
+      }else   this.transCount = net.transCount;
+      
       this.lastBlockTime = net.lastBlockTime;
-      this.tps = net.tps;
+      if(isNaN(net.tps)){
+        this.tps = 0;
+      }else   this.tps = net.tps;
+      
     }
     console.log('storager init finish');
-  }
-
-  getLastHeight(){
-    retrun this.lastheight;
-  }
-
-  getLastBlockHash(){
-    return this.lastBlockHash;
-  }
+  };
 
 
   async saveBlock(blk,blkHash){
-    var blk_data = {
-      hash: blkHash,
-      transCount: blk.transactions.length,
-      timeStamp: new Date(blk.timestamp.seconds * 1000 - 8 * 3600 * 1000),
-      preHash: null
-    };
-    if (blk.previousBlockHash)
-      blk_data.preHash = Buffer.from(blk.previousBlockHash).toString(ECODE_BIN);
-    if(blk_data.preHash == this.lastBlockHash){
-      //可以保存,继续检查该块是否存在
-      this.prisma.exists.Block({ hash: blk_data.hash }).then(b_exist => {
-        if (!b_exist) {
-            //不存在可以继续保存，先保存交易，后保存块
-            saveTranscations(txs,0).then(rdata => {
-              if(rdata.result){
-                await prisma.mutation.createBlock(
-                  {
-                    data: blk_data,
-                  }
-                );
-                refreshCache(blk,blkHash);
-                console.log('save block success,block height='+this.lastheight);
-                return true;
-              }else{
-                console.log('save transcation failed');
-                return false;
-              }
-            });
-        } else {
-          //已经存在了，修改最后缓存信息
-          refreshCache(blk,blkHash);
-          console.log('block[' + prevHash + '] exists.');
-          return true;
-        }
-      });
-    }else{
-      console.log('do not save ,current block is not next block,reset pull,please');
-      return false;
-    }
+      var blk_data = {
+        hash: blkHash,
+        transCount: blk.transactions.length,
+        timeStamp: new Date(blk.timestamp.seconds * 1000 - 8 * 3600 * 1000),
+        preHash: null
+      };
+      if (blk.previousBlockHash)
+        blk_data.preHash = Buffer.from(blk.previousBlockHash).toString(ECODE_BIN);
+      //判断当前的块是不是能够接到最后一个块
+      if(blk_data.preHash == this.lastBlockHash){
+        //可以保存,继续检查该块是否存在
+        await this.saveBlockForOnly(blk_data,blk);
+        await this.refreshCache4Async(blk,blkHash);
+        console.log('save block success,block height='+this.lastheight);
+        
+      }else{
+        console.log('do not save ,current block is not next block,reset pull,please');
+      }
   }
 
-  async refreshCache(blk,blkHash){
-    var net_data = statisNetData(blk,blkHash);
+  async refreshCache4Async(blk,blkHash){
+    //console.log('netid='+this.default_NetId);
+    var net_data = this.statisNetData(blk,blkHash);
+    //console.log(net_data);
     await this.prisma.mutation.updateNetwork({
-      where: { id: netId },
-      data: info
+      where: { id: this.default_NetId },
+      data: net_data
     });
     this.lastheight = net_data.syncHeight;
     this.lastBlockHash = net_data.lastBlockHash;
@@ -121,18 +112,18 @@ class BlockStorager{
 
   statisNetData(blk,blkHash){
     var tps =0.0;
-    var ctime = blk.timestamp.toInt();
+    //console.log('blk.timestamp='+JSON.stringify( blk.timestamp));
+    var ctime = ~~blk.timestamp.seconds;
+    //console.log('ctime='+ctime);
     var tm_span = ctime - this.lastBlockTime;
-    //if(tm_span < 10000){
-      tps = blk.transactions.length / tm_span;
-      tps = Math.floor(tps * 10) / 10;
-    /*}else{
-      tps = this.tps;
-    }*/
 
+    tps = blk.transactions.length / tm_span;
+    tps = Math.floor(tps * 10) / 10;
+    
     var net_data = { 
-      syncHeight: this.syncHeight+1, 
-      transCount: this.transCount + blk.transactions.length, 
+      syncHeight: ~~this.lastheight+1, 
+      blockCount:~~this.lastheight+1, 
+      transCount: ~~this.transCount + blk.transactions.length, 
       lastBlockHash:blkHash,
       lastBlockTime:ctime,
       tps: tps
@@ -140,56 +131,46 @@ class BlockStorager{
     return net_data;
   }
   
-  saveTranscations(txs,cidx){
-    return new Promise(function (resolve, reject) {
-      if(txs != null && txs.length > cidx){
-        var tx = txs[cidx];
-        var tx_data = {
-          txId: tx.txid,
-          blockId: blk_data.hash,
-          type: tx.type,
-          cname: tx.payload.chaincodeID.name,
-          action: tx.payload.ctorMsg.function,
-          ipt: tx.payload.ctorMsg.args.toString(),
-          signature: tx.signature.toString(ECODE_HEX),
-          //nodejs只支持到毫秒
-          timeStamp: new Date(tx.timestamp.seconds * 1000 - 8 * 3600 * 1000),
-          blocker: { connect: { id: obj_blk.id } }
-        };
-
-        this.prisma.exists.Transaction({ txId: tx.txid }).then(t_exist => {
-          if (!t_exist) {
-            this.prisma.mutation.createTransaction(
-              {
-                data: tx_data,
-              }
-            ).then((data)=>{
-              if((txs.length - 1) == cidx){
-                resolve({result: true});
-              }else{
-                saveTranscations(txs,cidx+1);
-              }
-            }).catch(err => {
-                console.log(err);
-                resolve({result: false});
-            });
-          } else {
-              console.log('transcation[' + tx.txid + '] exists.');
-              if((txs.length - 1) == cidx){
-                resolve({result: true});
-              }else{
-                this.saveTranscations(txs,cidx+1);
-              }
-          }
-        }).catch(err =>{
-          console.log(err);
-          resolve({result: false});
-        });
-      }else{
-        resolve({result: true});
-      }
+  async saveBlockForOnly(blk_data,blk){
+    var isexist = await this.prisma.exists.Block({ hash: blk_data.hash });
+    if (!isexist) {
+      var blk_obj = await this.prisma.mutation.createBlock(
+        {
+          data: blk_data,
+        }
+      );
+      await this.saveTranscations(blk.transactions,blk_data.hash,blk_obj.id);
     }
   }
+
+  async saveTranscations(txs,blkHash,blkid){
+    for (var cidx = 0; cidx < txs.length; cidx++) {
+      var tx = txs[cidx];
+      var tx_data = {
+        txId: tx.txid,
+        blockId: blkHash,
+        type: tx.type,
+        cname: tx.payload.chaincodeID.name,
+        action: tx.payload.ctorMsg.function,
+        ipt: tx.payload.ctorMsg.args.toString(),
+        signature: tx.signature.toString(ECODE_HEX),
+        //nodejs只支持到毫秒
+        timeStamp: new Date(tx.timestamp.seconds * 1000 - 8 * 3600 * 1000),
+        blocker: { connect: { id: blkid } }
+      };
+      var isexist = await this.prisma.exists.Transaction({ txId: tx.txid });
+      if(!isexist){
+        await this.prisma.mutation.createTransaction(
+          {
+            data: tx_data,
+          }
+        );
+      }
+      console.log('save trans i='+cidx+',txid='+tx_data.txId);
+    }
+  }
+
+  
 }
 
 exports.BlockStorager = BlockStorager;
