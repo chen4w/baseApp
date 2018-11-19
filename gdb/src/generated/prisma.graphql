@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Mon Nov 19 2018 10:18:35 GMT+0800 (GMT+08:00)
+# timestamp: Tue Nov 20 2018 06:17:02 GMT+0800 (中国标准时间)
 
 type AggregateBlock {
   count: Int!
@@ -185,9 +185,11 @@ input BlockUpdateManyMutationInput {
   timeStamp: DateTime
 }
 
-input BlockUpdateOneRequiredWithoutTransactionsInput {
+input BlockUpdateOneWithoutTransactionsInput {
   create: BlockCreateWithoutTransactionsInput
   connect: BlockWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
   update: BlockUpdateWithoutTransactionsDataInput
   upsert: BlockUpsertWithoutTransactionsInput
 }
@@ -2244,7 +2246,7 @@ type Transaction implements Node {
   signature: String
   blockId: String
   timeStamp: DateTime
-  blocker: Block!
+  blocker: Block
 }
 
 """A connection to a list of items."""
@@ -2266,7 +2268,7 @@ input TransactionCreateInput {
   signature: String
   blockId: String
   timeStamp: DateTime
-  blocker: BlockCreateOneWithoutTransactionsInput!
+  blocker: BlockCreateOneWithoutTransactionsInput
 }
 
 input TransactionCreateManyWithoutBlockerInput {
@@ -2379,7 +2381,7 @@ input TransactionUpdateInput {
   signature: String
   blockId: String
   timeStamp: DateTime
-  blocker: BlockUpdateOneRequiredWithoutTransactionsInput
+  blocker: BlockUpdateOneWithoutTransactionsInput
 }
 
 input TransactionUpdateManyMutationInput {

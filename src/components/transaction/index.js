@@ -1,8 +1,8 @@
 import React from "react";
 import {
-  Show,SelectInput,
+  Show, SelectInput,
   TabbedShowLayout,
-  Tab,
+  Tab, RadioButtonGroupInput,
   FormTab,
   TabbedForm,
   Filter,
@@ -44,6 +44,7 @@ export const TransList = props => (
         <Datagrid>
           <DateField source="timeStamp" showTime />
           <TextField source="txId" />
+          <TextField source="type" />
           <TextField source="cname" />
           <ShowButton />
         </Datagrid>
@@ -79,10 +80,18 @@ export const TransShow = props => (
 export const TransCreate = props => (
   <Create {...props}>
     <TabbedForm>
-      <FormTab label="resources.Transaction.tabs.tab2">
-        <TextInput source="cid" defaultValue="0bfbe2faf858dd495e712fb0f897dd66082f06b879fa21a80fcc2acbc199b8d7"/>
-        <TextInput source="action" defaultValue="房源发布"/>
-        <LongTextInput source="ipt" defaultValue=""/>
+      <FormTab label="resources.Transaction.tabs.tab1">
+        <RadioButtonGroupInput source="type"
+          options={{
+            defaultselected: '2'
+          }}
+          choices={[
+            { id: '1', name: 'CHAINCODE_DEPLOY' },
+            { id: '2', name: 'CHAINCODE_INVOKE' }
+          ]} />
+        <TextInput source="cid" defaultValue="0bfbe2faf858dd495e712fb0f897dd66082f06b879fa21a80fcc2acbc199b8d7" />
+        <TextInput source="action" defaultValue="房源发布" />
+        <LongTextInput source="ipt" defaultValue="" />
         <SelectInput
           source="keypair"
           choices={[

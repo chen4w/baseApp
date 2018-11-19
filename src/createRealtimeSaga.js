@@ -23,7 +23,7 @@ const apolloClient = new ApolloClient({
 const observeRequest = dataProvider => (type, resource, params) => {
     // Filtering so that only posts are updated in real time
     var s_gql = null;
-    if (resource == 'NetPeer') {
+    if (resource === 'NetPeer') {
         s_gql = gql`
         subscription netPeer {
             netPeer {
@@ -37,7 +37,7 @@ const observeRequest = dataProvider => (type, resource, params) => {
             }
         }
         `
-    }else if (resource == 'Network') {
+    }else if (resource === 'Network') {
         s_gql = gql`
         subscription network {
         network {
