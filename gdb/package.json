@@ -8,6 +8,7 @@
     "prisma": "prisma"
   },
   "dependencies": {
+    "eventproxy":"1.0.0",
     "apollo-link": "^1.2.3",
     "apollo-link-ws": "^1.0.9",
     "config": "^2.0.1",

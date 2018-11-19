@@ -1,7 +1,7 @@
 const { GraphQLServer } = require('graphql-yoga')
 const { Prisma } = require('prisma-binding')
 
-const {startSyncPush, startSyncPull} = require('./sync')
+const {syncher} = require('./sync')
 const cfg = require('config');
 
 const fs = require('fs')
@@ -108,9 +108,23 @@ const server = new GraphQLServer({
   }),
 });
 
-startSyncPush(cfg.get('RepChain.default.url_subscribe'),prisma);
-startSyncPull(cfg.get('RepChain.default.url_api'),prisma,100);
+//startSyncPush(cfg.get('RepChain.default.url_subscribe'),prisma);
+//startSyncPull(cfg.get('RepChain.default.url_api'),prisma,100);
 
+var sync = new syncher(prisma,cfg.get('RepChain.default.url_api'),
+                      cfg.get('RepChain.default.url_subscribe'));
+
+function startSynch(){
+    sync.StartPullBlocks();
+}
+
+setTimeout(() => {
+  sync.StartPullBlocks();
+}, 2000);
+
+setTimeout(() => {
+  sync.startSyncPush();
+}, 10000);
 //TODO 通过rclink restAPI主动请求高度，请求本地缺失block,调用pdb to mutation createBlock
 //TODO 前端react admin 通过graphql检索、分页、排序数据
 //TODO 前端react admin 订阅graphql,主动刷新

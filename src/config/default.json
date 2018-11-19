@@ -1,0 +1,6 @@
+{
+  "Crypto": {
+    "certificate_file_location": "../users",
+    "prvkey_file_location": "../users"
+  }
+}

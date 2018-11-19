@@ -1,13 +1,12 @@
 import React from "react";
+import NetSummary from "./summary";
+
 import {
   Show,
-  TabbedShowLayout,
-  Tab,
   FormTab,
   TabbedForm,
   ReferenceInput,
   Edit,
-  ReferenceField,
   SelectInput,
   Responsive,
   SimpleList,
@@ -18,7 +17,6 @@ import {
   EditButton,
   TextInput
 } from "react-admin/lib";
-import ApproveButton from "../netpeer/ApproveButton";
 
 export const NetworkList = props => (
   <List {...props} bulkActions={false}>
@@ -36,7 +34,7 @@ export const NetworkList = props => (
           <TextField source="seedip" />
           <TextField source="blockCount" />
           <TextField source="transCount" />
-          <TextField source="syncHeight" />          
+          <TextField source="syncHeight" />
           <EditButton />
         </Datagrid>
       }
@@ -45,49 +43,25 @@ export const NetworkList = props => (
 );
 
 const NetworkTitle = ({ record }) => {
-  return <span> {record ? `"${record.name}"` : ""}</span>;
+  return <span> 组网{record ? ` "${record.name}"` : ""}</span>;
 };
 
-export const NetworkShow = props => (
-  <Show title={<NetworkTitle />} {...props}>
-    <TabbedShowLayout>
-      <Tab label="resources.Network.tabs.tab1">
-        <TextField source="id" />
-        <TextField source="name" />
-        <TextField source="seedip" />
-      </Tab>
-      <Tab label="resources.Network.tabs.tab2">
-        <ReferenceField
-          label="创世块文件"
-          source="genesisBlock.id"
-          reference="File"
-        >
-          <TextField source="title" />
-        </ReferenceField>
-      </Tab>
-      
-      <Tab label="resources.Network.tabs.tab4">
-        <ReferenceField
-          label="信任证书列表"
-          source="certList.id"
-          reference="File"
-        >
-          <TextField source="title" />
-        </ReferenceField>
-      </Tab>
-    </TabbedShowLayout>
+export const NetworkShow = (props) => (
+  <Show  title={<NetworkTitle/>}  actions={null} {...props}>
+    <NetSummary {...props} />
   </Show>
-);
+)
+
 
 export const NetworkCreate = props => (
   <Create {...props}>
-    <TabbedForm  redirect="list">
+    <TabbedForm redirect="list">
       <FormTab label="resources.Network.tabs.tab1">
         <TextInput source="name" />
         <TextInput source="seedip" />
       </FormTab>
       <FormTab label="resources.Network.tabs.tab2">
-      <ReferenceInput
+        <ReferenceInput
           label="创世块文件"
           source="genesisBlock.id"
           reference="File"
@@ -109,14 +83,14 @@ export const NetworkCreate = props => (
 );
 
 export const NetworkEdit = props => (
-  <Edit {...props}>
+  <Edit title={<NetworkTitle/>} {...props}>
     <TabbedForm>
       <FormTab label="resources.Network.tabs.tab1">
         <TextInput source="name" />
         <TextInput source="seedip" />
       </FormTab>
       <FormTab label="resources.Network.tabs.tab2">
-      <ReferenceInput
+        <ReferenceInput
           label="创世块文件"
           source="genesisBlock.id"
           reference="File"
@@ -124,7 +98,7 @@ export const NetworkEdit = props => (
           <SelectInput optionText="title" />
         </ReferenceInput>
       </FormTab>
-      
+
       <FormTab label="resources.Network.tabs.tab4">
         <ReferenceInput
           label="信任证书列表"

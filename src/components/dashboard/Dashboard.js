@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Responsive, ViewTitle } from 'react-admin/lib';
+import { Responsive, ViewTitle,Title } from 'react-admin/lib';
 import DashUsers from './dashUser';
 import DashUKeypairs from './dashKeypair';
 import DashTransaction from './dashTransaction';
@@ -41,6 +41,7 @@ class Dashboard extends Component {
                 }
                 medium={
                     <div style={styles.flexColumn}>
+                     <Title title="Linkel BADS" />
                         <div style={styles.flex}>
                             <DashUKeypairs value={nbNewOrders} />
                             <DashUsers value={nbNewOrders} />
