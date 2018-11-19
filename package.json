@@ -28,7 +28,7 @@
     "ra-data-graphql-simple": "^2.2.2",
     "ra-data-json-server": "^2.1.1",
     "ra-data-simple-rest": "^2.1.1",
-    "ra-language-chinese": "^2.0.1",
+    "ra-language-chinese": "^2.0.5",
     "ra-language-english": "^2.0.2",
     "ra-realtime": "^2.4.1",
     "rclink": "^1.0.4",

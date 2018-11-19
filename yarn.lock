@@ -7456,10 +7456,10 @@ ra-data-simple-rest@^2.1.1:
     query-string "~5.1.1"
     react-admin "^2.1.5"
 
-ra-language-chinese@^2.0.1:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/ra-language-chinese/-/ra-language-chinese-2.0.4.tgz#6917796b55e2d43a5a75a113d3263c8ac518a86e"
-  integrity sha512-atmIOYDNYHF1n+Z9aJWm9XlELl7TdwVVzrMfG32nPJO+udJdsQXtZueh9jYolSonmbDTi53fnWeziQIsEH09UA==
+ra-language-chinese@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/ra-language-chinese/-/ra-language-chinese-2.0.5.tgz#51f029c1d1a18bb36c6608fd299587f29a511748"
+  integrity sha512-BwaqQWDNhQX/Ufe5Ki2GrJ3k5OGmH8dKrQn/npvRik80+tpN4Ew4vbyS8o4E74B4UfSJ8Sj10YdB0bA6FZnAOA==
 
 ra-language-english@^2.0.2:
   version "2.1.3"
