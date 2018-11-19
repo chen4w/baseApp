@@ -18,7 +18,9 @@ class BlockStorager{
     this.lastheight = 0;
     this.transCount = 0;
     this.lastBlockTime = 0;
+    this.blockCount = 0;
     this.tps = 0.0;
+    this.tm_lastBlock=process.uptime();
     return this;
   }
 
@@ -28,6 +30,16 @@ class BlockStorager{
 
   getLastBlockHash(){
     return this.lastBlockHash;
+  }
+
+  setBlockCount(blkcount){
+    this.blockCount = ~~blkcount;
+    console.log(this.blockCount);
+  }
+
+  setBlockInc(){
+    this.blockCount = this.blockCount+1;
+    console.log(this.blockCount);
   }
 
   async InitStorager() {
@@ -112,7 +124,7 @@ class BlockStorager{
   }
 
   statisNetData(blk,blkHash){
-    var tps =0.0;
+    /*var tps =0.0;
     //console.log('blk.timestamp='+JSON.stringify( blk.timestamp));
     var ctime = ~~blk.timestamp.seconds;
     //console.log('ctime='+ctime);
@@ -120,11 +132,28 @@ class BlockStorager{
     if(tm_span >  0){
       tps = blk.transactions.length / tm_span;
       tps = Math.floor(tps * 10) / 10;
-    }
+    }*/
     
+    var tps =0;
+    var ctime = ~~blk.timestamp.seconds;
+    var tm_now = process.uptime();
+    if(this.tm_lastBlock!==null){
+      var tm_span = tm_now - this.tm_lastBlock;
+      console.log('tm_span:'+ tm_span);
+
+      if(tm_span < 10000){
+        tps = blk.transactions.length / tm_span;
+        tps = Math.floor(tps * 10) / 10 
+      }
+    }
+    console.log('tps:'+ tps);
+    this.tm_lastBlock = tm_now;
+
+    console.log('this.blockcount='+this.blockCount);
+
     var net_data = { 
       syncHeight: ~~this.lastheight+1, 
-      blockCount:~~this.lastheight+1, 
+      blockCount:this.blockCount, 
       transCount: ~~this.transCount + blk.transactions.length, 
       lastBlockHash:blkHash,
       lastBlockTime:ctime,
