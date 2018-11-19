@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Thu Nov 15 2018 08:54:33 GMT+0800 (中国标准时间)
+# timestamp: Mon Nov 19 2018 10:18:35 GMT+0800 (GMT+08:00)
 
 type AggregateBlock {
   count: Int!
@@ -1475,7 +1475,7 @@ type Network implements Node {
   genesisBlock: File
   certList: File
   syncHeight: Int
-  lastBlockHash: String 
+  lastBlockHash: String
   lastBlockTime: Int
   blockCount: Int
   transCount: Int
@@ -1496,7 +1496,7 @@ input NetworkCreateInput {
   name: String!
   seedip: String!
   syncHeight: Int
-  lastBlockHash: String 
+  lastBlockHash: String
   lastBlockTime: Int
   blockCount: Int
   transCount: Int
@@ -1527,9 +1527,11 @@ enum NetworkOrderByInput {
   seedip_ASC
   seedip_DESC
   syncHeight_ASC
-  lastBlockHash_ASC 
-  lastBlockTime_ASC
   syncHeight_DESC
+  lastBlockHash_ASC
+  lastBlockHash_DESC
+  lastBlockTime_ASC
+  lastBlockTime_DESC
   blockCount_ASC
   blockCount_DESC
   transCount_ASC
@@ -1547,7 +1549,7 @@ type NetworkPreviousValues {
   name: String!
   seedip: String!
   syncHeight: Int
-  lastBlockHash: String 
+  lastBlockHash: String
   lastBlockTime: Int
   blockCount: Int
   transCount: Int
@@ -1597,7 +1599,7 @@ input NetworkUpdateDataInput {
   name: String
   seedip: String
   syncHeight: Int
-  lastBlockHash: String 
+  lastBlockHash: String
   lastBlockTime: Int
   blockCount: Int
   transCount: Int
@@ -1610,7 +1612,7 @@ input NetworkUpdateInput {
   name: String
   seedip: String
   syncHeight: Int
-  lastBlockHash: String 
+  lastBlockHash: String
   lastBlockTime: Int
   blockCount: Int
   transCount: Int
@@ -1623,7 +1625,7 @@ input NetworkUpdateManyMutationInput {
   name: String
   seedip: String
   syncHeight: Int
-  lastBlockHash: String 
+  lastBlockHash: String
   lastBlockTime: Int
   blockCount: Int
   transCount: Int
@@ -1795,6 +1797,68 @@ input NetworkWhereInput {
 
   """All values greater than or equal the given value."""
   syncHeight_gte: Int
+  lastBlockHash: String
+
+  """All values that are not equal to given value."""
+  lastBlockHash_not: String
+
+  """All values that are contained in given list."""
+  lastBlockHash_in: [String!]
+
+  """All values that are not contained in given list."""
+  lastBlockHash_not_in: [String!]
+
+  """All values less than the given value."""
+  lastBlockHash_lt: String
+
+  """All values less than or equal the given value."""
+  lastBlockHash_lte: String
+
+  """All values greater than the given value."""
+  lastBlockHash_gt: String
+
+  """All values greater than or equal the given value."""
+  lastBlockHash_gte: String
+
+  """All values containing the given string."""
+  lastBlockHash_contains: String
+
+  """All values not containing the given string."""
+  lastBlockHash_not_contains: String
+
+  """All values starting with the given string."""
+  lastBlockHash_starts_with: String
+
+  """All values not starting with the given string."""
+  lastBlockHash_not_starts_with: String
+
+  """All values ending with the given string."""
+  lastBlockHash_ends_with: String
+
+  """All values not ending with the given string."""
+  lastBlockHash_not_ends_with: String
+  lastBlockTime: Int
+
+  """All values that are not equal to given value."""
+  lastBlockTime_not: Int
+
+  """All values that are contained in given list."""
+  lastBlockTime_in: [Int!]
+
+  """All values that are not contained in given list."""
+  lastBlockTime_not_in: [Int!]
+
+  """All values less than the given value."""
+  lastBlockTime_lt: Int
+
+  """All values less than or equal the given value."""
+  lastBlockTime_lte: Int
+
+  """All values greater than the given value."""
+  lastBlockTime_gt: Int
+
+  """All values greater than or equal the given value."""
+  lastBlockTime_gte: Int
   blockCount: Int
 
   """All values that are not equal to given value."""
