@@ -36,6 +36,7 @@ class syncher{
             //console.log(JSON.stringify(msg));
             //console.log('msg.action='+msg.action+',msg.to='+msg.to);
             if (msg.action == 2 && msg.from != 'Block') {
+                self.storage.setBlockInc();
                 //var blk = msg.blk;
                 //console.log('########block');
                 if(!self.isPulling){
@@ -55,22 +56,28 @@ class syncher{
         //启动pull方式的区块数据同步
         //console.log(JSON.stringify(this.storage));
         //console.log(this);
+        var self = this;
         this.isPulling = true;
         var h_local = this.storage.getLastSyncHeight();
         console.log('h_local='+h_local);
-        var h_remote = await this.getNetWorkHeight();
-        if(h_remote > -1){
-            console.log("remoteheight="+h_remote);
-            if(h_remote > h_local){
-                //需要拉取
-                const ra = new RestAPI(this.api_url);
-                console.log('prepare pull height='+(h_local+1));
-                this.pullBlock(ra, h_local+1, h_remote);
-            }else{
-                this.isPulling = false;
-                console.log('StartPullBlocks,pull finish');
+        
+            var h_remote = await this.getNetWorkHeight().catch(function(err){
+                self.isPulling = false;
+            });
+            if(h_remote > -1){
+                console.log("remoteheight="+h_remote);
+                if(h_remote > h_local){
+                    //需要拉取
+                    this.storage.setBlockCount(h_remote);
+                    const ra = new RestAPI(this.api_url);
+                    console.log('prepare pull height='+(h_local+1));
+                    this.pullBlock(ra, h_local+1, h_remote);
+                }else{
+                    this.isPulling = false;
+                    console.log('StartPullBlocks,pull finish');
+                }
             }
-        }
+        
     }
 
     async getNetWorkHeight(){
@@ -96,8 +103,11 @@ class syncher{
     }
 
     async pullBlock(ra, h, maxh) {
+        var self = this;
         console.log('pullBlock,prepare pull height='+(h));        
-        var res = await ra.blockStream(h);
+        var res = await ra.blockStream(h).catch(function(err){
+            self.isPulling = false;
+        });
         var r = await this.BlockToStore(res);
         if(r == 1){
             if(h < maxh){
