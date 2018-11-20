@@ -3,7 +3,7 @@ const { EventTube } = require('./rclink/events')
 const { BlockStorager} = require('./saveblock')
 const { RestAPI } = require('./rclink/rest')
 
-const root_proto = protobuf.loadSync("protos/peer.proto");//单步调试增加了gdb目录
+const root_proto = protobuf.loadSync("../public/protos/peer.proto");//单步调试增加了gdb目录
 const Message = root_proto.lookupType("rep.protos.Event");
 const Block = root_proto.lookupType("rep.protos.Block");
 const ECODE_BIN = 'binary';

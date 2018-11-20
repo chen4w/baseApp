@@ -31,7 +31,7 @@
     "ra-language-chinese": "^2.0.5",
     "ra-language-english": "^2.0.2",
     "ra-realtime": "^2.4.1",
-    "rclink": "^1.0.4",
+    "rclink": "^1.0.25",
     "react": "^16.4.1",
     "react-admin": "^2.1.1",
     "react-admin-date-inputs": "^1.1.0",
