@@ -6,8 +6,10 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { WebSocketLink } from 'apollo-link-ws';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import gql from 'graphql-tag';
+import settings from  './settings';
 
-const GRAPHQL_ENDPOINT = 'ws://localhost:4466';
+
+const GRAPHQL_ENDPOINT = settings.Prisma.url_subscribe;
 const wsClient = new SubscriptionClient(
     GRAPHQL_ENDPOINT, { reconnect: true }
 );
