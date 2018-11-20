@@ -81,17 +81,14 @@ export const TransCreate = props => (
   <Create {...props}>
     <TabbedForm>
       <FormTab label="resources.Transaction.tabs.tab1">
-        <RadioButtonGroupInput source="type"
-          options={{
-            defaultselected: '2'
-          }}
+        <RadioButtonGroupInput label="合约类型" source="type"   defaultValue={"2"}
           choices={[
-            { id: '1', name: 'CHAINCODE_DEPLOY' },
-            { id: '2', name: 'CHAINCODE_INVOKE' }
+            { id: "1", name: 'CHAINCODE_DEPLOY' },
+            { id: "2", name: 'CHAINCODE_INVOKE' }
           ]} />
-        <TextInput source="cid" defaultValue="0bfbe2faf858dd495e712fb0f897dd66082f06b879fa21a80fcc2acbc199b8d7" />
-        <TextInput source="action" defaultValue="房源发布" />
-        <LongTextInput source="ipt" defaultValue="" />
+        <TextInput source="cname" defaultValue="0bfbe2faf858dd495e712fb0f897dd66082f06b879fa21a80fcc2acbc199b8d7" />
+        <TextInput source="action" defaultValue="transfer" />
+        <LongTextInput source="ipt" defaultValue='{ "from" : "1GvvHCFZPajq5yVY44n7bdmSfv2MJ5LyLs", "to" : "1AqZs6vhcLiiTvFxqS5CEqMw6xWuX9xqyi", "amount" : 5 } ' />
         <SelectInput
           source="keypair"
           choices={[
@@ -100,6 +97,7 @@ export const TransCreate = props => (
             { id: "5fd5c2d622b658e9fca4406a8317ad2acdc82ae4", name: "2320512304" }
           ]}
         />
+        <TextInput label="密钥密码" source="keypair_pwd" defaultValue="1" type="password" />
       </FormTab>
     </TabbedForm>
   </Create>
