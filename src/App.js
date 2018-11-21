@@ -25,7 +25,7 @@ import buildGraphQLProvider from './adaptator';
 import indexDataProvider from './dataprovider/ra-data-indexdb'
 import addUploadCapabilities from './dataprovider/addUploadFeature';
 import createRealtimeSaga from "./createRealtimeSaga";
-
+import settings from  './settings';
 
 const messages = {
     cn: chineseMessages,
@@ -42,13 +42,12 @@ class App extends Component {
     }
     componentDidMount() {
         buildGraphQLProvider({
-            clientOptions: { uri: 'http://localhost:4466/' }
+            clientOptions: { uri: settings.Prisma.endpoint }
         }).then(dataProvider => {
             const upDataProvider = addUploadCapabilities(dataProvider)
             const realTimeSaga = createRealtimeSaga(upDataProvider);
             this.setState({
                 customSagas: realTimeSaga,
-                title: "sdfdfdfsdfds",
                 dataProvider: (type, resource, params) => {
                     if (resource === 'keypairs')
                         return addUploadCapabilities(indexDataProvider)(type, resource, params);

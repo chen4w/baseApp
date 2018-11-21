@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -39,7 +38,7 @@ const styles = theme => ({
 const PaperSheet = ({ label, value, total, classes })  => {
     const font_size =["display3","display2","display2","display1","headline"];
     const font_top = [15,25,30,35,40];
-    let len = value.length;
+    let len = value?(value+"").length:1;
     let fsize = (len<=font_size.length)? font_size[len-1]:"title";
     let ftop =  (len<=font_size.length)? font_top[len-1]: 40;
     

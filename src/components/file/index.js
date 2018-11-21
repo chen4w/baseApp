@@ -10,8 +10,6 @@ import {
   FileInput,
   FileField,
   Filter,
-  SaveButton,
-  Toolbar,
   Responsive,
   SimpleList,
   List,

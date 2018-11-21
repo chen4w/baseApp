@@ -11,7 +11,7 @@ const uploadFile = file => {
     var formData = new FormData();
     formData.append('file-to-upload', file.rawFile);
     xhr.open('POST', '/upload', true);
-    console.log(file.rawFile)
+    //console.log(file.rawFile)
     xhr.send(formData);
 }
 

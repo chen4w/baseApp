@@ -37,8 +37,8 @@ const adjustFormData = (type, resource, formData) => {
 
                 if(d.keypairImported){
                     const pemInfo = d.keypairImported.src;
-                    const prvKeyRex = /-*BEGIN.*\s+PRIVATE.*\s+KEY-*\r\n[\w+=\/\r\n]*-*END.*\s+PRIVATE.*\s+KEY-*\r\n/i;
-                    const certRex = /-*BEGIN.*\s+CERTIFICATE-*\r\n[\w+=\/\r\n]*-*END.*\s+CERTIFICATE-*\r\n/i;
+                    const prvKeyRex = /-*BEGIN.*\s+PRIVATE.*\s+KEY-*(\r\n)*[\w+=\/\r\n]*-*END.*\s+PRIVATE.*\s+KEY-*(\r\n)*/i;
+                    const certRex = /-*BEGIN.*\s+CERTIFICATE-*(\r\n)*[\w+=\/\r\n]*-*END.*\s+CERTIFICATE-*(\r\n)*/i;
                     prvKeyPEM = prvKeyRex.exec(pemInfo)[0];
                     certPEM = certRex.exec(pemInfo)[0];
                     const pubKeyObj = Crypto.ImportKey(certPEM);
@@ -72,11 +72,16 @@ const adjustFormData = (type, resource, formData) => {
                     d.kp.pubKeyPEM = pubKeyPEM
                     d.kp.sn = Crypto.GetHashVal(Crypto.GetHashVal(pubKeyPEM), 'RIPEMD160').toString('hex')
 
-                    // Todo: fix timestamp bug
                     const startUnixTime = parseInt(d.cert.validityStart.getTime() / 1000)
                     const endUnixTime = parseInt(d.cert.validityEnd.getTime() / 1000)
-                    certPEM = Crypto.CreateSelfSignedCertificate(d.cert.sn, d.cert.sigAlg, d.cert.distinguishName, 
-                        startUnixTime, endUnixTime, keypair)
+                    certPEM = Crypto.CreateSelfSignedCertificate({
+                        serialNumber: d.cert.sn, 
+                        sigAlg: d.cert.sigAlg, 
+                        DN: d.cert.distinguishName, 
+                        notBefore: startUnixTime, 
+                        notAfter: endUnixTime, 
+                        keypair: keypair
+                    });
                     d.cert.certPEM = certPEM
                     d.cert.validityStart = d.cert.validityStart.toISOString()
                     d.cert.validityEnd = d.cert.validityEnd.toISOString()
