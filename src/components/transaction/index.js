@@ -85,7 +85,7 @@ export const TransCreate = props => (
   <Create {...props}>
     <TabbedForm toolbar={null}>
       <FormTab label="resources.Transaction.tabs.tab1">
-        <RadioButtonGroupInput label="合约类型" source="type" defaultValue={"2"}
+        <RadioButtonGroupInput label="合约类型" source="type2" defaultValue={"2"}
           choices={[
             { id: "1", name: 'CHAINCODE_DEPLOY' },
             { id: "2", name: 'CHAINCODE_INVOKE' }
