@@ -73,7 +73,7 @@ export default (data, loggingEnabled = false) => {
             case GET_MANY:
                 return {
                     data: restServer.getAll(resource, {
-                        filter: { id: params.ids },
+                        filter: { "id": params.ids },
                     }),
                 };
             case GET_MANY_REFERENCE: {

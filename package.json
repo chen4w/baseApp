@@ -38,6 +38,7 @@
     "react-apollo": "^2.1.11",
     "react-dom": "^16.4.1",
     "react-scripts": "1.1.4",
+    "request-promise": "^4.2.2",
     "subscriptions-transport-ws": "^0.9.15",
     "typeface-roboto": "^0.0.54",
     "uuid": "^3.3.2"

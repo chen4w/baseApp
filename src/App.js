@@ -48,7 +48,6 @@ class App extends Component {
             const realTimeSaga = createRealtimeSaga(upDataProvider);
             this.setState({
                 customSagas: realTimeSaga,
-                title: "sdfdfdfsdfds",
                 dataProvider: (type, resource, params) => {
                     if (resource === 'keypairs')
                         return addUploadCapabilities(indexDataProvider)(type, resource, params);

@@ -48,9 +48,7 @@ export const TransList = props => (
       }
       medium={
         <Datagrid>
-          <DateField source="timeStamp" showTime />
           <TextField source="txId" />
-          <TextField source="type" />
           <TextField source="cname" />
           <ShowButton />
         </Datagrid>

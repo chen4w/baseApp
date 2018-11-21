@@ -43,35 +43,48 @@ const initData = {};
 */
 
 export default (type, resource, params) => {
-    const indexdbRest = new IndexDBRest("BAR", 1, schema, initData) 
+    const indexdbRest = new IndexDBRest("BAR", 1, schema, initData)
     log(type, resource, params)
 
     let adjustedFormData;
 
-    switch(type){
-        case GET_LIST: 
-            const {page, perPage} = params.pagination
+    switch (type) {
+        case GET_LIST:
+            const { page, perPage } = params.pagination
             const s = [params.sort.field, params.sort.order]
-            const r = [(page-1)*perPage, page*perPage - 1]  
+            const r = [(page - 1) * perPage, page * perPage - 1]
             const query = {
                 filter: adjustFormData(type, resource, params.filter),
                 sort: s,
                 range: r
             }
 
-            return indexdbRest.getCollection(resource, query).then(r => { return {
+            return indexdbRest.getCollection(resource, query).then(r => {
+                return {
                     data: r.result,
                     total: r.totalCount
                 }
             })
         case GET_ONE:
             const gID = parseInt(params.id, 10)
-            return indexdbRest.getOne(resource, gID).then(r => ({ data: r.result}))
+            return indexdbRest.getOne(resource, gID).then(r => ({ data: r.result }))
+            //c4w 11.21
+        case GET_MANY:           
+            return indexdbRest.getCollection(resource, {   
+                    filter:{id: ['in',params.ids] },
+                    sort: ['id','DESC'],
+                    range: [0,20]
+            }).then(r => {
+                return {
+                    data: r.result,
+                    total: r.totalCount
+                }
+            })
         case CREATE:
             let d = params.data
             adjustedFormData = adjustFormData(type, resource, d);
             return indexdbRest.create(resource, adjustedFormData)
-                .then(r => ({data: r.result}))
+                .then(r => ({ data: r.result }))
                 .catch(e => new Promise((_, reject) => {
                     reject(new Error("密钥对已存在！"));
                 }));
@@ -79,20 +92,20 @@ export default (type, resource, params) => {
         case UPDATE:
             const uID = parseInt(params.id, 10)
             let uData = params.data
-            
-            try{
+
+            try {
                 adjustedFormData = adjustFormData(type, resource, uData);
             }
-            catch(e){
+            catch (e) {
                 return new Promise((_, reject) => {
                     reject(e);
                 })
             }
 
-            return indexdbRest.update(resource, uID, adjustedFormData).then(r => ({data: r.result}))
+            return indexdbRest.update(resource, uID, adjustedFormData).then(r => ({ data: r.result }))
         case DELETE:
             const dID = parseInt(params.id, 10)
-            return indexdbRest.delete(resource, dID).then(r => ({data: r.result}))
+            return indexdbRest.delete(resource, dID).then(r => ({ data: r.result }))
         default:
             throw new Error(`Unsupported data provider request type ${type}`)
     }
