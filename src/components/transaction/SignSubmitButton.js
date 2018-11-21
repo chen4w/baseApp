@@ -61,6 +61,7 @@ class SignSubmitButton extends Component {
             record.txId = t.getTxMsg().txid;
             //record.timeStamp = new Date();
             this.dataProvider(CREATE, 'Transaction', { data: record })
+            showNotification('签名交易['+record.txId +']已提交到RepChain')
         } catch (e) {
             showNotification('' + e, 'warning')
         }
