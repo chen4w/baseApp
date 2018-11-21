@@ -44,8 +44,9 @@ class SignSubmitButton extends Component {
                 showNotification('' + e, 'warning')
             })
             .finally(fetchEnd)
+        let itype = parseInt(record.type2, 10);
         let t = new Transaction({
-            type: parseInt(record.type, 10), name: record.cname,
+            type: itype, name: record.cname,
             function: record.action, args: [record.ipt]
         })
         let txSignedBuffer = t.createSignedTransaction(prvKP, "ecdsa-with-SHA1")
@@ -57,7 +58,7 @@ class SignSubmitButton extends Component {
             xhr.open('POST', postURL, false);
             xhr.send(formData);
             //save record
-            record.type = parseInt(record.type, 10);
+            record.type = itype;
             record.txId = t.getTxMsg().txid;
             //record.timeStamp = new Date();
             this.dataProvider(CREATE, 'Transaction', { data: record })
