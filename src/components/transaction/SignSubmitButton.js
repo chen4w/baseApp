@@ -32,6 +32,9 @@ class SignSubmitButton extends Component {
         }
         );
     }
+    componentWillUnmount(){
+        window.removeEventListener("message", this.receiveMessage, false);       
+    }
     handleClick = async (p1) => {
         const { push, record, showNotification, fetchStart, fetchEnd } = this.props;
         const updatedRecord = { ...record };
@@ -64,7 +67,7 @@ class SignSubmitButton extends Component {
             //record.timeStamp = new Date();
             this.dataProvider(CREATE, 'Transaction', { data: record })
             showNotification('resources.Transaction.notification.send_success',
-            'info',{messageArgs:{txId:record.txId  }})
+                'info', { messageArgs: { txId: record.txId } })
             push('/Transaction');
         } catch (e) {
             showNotification('' + e, 'warning')
