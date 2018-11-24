@@ -60,6 +60,7 @@ class SignSubmitButton extends Component {
             //save record
             record.type = itype;
             record.txId = t.getTxMsg().txid;
+            record.signature = t.getTxMsg().signature.toString('hex');
             //record.timeStamp = new Date();
             this.dataProvider(CREATE, 'Transaction', { data: record })
             showNotification('resources.Transaction.notification.send_success',
