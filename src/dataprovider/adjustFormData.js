@@ -86,6 +86,36 @@ const adjustFormData = (type, resource, formData) => {
                     d.cert.validityStart = d.cert.validityStart.toISOString()
                     d.cert.validityEnd = d.cert.validityEnd.toISOString()
                 }
+            } 
+            else if(resource === 'certsImport') {
+                d.createdAt = new Date().toISOString();
+                d.createdAtLocale = new Date().toLocaleString();
+
+                let pubKeyPEM;
+                let certPEM;
+                if(d.certImported){
+                    const pemInfo = d.certImported.src;
+                    const certRex = /-*BEGIN.*\s+CERTIFICATE-*(\r\n)*[\w+=\/\r\n]*-*END.*\s+CERTIFICATE-*(\r\n)*/i;
+                    certPEM = certRex.exec(pemInfo)[0];
+                    const pubKeyObj = Crypto.ImportKey(certPEM);
+                    pubKeyPEM = Crypto.GetKeyPEM(pubKeyObj);
+
+                    d.cert = {alg: {name: pubKeyObj.type || 'RSA', param: pubKeyObj.curveName 
+                        || ((pubKeyObj.n && pubKeyObj.n.t === 40) ? 1024 : 2048)}};
+                    d.cert.pubKeyPEM = pubKeyPEM;
+                    d.cert.sn = Crypto.GetHashVal(Crypto.GetHashVal(pubKeyPEM), 'RIPEMD160').toString('hex')
+
+                    const cert = Crypto.ImportCertificate(certPEM);
+                    d.cert = {sn: parseInt(cert.getSerialNumberHex(), 16), sigAlg: cert.getSignatureAlgorithmField(),
+                        distinguishName: cert.getSubjectString(), 
+                        validityStart: new Date(cert.getNotBeforeUnixTimestamp() * 1000)
+                            .toISOString(),
+                        validityEnd: new Date(cert.getNotAfterUnixTimestamp() * 1000)
+                            .toISOString(), 
+                        certPEM: certPEM};
+                    
+                    delete d.certImported;
+                }
             }
             break;
         case UPDATE:

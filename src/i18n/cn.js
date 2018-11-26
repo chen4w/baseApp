@@ -211,6 +211,32 @@ export default {
                 },
             }
         },
+        certsImport: {
+            name: '证书',
+            tabs: {
+                tab1: '证书信息',
+                tab2: '证书PEM',
+                tab3: "证书注册参数"
+            },
+            fields: {
+                id: '序号',
+                usrname: '用户姓名',
+                phone: '用户手机号',
+                email: '用户邮箱',
+                desc: '备注',
+                import: '导入',
+                export: '导出',
+                createdAt: '生成时间',
+                cert: {
+                    sn: '证书标识',
+                    status: '证书状态',
+                    created: '生成时间',
+                    certPEM: 'pem格式',
+                    validityEnd: '有效期至'
+                },
+
+            }
+        },
         users: {
             name: '用户 |||| 用户列表',
             fields: {

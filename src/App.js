@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Admin, Resource } from 'react-admin/lib';
 
 import { KeypairList, KeypairShow, KeypairEdit, KeypairCreate } from './components/keypair';
+import { CertList, CertShow, CertCreate, CertEdit} from './components/cert';
 import { TransList, TransShow, TransCreate } from './components/transaction';
 import { NetworkList, NetworkShow, NetworkEdit, NetworkCreate } from './components/network';
 import { NodeList, NodeEdit, NodeShow, NodeCreate } from './components/netpeer';
@@ -9,6 +10,7 @@ import { BlockList, BlockShow } from './components/block';
 import { FileList, FileCreate, FileShow } from './components/file';
 
 import KeypairIcon from '@material-ui/icons/VpnKey';
+import CertIcon from '@material-ui/icons/CardMembership'
 import TransIcon from '@material-ui/icons/Cached';
 import NetworkIcon from '@material-ui/icons/GroupWork';
 import NodeIcon from '@material-ui/icons/Computer';
@@ -51,8 +53,9 @@ class App extends Component {
                 dataProvider: (type, resource, params) => {
                     if (resource === 'keypairs')
                         return addUploadCapabilities(indexDataProvider)(type, resource, params);
-                    else
-                        return upDataProvider(type, resource, params);
+                    if(resource === 'certsImport')
+                        return addUploadCapabilities(indexDataProvider)(type, resource, params);
+                    return upDataProvider(type, resource, params);
                 }
             }
             )
@@ -76,6 +79,7 @@ class App extends Component {
                 i18nProvider={i18nProvider} 
                 dashboard={Dashboard} >
                 <Resource name="keypairs" list={KeypairList} show={KeypairShow} edit={KeypairEdit} create={KeypairCreate} icon={KeypairIcon} />
+                <Resource name="certsImport" list={CertList} create={CertCreate} edit={CertEdit} show={CertShow} icon={CertIcon}/>
                 <Resource name="Network" list={NetworkList} edit={NetworkEdit} show={NetworkShow} create={NetworkCreate} icon={NetworkIcon} />
                 <Resource name="NetPeer" list={NodeList} edit={NodeEdit} show={NodeShow} create={NodeCreate} icon={NodeIcon} />
                 <Resource name="Block" list={BlockList} show={BlockShow} icon={BlockIcon} />

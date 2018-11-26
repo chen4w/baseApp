@@ -46,7 +46,7 @@ class SignSubmitButton extends Component {
             .finally(fetchEnd)
         let t = new Transaction({
             type: parseInt(record.type, 10), name: record.cname,
-            function: record.action, args: [record.ipt]
+            function: record.action, args: [record.ipt], accountAddr: '1Luv5vq4v1CRkTN98YMhqQV1F18nGv11gX'
         })
         let txSignedBuffer = t.createSignedTransaction(prvKP, "ecdsa-with-SHA1")
 

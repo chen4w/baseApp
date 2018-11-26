@@ -35,6 +35,24 @@ const addUploadCapabilities = requestHandler => (type, resource, params) => {
         }
 
         return requestHandler(type, resource, params);
+    } 
+    else if((type === 'UPDATE'|| type === 'CREATE') && (resource === 'certsImport' )){
+        if(params.data.certFile){
+            console.log(params.data)
+            return convertFile(params.data.certFile, 'utf8')
+            .then(cert =>
+                requestHandler(type, resource, {
+                    data: {
+                        certImported: cert,
+                        usrname: params.data.usrname,
+                        email: params.data.email,
+                        phone: params.data.phone
+                    }
+                })
+            )
+        }
+
+        return requestHandler(type, resource, params);
     }
 
     return requestHandler(type, resource, params);

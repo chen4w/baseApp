@@ -19,6 +19,7 @@ const log = (type, resource, params) => {
 const schema = {
     users: "++id, &userName, &email",
     keypairs: "++id, createdAt, status, ownerID, &kp.sn, &cert.sn",
+    certsImport: "++id, phone, &cert.sn"
 }
 
 // Init For test
@@ -60,6 +61,7 @@ export default (type, resource, params) => {
             }
 
             return indexdbRest.getCollection(resource, query).then(r => {
+                console.log(r)
                 return {
                     data: r.result,
                     total: r.totalCount
