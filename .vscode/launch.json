@@ -32,7 +32,7 @@
       "type": "node",
       "request": "launch",
       //"program": "${workspaceFolder}/src/server/deployservice/test/testRW4Hocon.js"
-      "program": "${workspaceFolder}/gdb/src/index.js"
+      "program": "${workspaceFolder}/gdb/src/syncBlockHandlerOfCustom.js"
     }/*,
 
     {
