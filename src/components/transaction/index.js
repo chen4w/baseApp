@@ -99,6 +99,7 @@ export class TransCreate extends React.Component {
     var origin = event.origin || event.originalEvent.origin;
     console.log(event);
     this.setState({iptVal:event.data})
+    event.source.postMessage("received")
     if (origin !== "http://example.org:8080")
       return;
   }
