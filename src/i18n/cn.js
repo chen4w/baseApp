@@ -98,6 +98,9 @@ export default {
             }
         },
         Transaction: {
+            notification:{
+                send_success:'签名交易[%{txId}]已提交到RepChain'
+            },
             name: '交易',
             tabs: {
                 tab1: '基本项',
