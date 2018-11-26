@@ -116,9 +116,9 @@ export class TransCreate extends React.Component {
                 { id: "1", name: 'CHAINCODE_DEPLOY' },
                 { id: "2", name: 'CHAINCODE_INVOKE' }
               ]} />
-            <DisabledInput source="cname" value={cnameVal} defaultValue={cnameVal} />
-            <DisabledInput source="action" value={actionVal} defaultValue={actionVal} />
-            <DisabledInput source="ipt" value={iptVal} defaultValue={iptVal} />
+            <TextInput source="cname" value={cnameVal} defaultValue={cnameVal} />
+            <TextInput source="action" value={actionVal} defaultValue={actionVal} />
+            <LongTextInput source="ipt" value={iptVal} defaultValue={iptVal} />
             <ReferenceInput label="密钥对" source="keypair" defaultValue={1}
               reference="keypairs" validate={required()} >
               <SelectInput optionText="cert.sn" optionValue="id" />

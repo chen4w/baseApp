@@ -20,7 +20,10 @@
         popup = window.open("/index.html#/Transaction/create", "BaseApp");
         timer = setInterval(function(){
           // popup.postMessage(document.getElementById("ipt_message").value);
-          popup.postMessage({"cnameVal":"1234567", "actionVal":"housingProof", "iptVal":"hello world"})
+          popup.postMessage({
+            "cnameVal":"0bfbe2faf858dd495e712fb0f897dd66082f06b879fa21a80fcc2acbc199b8d7",
+            "actionVal":"transfer", 
+            "iptVal":"{\"from\":\"1AqZs6vhcLiiTvFxqS5CEqMw6xWuX9xqyi\",\"to\":\"1GvvHCFZPajq5yVY44n7bdmSfv2MJ5LyLs\",\"amount\":5}"})
         },1000);
         //popup.postMessage("expectResponse");
       }
