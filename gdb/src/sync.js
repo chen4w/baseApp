@@ -12,11 +12,11 @@ const ECODE_HEX = 'hex';
 
 class syncher{
     
-    constructor(prisma,api_url,ws_url) {
+    constructor(prisma,api_url,ws_url,customCall) {
         this.prisma = prisma;
         this.api_url = api_url;
         this.ws_url = ws_url;
-        this.storage = new BlockStorager(prisma,this.api_url);
+        this.storage = new BlockStorager(prisma,this.api_url,customCall);
         this.storage.InitStorager();
         this.isPulling = false;
         this.isPush = false;

@@ -5,10 +5,11 @@ const { RestAPI } = require('./rclink/rest');
 
 class BlockStorager{
 
-  constructor(prisma,pullUrl) {
+  constructor(prisma,pullUrl,customCall) {
     this.prisma = prisma;
     this.default_NetId =  "";
     this.default_NetName = "DEFAULT_NET";
+    this.customCall = customCall;
     var URL = require('url');
     var p = URL.parse(pullUrl);
     this.seedip = p.hostname;
@@ -196,6 +197,14 @@ class BlockStorager{
             data: tx_data,
           }
         );
+      }
+      if(this.customCall != null){
+        try{
+          this.customCall(blkHash,tx);
+        }catch(err){
+          console.log('callback ='+this.customCall+',invoke error='+err);
+        }
+        
       }
       console.log('save trans i='+cidx+',txid='+tx_data.txId);
     }

@@ -2,6 +2,7 @@ const { GraphQLServer } = require('graphql-yoga')
 const { Prisma } = require('prisma-binding')
 
 const {syncher} = require('./sync')
+const {TranscationHandler} = require('./syncBlockHandlerOfCustom')
 const cfg = require('config');
 
 const fs = require('fs')
@@ -112,7 +113,8 @@ const server = new GraphQLServer({
 //startSyncPull(cfg.get('RepChain.default.url_api'),prisma,100);
 
 var sync = new syncher(prisma,cfg.get('RepChain.default.url_api'),
-                      cfg.get('RepChain.default.url_subscribe'));
+                      cfg.get('RepChain.default.url_subscribe'),
+                      TranscationHandler);
 
 function startSynch(){
     sync.StartPullBlocks();
