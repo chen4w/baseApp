@@ -103,9 +103,9 @@ export const CertCreate = (props) => {
     return (
         <Create {...props}>
             <SimpleForm redirect='list'>
-                <TextInput source="usrname" defalutValue="ISCAS" validate={required} />
-                <TextInput source="phone" defalutValue="010-6266****" validate={required} />
-                <TextInput source="email" defalutValue="iscas@iscas.ac.cn" validate={required} />
+                <TextInput source="usrname" defalutValue="ISCAS" validate={required()} />
+                <TextInput source="phone" defalutValue="010-6266****" validate={required()} />
+                <TextInput source="email" defalutValue="iscas@iscas.ac.cn" validate={required()} />
                 <FileInput source="certFile" label="导入证书" accept=".pem" validate={required()}>
                     <FileField source="import" title="title" />
                 </FileInput>
