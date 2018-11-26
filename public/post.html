@@ -19,7 +19,8 @@
         //document.getElementById("ipt_message").value = "Hello World";
         popup = window.open("/index.html#/Transaction/create", "BaseApp");
         timer = setInterval(function(){
-          popup.postMessage(document.getElementById("ipt_message").value);
+          // popup.postMessage(document.getElementById("ipt_message").value);
+          popup.postMessage({"cnameVal":"1234567", "actionVal":"housingProof", "iptVal":"hello world"})
         },1000);
         //popup.postMessage("expectResponse");
       }

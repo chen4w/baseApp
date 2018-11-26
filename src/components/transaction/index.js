@@ -18,7 +18,8 @@ import {
   TextField,
   ShowButton,
   LongTextInput,
-  TextInput
+  TextInput,
+  DisabledInput
 } from "react-admin/lib";
 
 import {
@@ -98,14 +99,14 @@ export class TransCreate extends React.Component {
     // object. 
     var origin = event.origin || event.originalEvent.origin;
     console.log(event);
-    this.setState({iptVal:event.data})
+    this.setState({cnameVal:event.data.cnameVal, actionVal: event.data.actionVal, iptVal:event.data.iptVal})
     event.source.postMessage("received")
     if (origin !== "http://example.org:8080")
       return;
   }
 
   render() {
-    const {iptVal} = this.state;
+    const {cnameVal, actionVal, iptVal} = this.state;
     return (
       <Create {...this.props}>
         <TabbedForm toolbar={null}>
@@ -115,9 +116,9 @@ export class TransCreate extends React.Component {
                 { id: "1", name: 'CHAINCODE_DEPLOY' },
                 { id: "2", name: 'CHAINCODE_INVOKE' }
               ]} />
-            <TextInput source="cname" defaultValue="0bfbe2faf858dd495e712fb0f897dd66082f06b879fa21a80fcc2acbc199b8d7" />
-            <TextInput source="action" defaultValue="transfer" />
-            <LongTextInput source="ipt" value={iptVal} defaultValue={iptVal} />
+            <DisabledInput source="cname" value={cnameVal} defaultValue={cnameVal} />
+            <DisabledInput source="action" value={actionVal} defaultValue={actionVal} />
+            <DisabledInput source="ipt" value={iptVal} defaultValue={iptVal} />
             <ReferenceInput label="密钥对" source="keypair" defaultValue={1}
               reference="keypairs" validate={required()} >
               <SelectInput optionText="cert.sn" optionValue="id" />
