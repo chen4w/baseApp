@@ -14,7 +14,7 @@ Transaction.setTxMsgType().then(data => {
     console.log('setTxMsgType:' + data);
 }).catch(e => {
     console.error("setTxMsgType err:\n", e);
-})
+});
 const xhr = new XMLHttpRequest();
 const postURL = settings.RepChain.default.url_api + 'transaction/postTranStream';
 class SignSubmitButton extends Component {
@@ -35,10 +35,14 @@ class SignSubmitButton extends Component {
     handleClick = async (p1) => {
         const { push, record, showNotification, fetchStart, fetchEnd } = this.props;
         const updatedRecord = { ...record };
-        fetchStart()
-        let prvKP = await indexDataProvider(GET_ONE, 'keypairs', { id: record.keypair })
+        fetchStart();
+        
+        let {pubKP, prvKP} = await indexDataProvider(GET_ONE, 'keypairs', { id: record.keypair })
             .then((data) => {
-                return data.data.kp.prvKeyPEM;
+                return { 
+                    pubKP: data.data.kp.pubKeyPEM,
+                    prvKP: data.data.kp.prvKeyPEM
+                }
             })
             .catch(e => {
                 showNotification('' + e, 'warning')
@@ -48,8 +52,8 @@ class SignSubmitButton extends Component {
             let t = new Transaction({
                 type: parseInt(record.type2, 10), name: record.cname,
                 function: record.action, args: [record.ipt],
-                accountAddr:'1Luv5vq4v1CRkTN98YMhqQV1F18nGv11gX'
-            })
+                pubKeyPEM: pubKP
+            });
             let txSignedBuffer = t.createSignedTransaction(prvKP, "ecdsa-with-SHA1")
 
             //post signed transaction
