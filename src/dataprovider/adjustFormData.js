@@ -74,6 +74,14 @@ const adjustFormData = (type, resource, formData) => {
 
                     const startUnixTime = parseInt(d.cert.validityStart.getTime() / 1000)
                     const endUnixTime = parseInt(d.cert.validityEnd.getTime() / 1000)
+                    let certDN = '';
+                    if(d.cert.distinguishNameAttributes.length == 0)
+                        throw new Error("证书拥有者/发行者识别名不能为空")
+                    for(let attr of d.cert.distinguishNameAttributes){
+                        certDN += '/' + attr.name + '=' + attr.value;
+                    }
+                    delete d.cert.distinguishNameAttributes;
+                    d.cert.distinguishName = certDN;
                     certPEM = Crypto.CreateSelfSignedCertificate({
                         serialNumber: d.cert.sn, 
                         sigAlg: d.cert.sigAlg, 
@@ -98,7 +106,7 @@ const adjustFormData = (type, resource, formData) => {
                 }
                 catch(e){
                     console.error(e);
-                    if(e === 'malformed plain PKCS8 private key(code:001)')
+                    if(e.message === '提供的私钥信息无效或解密密码无效')
                         throw new Error('您输入的旧密码错误');
                     else
                         throw new Error(e);

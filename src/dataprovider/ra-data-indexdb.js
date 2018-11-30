@@ -64,7 +64,7 @@ export default (type, resource, params) => {
                     data: r.result,
                     total: r.totalCount
                 }
-            })
+            });
         case GET_ONE:
             const gID = parseInt(params.id, 10)
             return indexdbRest.getOne(resource, gID).then(r => ({ data: r.result }))
