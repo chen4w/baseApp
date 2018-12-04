@@ -7,7 +7,7 @@ sys_tag=$1
 logger_name="logback"
 
 #::=== config
-config_base="conf/"
+config_base="conf"
 config_app="system.conf"
 config_log="logback.xml"
 
