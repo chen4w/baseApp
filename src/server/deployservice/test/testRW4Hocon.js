@@ -1,20 +1,19 @@
-/*var parseHocon = require('hocon-parser');
-var fs =require("fs");
-var filename = 'C:\\RepChain_devlop_env\\scala_workspace\\repchain\\conf\\system.conf';
-var wrfilename = 'e:\\tempfile.txt';
-fs.readFile(filename,{flag:'r+',encoding:'utf-8'},function(err,data){
-    if(err){
-        console.log("文件失败，filename="+filename);
-    }else{
-        var obj = parseHocon(data);
-        console.log(obj);
-       
-        var data1 = obj +'-------sdflkdfjs';
-        fs.writeFile(wrfilename,data1,{encoding:'utf-8'},function(err){
-           console.log("文件写入成功");
-        })
-    }
-})*/
+/*
+ * Copyright  2018 Linkel Technology Co., Ltd, Beijing
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BA SIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 
 var URL = require('url');
 var urlstr = 'http://localhost:4466';

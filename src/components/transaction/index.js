@@ -1,3 +1,18 @@
+/*
+ * Copyright  2018 Linkel Technology Co., Ltd, Beijing
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BA SIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 import React from "react";
 import SignSubmitButton from './SignSubmitButton';
 
@@ -5,7 +20,7 @@ import {
   Show, SelectInput,
   TabbedShowLayout,
   Tab, RadioButtonGroupInput,
-  FormTab,ReferenceInput,
+  FormTab, ReferenceInput,
   TabbedForm, FormDataConsumer,
   Filter,
   RichTextField,
@@ -81,31 +96,58 @@ export const TransShow = props => (
   </Show>
 );
 
-export const TransCreate = props => (
-  <Create {...props}>
-    <TabbedForm toolbar={null}>
-      <FormTab label="resources.Transaction.tabs.tab1">
-        <RadioButtonGroupInput label="合约类型" source="type2" defaultValue={"2"}
-          choices={[
-            { id: "1", name: 'CHAINCODE_DEPLOY' },
-            { id: "2", name: 'CHAINCODE_INVOKE' }
-          ]} />
-        <TextInput source="cname" defaultValue="0bfbe2faf858dd495e712fb0f897dd66082f06b879fa21a80fcc2acbc199b8d7" />
-        <TextInput source="action" defaultValue="transfer" />
-        <LongTextInput source="ipt" defaultValue='{ "from" : "1GvvHCFZPajq5yVY44n7bdmSfv2MJ5LyLs", "to" : "1AqZs6vhcLiiTvFxqS5CEqMw6xWuX9xqyi", "amount" : 5 } ' />
-        <ReferenceInput label="密钥对" source="keypair" defaultValue={1}
-          reference="keypairs" validate={required()} >
-          <SelectInput optionText="cert.sn" optionValue="id"/>
-        </ReferenceInput>
-        <TextInput label="密钥密码" source="keypair_pwd" defaultValue="" type="password" />
-        <FormDataConsumer>
-          {
-            ({ formData, ...rest }) => (
-              <SignSubmitButton record={formData} />
-            )
-          }
-        </FormDataConsumer>
-      </FormTab>
-    </TabbedForm>
-  </Create>
-);
+export class TransCreate extends React.Component {
+  constructor() {
+    super();
+    this.receiveMessage = this.receiveMessage.bind(this);
+    this.state = {};
+  }
+  componentDidMount() {
+    window.addEventListener("message", this.receiveMessage, false);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("message", this.receiveMessage, false);
+  }
+  receiveMessage(event) {
+    // For Chrome, the origin property is in the event.originalEvent
+    // object. 
+    var origin = event.origin || event.originalEvent.origin;
+    console.log(event);
+    this.setState({iptVal:event.data})
+    event.source.postMessage("received")
+    if (origin !== "http://example.org:8080")
+      return;
+  }
+
+  render() {
+    const {iptVal} = this.state;
+    return (
+      <Create {...this.props}>
+        <TabbedForm toolbar={null}>
+          <FormTab label="resources.Transaction.tabs.tab1">
+            <RadioButtonGroupInput label="合约类型" source="type2" defaultValue={"2"}
+              choices={[
+                { id: "1", name: 'CHAINCODE_DEPLOY' },
+                { id: "2", name: 'CHAINCODE_INVOKE' }
+              ]} />
+            <TextInput source="cname" defaultValue="0bfbe2faf858dd495e712fb0f897dd66082f06b879fa21a80fcc2acbc199b8d7" />
+            <TextInput source="action" defaultValue="transfer" />
+            <LongTextInput source="ipt" value={iptVal} defaultValue={iptVal} />
+            <ReferenceInput label="密钥对" source="keypair" defaultValue={1}
+              reference="keypairs" validate={required()} >
+              <SelectInput optionText="cert.sn" optionValue="id" />
+            </ReferenceInput>
+            <TextInput label="密钥密码" source="keypair_pwd" defaultValue="" type="password" />
+            <FormDataConsumer>
+              {
+                ({ formData, source, ...rest }) => (
+                  <SignSubmitButton record={formData} source={source} />
+                )
+              }
+            </FormDataConsumer>
+          </FormTab>
+        </TabbedForm>
+      </Create>
+    );
+  }
+}
