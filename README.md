@@ -1,4 +1,8 @@
 > 本项目的建立采用 [Create React App](https://marmelab.com/react-admin/Tutorial.html).
+BAAS部署为区块链部署带来便利，但是在应用的开发和实施中，仍然需要开发许多区块链应用的基础功能，
+包括：账户/密钥管理，区块数据同步与检索，交易的签名与提交等。
+Linke BaseApp提供了这些通用的基础功能实现，区块链应用实施者既可以直接复用其提供的功能，
+也可以在其源代码的基础上进行开发，快速开发自己的DAppp
 
 ## 项目介绍
 本项目为[RepChain](https://gitee.com/BTAJL/repchain)
